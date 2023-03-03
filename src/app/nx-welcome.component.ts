@@ -768,6 +768,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
               </svg>
               Add UI library
             </summary>
+            <button mat-raised-button color="primary">Primary</button>
+
             <pre><span># Generate UI lib</span>
 nx g @nrwl/angular:lib ui
 

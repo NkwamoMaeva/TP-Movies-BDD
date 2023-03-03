@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "movieapp-309ac": {
+      "hosting": {
+        "tp-movies": [
+          "movieapp-309ac"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "movieapp-309ac"
+  }
+}

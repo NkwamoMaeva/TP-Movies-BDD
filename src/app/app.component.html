@@ -1,1 +1,60 @@
-<tp-movies-nx-welcome></tp-movies-nx-welcome> <router-outlet></router-outlet>
+<div style="height: 100vh;">
+    <mat-toolbar color="primary">
+        <div fxShow="true" fxHide.gt-sm="true">
+            <button mat-icon-button (click)="sidenav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
+
+        <a mat-button class="title" routerLink="/">
+            <span>Movies BDD</span>
+        </a>
+        <span class="example-spacer"></span>
+
+        <div class="nav-list" fxShow="true" fxHide.lt-md="true">
+            <a mat-button routerLink="/">Accueil</a>
+            <a mat-button routerLink="/wachlist">Wachlist</a>
+            <a mat-button routerLink="/download">Téléchargements</a>
+
+            <button mat-icon-button aria-label="notifications">
+                <mat-icon matBadge="8" matBadgeColor="accent">notifications</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>person</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <span>Inscription</span>
+                </button>
+                <button mat-menu-item>
+                    <span>Connexion</span>
+                </button>
+            </mat-menu>
+        </div>
+        <div fxShow="false" fxHide.lt-md="false">
+            <button mat-icon-button aria-label="search">
+                <mat-icon>search</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="logout">
+                <mat-icon>logout</mat-icon>
+            </button>
+        </div>
+
+    </mat-toolbar>
+    <mat-sidenav-container fxFlexFill>
+
+        <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over" opened="false" fxHide.gt-sm="true">
+            <div fxLayout="column" class="sidebar-content">
+                <mat-divider></mat-divider>
+                <a mat-button [routerLink]="menu.link" *ngFor="let menu of menus">
+                    <mat-icon>{{menu.icon}}</mat-icon>
+                    <span>{{menu.name}}</span>
+                </a>
+            </div>
+        </mat-sidenav>
+        <mat-sidenav-content fxFlexFill>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>
