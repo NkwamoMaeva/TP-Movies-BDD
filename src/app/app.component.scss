@@ -1,20 +1,11 @@
 .title {
-  font-size: 18px;
-}
-
-div {
-  overflow: inherit;
+  font-size: 16px;
 }
 
 a {
   text-decoration: none;
   font-size: 16px;
   white-space: normal;
-}
-
-button {
-  font-size: 8%;
-  min-width: min-content;
 }
 
 .example-icon {
@@ -32,12 +23,27 @@ button {
 
 .sidebar-content {
   height: 100%;
+  min-width: 320px;
   a {
+    padding: 0 15px;
+    height: 60px;
     text-decoration: none;
     font-size: 16px;
     white-space: normal;
     display: flex;
     justify-content: flex-start;
+  }
+  .user-info {
+    background-color: lightslategray;
+    width: 100%;
+    height: 160px;
+    padding: 20px 15px;
+    .user-avatar {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      border: 2px solid lightgray;
+    }
   }
 }
 

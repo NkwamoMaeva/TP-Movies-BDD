@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 export interface Menu {
   name: string;
@@ -12,7 +13,17 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'tp-movies';
+  constructor(private router: Router) {
+    router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.link = this.router.url;
+      }
+    });
+  }
+  title = '';
+  link = '/';
+
+  connected = false;
   menus: Menu[] = [
     {
       name: 'Accueil',
@@ -30,4 +41,8 @@ export class AppComponent {
       icon: 'download',
     },
   ];
+
+  goToMenu(menu: string) {
+    this.title = menu;
+  }
 }

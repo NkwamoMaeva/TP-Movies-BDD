@@ -1,3 +1,6 @@
 import { Route } from '@angular/router';
-
-export const appRoutes: Route[] = [];
+import { AuthentificationComponent } from './authentification/authentification.component';
+export const appRoutes: Route[] = [
+  { path: 'login', component: AuthentificationComponent },
+  { path: 'register', component: AuthentificationComponent },
+];

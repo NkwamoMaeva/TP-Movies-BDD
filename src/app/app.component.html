@@ -1,5 +1,5 @@
 <div style="height: 100vh;">
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" [fxShow]="!sidenav.opened && link !== '/register' && link !== '/login'">
         <div fxShow="true" fxHide.gt-sm="true">
             <button mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -7,7 +7,16 @@
         </div>
 
         <a mat-button class="title" routerLink="/">
-            <span>Movies BDD</span>
+            <ng-container *ngIf="title !== ''; else elseTemplate">
+                <span ngI>{{title}}</span>
+            </ng-container>
+            <ng-template #elseTemplate>
+                <div fxLayout="row" fxLayoutAlign="flex-start center">
+                    <mat-icon class="white" aria-hidden="false" fontIcon="movie"></mat-icon>
+                    <span style="margin-left: 5px;">Movies<b>BDD</b></span>
+                </div>
+            </ng-template>
+
         </a>
         <span class="example-spacer"></span>
 
@@ -23,10 +32,10 @@
                 <mat-icon>person</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item>
+                <button mat-menu-item routerLink="/register">
                     <span>Inscription</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item routerLink="/login">
                     <span>Connexion</span>
                 </button>
             </mat-menu>
@@ -35,7 +44,7 @@
             <button mat-icon-button aria-label="search">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button aria-label="logout">
+            <button mat-icon-button aria-label="logout" routerLink="/login" *ngIf="connected">
                 <mat-icon>logout</mat-icon>
             </button>
         </div>
@@ -45,9 +54,41 @@
 
         <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over" opened="false" fxHide.gt-sm="true">
             <div fxLayout="column" class="sidebar-content">
+                <div class="user-info" fxLayout="row">
+                    <div fxLayout="column" fxLayoutAlign="space-between start" class="h-100">
+                        <img class="user-avatar" [src]="connected ? 'https://material.angular.io/assets/img/examples/shiba2.jpg' :
+                            'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
+                            alt="avatar">
+                        <ng-container *ngIf="connected; else elseConnect">
+                            <span class="white" style="margin-bottom: 9px;">Alan Walker</span>
+                        </ng-container>
+                        <ng-template #elseConnect>
+                            <button class="white" mat-button (click)="sidenav.close()" routerLink="/login">
+                                Se connecter
+                            </button>
+                        </ng-template>
+
+                    </div>
+                    <span class="example-spacer"></span>
+                    <div fxLayout="column" fxLayoutAlign="space-between end" class="h-100">
+                        <div>
+                            <button mat-icon-button aria-label="notifications" *ngIf="connected">
+                                <mat-icon class="white" matBadge="8" matBadgeColor="accent" mat-icon-no-color>
+                                    notifications</mat-icon>
+                            </button>
+                            <span class="example-spacer"></span>
+                            <button mat-icon-button aria-label="settings">
+                                <mat-icon class="white" mat-icon-no-color>settings</mat-icon>
+                            </button>
+                        </div>
+                        <button *ngIf="connected" class="white" mat-button>Modifier</button>
+
+                    </div>
+                </div>
                 <mat-divider></mat-divider>
-                <a mat-button [routerLink]="menu.link" *ngFor="let menu of menus">
-                    <mat-icon>{{menu.icon}}</mat-icon>
+                <a mat-button [routerLink]="menu.link" (click)="sidenav.close(); goToMenu(menu.name)"
+                    *ngFor="let menu of menus">
+                    <mat-icon style="font-size: 26px;height: 26px; width: 26px;">{{menu.icon}}</mat-icon>
                     <span>{{menu.name}}</span>
                 </a>
             </div>
