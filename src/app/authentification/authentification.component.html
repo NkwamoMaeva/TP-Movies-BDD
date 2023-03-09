@@ -12,20 +12,20 @@
             <form [formGroup]="signin" class="sign-in-htm">
                 <div class="group">
                     <mat-form-field appearance="outline">
-                        <input matInput placeholder="Email">
+                        <input matInput placeholder="Email" formControlName="email">
                         <mat-icon matSuffix>person</mat-icon>
                     </mat-form-field>
                 </div>
                 <div class="group">
                     <mat-form-field appearance="outline">
                         <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'"
-                            formControlName="password">
+                            formControlName="password" formControlName="password">
                         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </mat-form-field>
 
                 </div>
                 <div class="group">
-                    <button type="submit" mat-raised-button color="primary">Se connecter</button>
+                    <button (click)="signIn()" type="submit" mat-raised-button color="primary">Se connecter</button>
                 </div>
 
             </form>

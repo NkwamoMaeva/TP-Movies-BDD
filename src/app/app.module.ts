@@ -22,6 +22,9 @@ import { AuthentificationComponent } from './authentification/authentification.c
 import { MovieListComponent } from './movie-list/movie-list.component';
 
 import { MovieListService } from './movie-list/services/movie-list.service';
+import { AuthentificationService } from './authentification/services/authentification.service';
+
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 @NgModule({
   declarations: [AppComponent, AuthentificationComponent, MovieListComponent],
@@ -45,7 +48,11 @@ import { MovieListService } from './movie-list/services/movie-list.service';
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
   ],
-  providers: [MovieListService],
+  providers: [
+    MovieListService,
+    AuthentificationService,
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
+  ],
   bootstrap: [AppComponent],
   exports: [AuthentificationComponent, MovieListComponent],
 })
