@@ -6,7 +6,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthentificationService } from '../authentification/services/authentification.service';
+import { AuthentificationService } from './services/authentification.service';
 @Component({
   selector: 'tp-movies-login',
   templateUrl: './authentification.component.html',

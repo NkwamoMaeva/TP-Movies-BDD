@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AuthentificationComponent } from './authentification/authentification.component';
 import { MovieListComponent } from './movie-list/movie-list.component';
+import { FluxListComponent } from './flux/flux-list.component';
 
 import { MovieListService } from './movie-list/services/movie-list.service';
 import { AuthentificationService } from './authentification/services/authentification.service';
@@ -27,7 +28,7 @@ import { AuthentificationService } from './authentification/services/authentific
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 @NgModule({
-  declarations: [AppComponent, AuthentificationComponent, MovieListComponent],
+  declarations: [AppComponent, AuthentificationComponent, MovieListComponent, FluxListComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -54,6 +55,6 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
   bootstrap: [AppComponent],
-  exports: [AuthentificationComponent, MovieListComponent],
+  exports: [AuthentificationComponent, MovieListComponent, FluxListComponent],
 })
 export class AppModule {}
