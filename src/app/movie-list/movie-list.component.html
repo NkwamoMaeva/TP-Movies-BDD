@@ -1,0 +1,31 @@
+<div id="app">
+    <div class="container pt-4">
+        <div class="d-flex flex-wrap">
+            <div class="search-wrapper">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Search</mat-label>
+                    <input matInput placeholder="search">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="genres">
+            <mat-chip-listbox *ngFor="let genre of genres;" aria-label="Genre selection">
+                <mat-chip-option [selected]="genre.selected" style="margin-right: 5px;">{{genre.name}}</mat-chip-option>
+            </mat-chip-listbox>
+        </div>
+
+        <div class="list mt-4 pt-4">
+            <div *ngFor="let movie of movies;" class="movie">
+                <h5>{{ movie.title }}</h5>
+
+                <div class="poster"
+                    [style]='"background-image: url(https://image.tmdb.org/t/p/w500" + movie.poster_path + ")"'>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
