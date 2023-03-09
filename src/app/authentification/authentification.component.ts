@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { AuthentificationService } from '../authentification/services/authentification.service';
 @Component({
   selector: 'tp-movies-login',
   templateUrl: './authentification.component.html',
@@ -11,11 +16,41 @@ export class AuthentificationComponent {
   login = true;
   register = false;
   hide = true;
-  signin: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.min(6)]),
-  });
-  constructor(private router: Router) {
+  email = '';
+  password = '';
+  signin = this.fb.group(
+    {
+      email: [''],
+      password: [
+        '',
+        {
+          validators: [Validators.required, Validators.minLength(6)],
+          updateOn: 'change',
+        },
+      ],
+    },
+    {
+      asyncValidators: [],
+    }
+  );
+
+  signIn() {
+    console.log(this.signin.get('email'));
+    this.authService
+      .signIn(
+        this.signin.get('email')?.value ?? '',
+        this.signin.get('password')?.value ?? ''
+      )
+      .then((result) => {
+        console.log(result);
+      });
+  }
+
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    public authService: AuthentificationService
+  ) {
     if (this.router.url === '/register') {
       this.register = true;
       this.login = false;
@@ -25,6 +60,9 @@ export class AuthentificationComponent {
     }
   }
 
+  get EmailInput() {
+    return this.signin.get('email');
+  }
   get passwordInput() {
     return this.signin.get('password');
   }
