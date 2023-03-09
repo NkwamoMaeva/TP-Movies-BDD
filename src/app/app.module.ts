@@ -16,13 +16,18 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material.module';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AuthentificationComponent } from './authentification/authentification.component';
+import { MovieListComponent } from './movie-list/movie-list.component';
+
+import { MovieListService } from './movie-list/services/movie-list.service';
 
 @NgModule({
-  declarations: [AppComponent, AuthentificationComponent],
+  declarations: [AppComponent, AuthentificationComponent, MovieListComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     BrowserAnimationsModule,
     MaterialModule,
@@ -40,8 +45,8 @@ import { AuthentificationComponent } from './authentification/authentification.c
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
   ],
-  providers: [],
+  providers: [MovieListService],
   bootstrap: [AppComponent],
-  exports: [AuthentificationComponent],
+  exports: [AuthentificationComponent, MovieListComponent],
 })
 export class AppModule {}
