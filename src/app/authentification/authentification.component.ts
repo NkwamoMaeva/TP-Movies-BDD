@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  FormGroup,
-  FormControl,
   Validators,
   FormBuilder,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthentificationService } from '../authentification/services/authentification.service';
@@ -16,11 +18,15 @@ export class AuthentificationComponent {
   login = true;
   register = false;
   hide = true;
-  email = '';
-  password = '';
   signin = this.fb.group(
     {
-      email: [''],
+      email: [
+        '',
+        {
+          validators: [Validators.required, Validators.email],
+          updateOn: 'change',
+        },
+      ],
       password: [
         '',
         {
@@ -34,19 +40,105 @@ export class AuthentificationComponent {
     }
   );
 
+  signup = this.fb.group(
+    {
+      username: [
+        '',
+        {
+          validators: [Validators.required, Validators.minLength(6)],
+          updateOn: 'change',
+        },
+      ],
+      email: [
+        '',
+        {
+          validators: [Validators.required, Validators.email],
+          updateOn: 'change',
+        },
+      ],
+      password: [
+        '',
+        {
+          validators: [
+            Validators.required,
+            Validators.minLength(6),
+            this.matchValidator('confirmPassword', true),
+          ],
+          updateOn: 'change',
+        },
+      ],
+      confirmPassword: [
+        '',
+        {
+          validators: [
+            Validators.required,
+            Validators.minLength(6),
+            this.matchValidator('password'),
+          ],
+          updateOn: 'change',
+        },
+      ],
+    },
+    {
+      asyncValidators: [],
+    }
+  );
+
   signIn() {
-    console.log(this.signin.get('email'));
-    this.authService
-      .signIn(
-        this.signin.get('email')?.value ?? '',
-        this.signin.get('password')?.value ?? ''
-      )
-      .then((result) => {
-        console.log(result);
-      });
+    if (this.signin.valid) {
+      this.authService
+        .signIn(
+          this.signin.get('email')?.value ?? '',
+          this.signin.get('password')?.value ?? ''
+        )
+        .then(() => {
+          this.snackBar.open('Successfully connected', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
+        })
+        .catch((error) => {
+          this.snackBar.open(error.message, 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+          });
+        });
+    }
+  }
+  signUp() {
+    if (this.signup.valid) {
+      this.authService
+        .signUp(
+          this.signup.get('email')?.value ?? '',
+          this.signup.get('password')?.value ?? '',
+          this.signup.get('username')?.value ?? ''
+        )
+        .then(() => {
+          this.router.navigate(['login']);
+        });
+    }
+  }
+  matchValidator(matchTo: string, reverse?: boolean): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.parent && reverse) {
+        const c = (control.parent?.controls as any)[matchTo] as AbstractControl;
+        if (c) {
+          c.updateValueAndValidity();
+        }
+        return null;
+      }
+      return !!control.parent &&
+        !!control.parent.value &&
+        control.value === (control.parent?.controls as any)[matchTo].value
+        ? null
+        : { matching: true };
+    };
   }
 
   constructor(
+    private snackBar: MatSnackBar,
     private router: Router,
     private fb: FormBuilder,
     public authService: AuthentificationService
