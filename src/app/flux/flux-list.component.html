@@ -1,35 +1,14 @@
 <div id="app">
     <div class="container pt-4">
-        <div class="d-flex flex-wrap">
-            <div class="search-wrapper">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Search</mat-label>
-                    <input matInput placeholder="search">
-                    <mat-icon matSuffix>search</mat-icon>
-                </mat-form-field>
-            </div>
-        </div>
-
-        <div class="genres">
-            <mat-chip-listbox *ngFor="let genre of genres;" aria-label="Genre selection">
-                <mat-chip-option [selected]="genre.selected" style="margin-right: 5px;">{{genre.name}}</mat-chip-option>
-            </mat-chip-listbox>
-        </div>
-
         <div class="list mt-4 pt-4">
-            <div *ngFor="let flu of flux;" class="flux">
-                <mat-grid-list cols="3" rowHeight="2:1">
-                    <mat-grid-tile colspan="1">
-                        <div class="poster" [style]='"background-image: url(https://image.tmdb.org/t/p/w500" + flu.author_details.avatar_path + ")"'></div>
-                    </mat-grid-tile>
-                    <mat-grid-tile colspan="2" style="margin-left:0;">
-                        <h4>{{ flu.author_details.name }}</h4>
-                    </mat-grid-tile>
-                </mat-grid-list>
-                <p>Username: {{ flu.author_details.username }}</p>
-                <p>Rating: {{ flu.author_details.rating }}</p>
-<!--                <h5>{{ flu.content }}</h5>-->
-                <p>{{ flu.created_at }}</p>
+            <div *ngFor="let flu of flux | async" class="flux">
+                <p><strong>{{ flu.id_user }} rated {{ flu.movie_name }}</strong></p>
+                <p>{{ flu.rating }} stars</p>
+                <div class="row">
+                    <div class="col"><div class="button-gray w-50">Movie</div></div>
+                    <div class="col"><div class="button-purple w-50">Note</div></div>
+                </div>
+
 
             </div>
         </div>

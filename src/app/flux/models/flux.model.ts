@@ -1,9 +1,8 @@
 export interface Flux {
-  author: string;
-  author_details: {name: string, username: string, avatar_path: string, rating: number
-  },
-  content: string,
-  created_at: string
+  id_user: string;
+  rating: number,
+  movie_name: string,
+  date_created: string,
 }
 
 export interface FluxResult {
