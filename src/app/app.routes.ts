@@ -7,4 +7,5 @@ export const appRoutes: Route[] = [
   { path: 'login', component: AuthentificationComponent },
   { path: 'register', component: AuthentificationComponent },
   { path: 'flux', component: FluxListComponent },
+  { path: 'rating-test', component: FluxListComponent },
 ];
