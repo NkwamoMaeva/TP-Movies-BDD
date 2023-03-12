@@ -120,6 +120,7 @@ export class AuthentificationComponent {
         });
     }
   }
+
   matchValidator(matchTo: string, reverse?: boolean): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.parent && reverse) {
@@ -150,12 +151,5 @@ export class AuthentificationComponent {
       this.login = true;
       this.register = false;
     }
-  }
-
-  get EmailInput() {
-    return this.signin.get('email');
-  }
-  get passwordInput() {
-    return this.signin.get('password');
   }
 }
