@@ -15,130 +15,119 @@ html,
   padding: 1em 1em 84px 1em;
 }
 
-.container {
-  width: 1200px;
-  max-width: 95%;
-  margin: auto;
-}
+$white: #FCFCFC;
+$gray: #CBCDD3;
+$dark: #777777;
+$error: #EF8D9C;
+$orange: #FFC39E;
+$success: #B0DB7D;
+$secondary: #99DBB4;
 
-.logo {
-  flex: 0 0 100px;
-}
-
-.search-wrapper {
-  flex: 1;
-}
-.genres {
-  display: flex;
-  flex-wrap: wrap;
-}
-.list {
-  margin-top: 30px;
-}
-
-.flux {
-  width: 100%;
-  padding: 10px;
-  margin: 0 auto;
-  background-color: white;
-  box-shadow: 0 5px 20px #999;
-}
-
-@media screen and (max-width: 767px) {
-  .list {
-    display: grid;
-    grid-gap: 20px 10px;
-    .poster {
-      height: 70px;
-    }
-    h5 {
-      margin: 10px 0;
-    }
-  }
-}
-
-@media (min-width: 766px) {
-  .list {
-    display: grid;
-    grid-gap: 20px 10px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    .poster {
-      height: 100px;
-    }
-    h5 {
-      margin: 15px 0;
-    }
-  }
-}
-
-#search {
-  background: white;
-  width: 100%;
-  input {
-    border: 1px solid #aaa;
-    border-radius: 10em;
-    color: #666;
-  }
-}
-
-.poster {
-  background: none 50% 50% / contain no-repeat transparent;
-  width: 100%;
-}
-
-.form-group {
-  margin-bottom: 0;
-  input {
-    height: auto;
-    padding: 0.5em;
-    margin-left: 0.5em;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .form-group input {
-    margin-left: 0;
-  }
-}
-
-.row {
-  --bs-gutter-x: 1.5rem;
-  --bs-gutter-y: 0;
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: calc(var(--bs-gutter-y) * -1);
-  margin-right: calc(var(--bs-gutter-x) * -.5);
-  margin-left: calc(var(--bs-gutter-x) * -.5);
-}
-.row > * {
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 100%;
-  padding-right: calc(var(--bs-gutter-x) * .5);
-  padding-left: calc(var(--bs-gutter-x) * .5);
-  margin-top: var(--bs-gutter-y);
-}
-.col {
-  flex: 1 0 0;
-}
-.w-50 {
-  width: 50%;
-  margin: 0 auto 0 auto;
-}
-
-.button-gray, .button-purple {
-  border: none;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 20px;
-}
-.button-gray {
-  background-color: #d0d0d0;
-  color: black;
-}
-
-.button-purple {
+.buttons{
   background-color: #3f51b5;
+  border: white 2px solid;
   color: white;
+}
+
+.green {
+  color: darken($secondary, 20%);
+}
+
+.red {
+  color: darken($error, 10%);
+}
+
+button {
+  cursor: pointer;
+}
+
+#success-box {
+  background: linear-gradient(to bottom right, $success 40%, $secondary 100%);
+  border-radius: 20px;
+  box-shadow: 5px 5px 20px rgba($gray, 10%);
+  perspective: 40px;
+}
+
+#error-box {
+  background: linear-gradient(to bottom left, $error 40%, $orange 100%);
+  border-radius: 20px;
+  box-shadow: 5px 5px 20px rgba($gray, 10%);
+}
+
+.face {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: $white;
+  border-radius: 50%;
+  border: 1px solid $dark;
+  top: 21%;
+  z-index: 2;
+  animation: bounce 1s ease-in infinite;
+}
+
+.face2 {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: $white;
+  border-radius: 50%;
+  border: 1px solid $dark;
+  top: 21%;
+  z-index: 2;
+  animation: roll 3s ease-in-out infinite;
+}
+
+.eye {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: $dark;
+  border-radius: 50%;
+  top: 40%;
+  left: 20%;
+}
+
+.right {
+  left: 68%;
+}
+
+.mouth {
+  position:absolute;
+  top: 43%;
+  left: 41%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.happy {
+  border: 2px solid;
+  border-color: transparent $dark $dark transparent;
+  transform: rotate(45deg);
+}
+
+.sad {
+  top: 49%;
+  border: 2px solid;
+  border-color: $dark transparent transparent $dark;
+  transform: rotate(45deg);
+}
+
+@keyframes bounce {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes roll {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(40deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }

@@ -11,4 +11,6 @@ import {AsyncPipe, NgForOf} from "@angular/common";
 })
 export class FluxListComponent {
   public readonly flux = inject(FluxListService).flux;
+
+  public readonly profiles = inject(FluxListService).profiles;
 }

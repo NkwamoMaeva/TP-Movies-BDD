@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import {inject, Injectable} from '@angular/core';
-import {Flux, FluxResult} from '../models/flux.model';
+import {Flux, Profile} from '../models/flux.model';
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 
 
@@ -11,4 +11,5 @@ import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat
 export class FluxListService {
   private readonly af = inject(AngularFirestore)
   public flux: Observable<Flux[]> = this.af.collection<Flux>('Ratings').valueChanges()
+  public profiles: Observable<Profile[]> = this.af.collection<Profile>('Profile').valueChanges()
 }

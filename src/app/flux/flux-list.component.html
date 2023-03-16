@@ -1,17 +1,54 @@
-<div id="app">
-    <div class="container pt-4">
-        <div class="list mt-4 pt-4">
-            <div *ngFor="let flu of flux | async" class="flux">
-                <p><strong>{{ flu.id_user }} rated {{ flu.movie_name }}</strong></p>
-                <p>{{ flu.rating }} stars</p>
-                <div class="row">
-                    <div class="col"><div class="button-gray w-50">Movie</div></div>
-                    <div class="col"><div class="button-purple w-50">Note</div></div>
+<!--<div id="app">-->
+<!--    <div class="container pt-4">-->
+<!--        <div class="list mt-4 pt-4">-->
+<!--            <div *ngFor="let flu of flux | async" class="flux">-->
+<!--                <div *ngFor="let profile of profiles | async">-->
+<!--                    <p *ngIf="flu.id_user===profile.id_user">-->
+<!--                        <strong>{{ profile.username }} rated {{ flu.movie_name }}</strong>-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--                <p>{{ flu.rating }} stars</p>-->
+<!--                <div class="row">-->
+<!--                    <div class="col"><div class="button-gray">Movie</div></div>-->
+<!--                    <div class="col"><div class="button-purple">Note</div></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--</div>-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+<div class="row mt-5 px-lg-5">
+    <div class="col-lg-3 col-md-5 col-11 mx-auto" *ngFor="let flu of flux | async">
+        <div class="card border-0 my-2" >
+            <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" class="py-3 px-3">
+            <div class="row">
+                    <div class="col-lg-3 col-12">
+                        <div class="py-3 px-3" [attr.class]="flu.rating >= 3.5 ? 'face' : 'face2'">
+                            <div class="eye"></div>
+                            <div class="eye right"></div>
+                            <div [attr.class]="flu.rating >= 3.5 ? 'mouth happy' : 'mouth sad'"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-12">
+                        <div *ngFor="let profile of profiles | async">
+                            <div *ngIf="flu.id_user===profile.id_user">
+                                <h5>{{ profile.username }} rated {{ flu.movie_name }}</h5>
+                                <p>{{ flu.rating }} stars</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-
+                <div class="row">
+                    <div class="col-lg-6 col-12 text-center">
+                        <button type="button" class="btn buttons">Movie</button>
+                    </div>
+                    <div class="col-lg-6 col-12 text-center">
+                        <button type="button" class="btn buttons">Note !</button>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
