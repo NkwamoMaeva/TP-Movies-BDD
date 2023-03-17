@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { User } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
+import { AuthentificationService } from './authentification/services/authentification.service';
 
 export interface Menu {
   name: string;
@@ -13,16 +16,26 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    public auth: AngularFireAuth,
+    public authService: AuthentificationService
+  ) {
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
       }
     });
+    this.auth.user.subscribe((user) => {
+      if (user) {
+        this.connected = true;
+        this.user = user;
+      }
+    });
   }
   title = '';
   link = '/';
-
+  user: firebase.default.User | null = null;
   connected = false;
   menus: Menu[] = [
     {
@@ -44,5 +57,11 @@ export class AppComponent {
 
   goToMenu(menu: string) {
     this.title = menu;
+  }
+  signOut() {
+    console.log('Logout');
+    this.auth.signOut().then((result) => {
+      console.log(result);
+    });
   }
 }
