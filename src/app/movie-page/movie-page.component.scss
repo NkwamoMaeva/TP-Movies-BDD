@@ -2,15 +2,6 @@
   background-color: grey;
 }
 
-body,
-html,
-#app {
-  width: 100%;
-  min-height: 100%;
-  background: #eee;
-  font: 400 16px 'Lato';
-}
-
 #app {
   padding: 1em 1em 84px 1em;
 }
@@ -31,36 +22,10 @@ html,
 .genres {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 .list {
   margin-top: 30px;
-}
-@media screen and (max-width: 767px) {
-  .list {
-    display: grid;
-    grid-gap: 20px 10px;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    .poster {
-      height: 200px;
-    }
-    h5 {
-      margin: 10px 0;
-    }
-  }
-}
-
-@media (min-width: 766px) {
-  .list {
-    display: grid;
-    grid-gap: 20px 10px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    .poster {
-      height: 300px;
-    }
-    h5 {
-      margin: 15px 0;
-    }
-  }
 }
 
 #search {
@@ -71,11 +36,6 @@ html,
     border-radius: 10em;
     color: #666;
   }
-}
-
-.poster {
-  background: none 50% 50% / contain no-repeat transparent;
-  width: 100%;
 }
 
 .form-group {

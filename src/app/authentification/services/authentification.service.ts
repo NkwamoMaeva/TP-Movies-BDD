@@ -31,7 +31,7 @@ export class AuthentificationService {
           id_user: result.user?.uid ?? '',
           email: result.user?.email ?? '',
         };
-        this.firestore.collection('Profile').add(user);
+        this.firestore.collection('Profile').doc(result.user?.uid).set(user);
         window.alert('You have been successfully registered!');
         console.log(result.user);
       })

@@ -16,16 +16,11 @@
             </mat-chip-listbox>
         </div>
 
-        <div class="list mt-4 pt-4">
-            <div *ngFor="let movie of movies;" class="movie">
-                <h5>{{ movie.title }}</h5>
+        <tp-movies-movie-list [movies]="movies"></tp-movies-movie-list>
 
-                <div class="poster"
-                    [style]='"background-image: url(https://image.tmdb.org/t/p/w500" + movie.poster_path + ")"'>
-                </div>
-
-            </div>
-        </div>
+        <mat-paginator (page)="handlePageEvent($event)" [length]="movies.total_results" [pageSize]="20"
+            aria-label="Select page">
+        </mat-paginator>
 
     </div>
 </div>
