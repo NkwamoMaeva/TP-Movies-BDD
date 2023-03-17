@@ -38,8 +38,9 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     AuthentificationComponent,
     MoviePageComponent,
     MovieListComponent,
-  , FluxListComponent],
-  imports: [
+    FluxListComponent,
+  ],
+imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
@@ -70,7 +71,8 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     HomepageComponent,
     MoviePageComponent,
     MovieListComponent,
-  , FluxListComponent],
+    FluxListComponent,
+  ],
 })
 export class AppModule {
   constructor(
