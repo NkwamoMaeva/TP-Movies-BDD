@@ -9,9 +9,11 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   providedIn: 'root',
 })
 export class FluxListService {
+  
   private readonly af = inject(AngularFirestore);
   private readonly auth = inject(AngularFireAuth);
   public flux: Observable<Flux[]> = this.af.collection<Flux>('Ratings').valueChanges()
+  public profiles: Observable<Profile[]> = this.af.collection<Profile>('Profile').valueChanges()
   async changeNotif() {
     this.auth.user.subscribe((user) => {
       // eslint-disable-next-line no-empty
