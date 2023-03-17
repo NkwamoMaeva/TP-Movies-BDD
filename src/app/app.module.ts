@@ -10,6 +10,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -57,4 +59,18 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
   bootstrap: [AppComponent],
   exports: [AuthentificationComponent, MovieListComponent, FluxListComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(
+    private afAuth: AngularFireAuth // Inject Firebase auth service
+  ) {
+    this.afAuth.onAuthStateChanged((user: any) => {
+      if (user) {
+        localStorage.setItem('connected', 'true');
+        console.log('Connected user', user);
+      } else {
+        localStorage.setItem('connected', 'false');
+        console.log('Is not connected at all');
+      }
+    });
+  }
+}

@@ -33,10 +33,13 @@
             </button>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="/register">
-                    <span>Inscription</span>
+                    <span>Register</span>
                 </button>
                 <button mat-menu-item routerLink="/login">
-                    <span>Connexion</span>
+                    <span>Login</span>
+                </button>
+                <button *ngIf="connected" mat-menu-item (click)="signOut()" routerLink="/login">
+                    <span>Logout</span>
                 </button>
             </mat-menu>
         </div>
@@ -56,11 +59,13 @@
             <div fxLayout="column" class="sidebar-content">
                 <div class="user-info" fxLayout="row">
                     <div fxLayout="column" fxLayoutAlign="space-between start" class="h-100">
-                        <img class="user-avatar" [src]="connected ? 'https://material.angular.io/assets/img/examples/shiba2.jpg' :
+                        <img class="user-avatar" [src]="connected ? (user?.photoURL?
+                            'https://material.angular.io/assets/img/examples/shiba2.jpg' :
+                            'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png') :
                             'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
                             alt="avatar">
                         <ng-container *ngIf="connected; else elseConnect">
-                            <span class="white" style="margin-bottom: 9px;">Alan Walker</span>
+                            <span class="white" style="margin-bottom: 9px;">{{user?.displayName}}</span>
                         </ng-container>
                         <ng-template #elseConnect>
                             <button class="white" mat-button (click)="sidenav.close()" routerLink="/login">

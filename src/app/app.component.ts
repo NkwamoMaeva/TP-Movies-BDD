@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { User } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
 import { RatingTestService } from './notif-test/services/notif-test.services';
+import { AuthentificationService } from './authentification/services/authentification.service';
 
 export interface Menu {
   name: string;
@@ -14,19 +17,26 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private router: Router, private rts: RatingTestService) {
+  constructor(private router: Router, private rts: RatingTestService,
+    public auth: AngularFireAuth,
+    public authService: AuthentificationService) {
     this.notif = this.rts.getNotif();
-    
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
+      }
+    });
+    this.auth.user.subscribe((user) => {
+      if (user) {
+        this.connected = true;
+        this.user = user;
       }
     });
   }
   notif = 10;
   title = '';
   link = '/';
-
+  user: firebase.default.User | null = null;
   connected = false;
   menus: Menu[] = [
     {
@@ -48,5 +58,11 @@ export class AppComponent {
 
   goToMenu(menu: string) {
     this.title = menu;
+  }
+  signOut() {
+    console.log('Logout');
+    this.auth.signOut().then((result) => {
+      console.log(result);
+    });
   }
 }

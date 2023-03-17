@@ -5,7 +5,7 @@ export interface Flux {
   date_created: string,
 }
 
-export interface FluxResult {
-  page: number;
-  results: Flux[];
+export interface Profile {
+  id_user: string;
+  username: string;
 }
