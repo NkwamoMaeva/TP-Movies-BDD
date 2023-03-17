@@ -20,12 +20,15 @@ export class AppComponent {
   constructor(private router: Router, private rts: RatingTestService,
     public auth: AngularFireAuth,
     public authService: AuthentificationService) {
-    this.notif = this.rts.getNotif();
+
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
       }
     });
+    if(!(this.link === '/flus')) {
+      this.notif = this.rts.getNotif();
+    }
     this.auth.user.subscribe((user) => {
       if (user) {
         this.connected = true;
