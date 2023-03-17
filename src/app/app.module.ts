@@ -20,16 +20,24 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { HomepageComponent } from './homepage/homepage.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
-import { MovieListComponent } from './movie-list/movie-list.component';
+import { MoviePageComponent } from './movie-page/movie-page.component';
+import { MovieListComponent } from './movie-page/movie-list/movie-list.component';
 
-import { MovieListService } from './movie-list/services/movie-list.service';
+import { MovieListService } from './movie-page/services/movie-list.service';
 import { AuthentificationService } from './authentification/services/authentification.service';
 
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 @NgModule({
-  declarations: [AppComponent, AuthentificationComponent, MovieListComponent],
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    AuthentificationComponent,
+    MoviePageComponent,
+    MovieListComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -56,7 +64,12 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
   bootstrap: [AppComponent],
-  exports: [AuthentificationComponent, MovieListComponent],
+  exports: [
+    AuthentificationComponent,
+    HomepageComponent,
+    MoviePageComponent,
+    MovieListComponent,
+  ],
 })
 export class AppModule {
   constructor(

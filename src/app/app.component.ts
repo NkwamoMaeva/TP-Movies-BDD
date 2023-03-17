@@ -33,6 +33,7 @@ export class AppComponent {
       }
     });
   }
+  notif = 0;
   title = '';
   link = '/';
   user: firebase.default.User | null = null;
