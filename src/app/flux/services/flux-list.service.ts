@@ -8,6 +8,7 @@ import {AngularFirestore} from "@angular/fire/compat/firestore";
   providedIn: 'root',
 })
 export class FluxListService {
+  
   private readonly af = inject(AngularFirestore);
   private readonly auth = inject(AngularFireAuth);
   public flux: Observable<Flux[]> = this.af.collection<Flux>('Ratings').valueChanges()
