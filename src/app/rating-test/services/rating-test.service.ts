@@ -17,11 +17,9 @@ export class RatingTestService {
   addDocument() {
     const document = {
       date_created: '10 mars 2023',
+      id_movie: 27205,
       id_user: 'jLyZyMIQv9Z53wMpI8XCnmKht513',
-      movie_name: 'Star Wars',
-      rating: 5,
-      title: 'Star Wars',
-      year: 2023,
+      rating: 5
     };
     return this.afs
       .collection('Ratings')
