@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
+import { RatingTestService } from './notif-test/services/notif-test.services';
 import { AuthentificationService } from './authentification/services/authentification.service';
 
 export interface Menu {
@@ -16,16 +17,18 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(
-    private router: Router,
+  constructor(private router: Router, private rts: RatingTestService,
     public auth: AngularFireAuth,
-    public authService: AuthentificationService
-  ) {
+    public authService: AuthentificationService) {
+
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
       }
     });
+    if(!(this.link === '/flus')) {
+      this.notif = this.rts.getNotif();
+    }
     this.auth.user.subscribe((user) => {
       if (user) {
         this.connected = true;
@@ -53,6 +56,11 @@ export class AppComponent {
       name: 'Téléchargements',
       link: '/download',
       icon: 'download',
+    },
+    {
+      name: 'Flux',
+      link: '/flux',
+      icon: '',
     },
   ];
 

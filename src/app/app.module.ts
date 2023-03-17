@@ -24,6 +24,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
 import { MoviePageComponent } from './movie-page/movie-page.component';
 import { MovieListComponent } from './movie-page/movie-list/movie-list.component';
+import { FluxListComponent } from './flux/flux-list.component';
 
 import { MovieListService } from './movie-page/services/movie-list.service';
 import { AuthentificationService } from './authentification/services/authentification.service';
@@ -37,7 +38,7 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     AuthentificationComponent,
     MoviePageComponent,
     MovieListComponent,
-  ],
+  , FluxListComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -69,7 +70,7 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     HomepageComponent,
     MoviePageComponent,
     MovieListComponent,
-  ],
+  , FluxListComponent],
 })
 export class AppModule {
   constructor(

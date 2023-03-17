@@ -24,9 +24,10 @@
             <a mat-button routerLink="/">Accueil</a>
             <a mat-button routerLink="/wachlist">Wachlist</a>
             <a mat-button routerLink="/download">Téléchargements</a>
+            <a mat-button routerLink="/flux">Flux</a>
 
             <button mat-icon-button aria-label="notifications">
-                <mat-icon matBadge="8" matBadgeColor="accent">notifications</mat-icon>
+                <mat-icon [matBadge]="notif" matBadgeColor="accent">notifications</mat-icon>
             </button>
             <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                 <mat-icon>person</mat-icon>
