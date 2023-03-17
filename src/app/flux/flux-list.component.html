@@ -22,30 +22,65 @@
 <div class="row mt-5 px-lg-5">
     <div class="col-lg-3 col-md-5 col-11 mx-auto" *ngFor="let flu of flux | async">
         <div class="card border-0 my-2" >
-            <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" class="py-3 px-3">
-            <div class="row">
-                    <div class="col-lg-3 col-12">
-                        <div class="py-3 px-3" [attr.class]="flu.rating >= 3.5 ? 'face' : 'face2'">
-                            <div class="eye"></div>
-                            <div class="eye right"></div>
-                            <div [attr.class]="flu.rating >= 3.5 ? 'mouth happy' : 'mouth sad'"></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-9 col-12">
-                        <div *ngFor="let profile of profiles | async">
-                            <div *ngIf="flu.id_user===profile.id_user">
-                                <h5>{{ profile.username }} rated {{ flu.movie_name }}</h5>
-                                <p>{{ flu.rating }} stars</p>
+            <div *ngFor="let profile of profiles | async">
+                <div *ngIf="flu.id_user===profile.id_user">
+                    <div *ngFor="let movie of movies">
+                        <div *ngIf="flu.id_movie===movie.id">
+                            <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" class="py-3 px-3">
+                                <div class="row">
+                                    <div class="col-lg-3 col-12">
+                                        <img src="{{profile.photo}}" alt="Profile picture of {{ profile.username }}" class="w-100 profile"/>
+                                    </div>
+                                    <div class="col-lg-9 col-12 my-auto">
+                                        <strong>{{ profile.username }}</strong>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-lg-4 col-12">
+                                        <img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt="Photo of the movie {{ movie.title }}" class="w-100 movie"/>
+                                    </div>
+                                    <div class="col-lg-8 col-12 my-auto">
+                                        <strong>{{ movie.title }}</strong>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-4 col-12">
+                                        <div [attr.class]="flu.rating >= 3.5 ? 'face' : 'face2'">
+                                            <div class="eye"></div>
+                                            <div class="eye right"></div>
+                                            <div [attr.class]="flu.rating >= 3.5 ? 'mouth happy' : 'mouth sad'"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-12">
+                                        {{ flu.rating }} stars
+                                        <svg style="display:none;">
+                                            <defs>
+                                                <symbol id="fivestars">
+                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"/>
+                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(24)"/>
+                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(48)"/>
+                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(72)"/>
+                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"  transform="translate(96)"/>
+                                                </symbol>
+                                            </defs>
+                                        </svg>
+                                        <div class="rating">
+                                            <progress class="rating-bg" value="{{ flu.rating }}" max="5"></progress>
+                                            <svg><use xlink:href="#fivestars"/></svg>
+                                        </div>
+                                        <p class="mt-2">{{ flu.date_created }}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-12 text-center">
+                                        <button type="button" class="btn buttons">Movie</button>
+                                    </div>
+                                    <div class="col-lg-6 col-12 text-center">
+                                        <button type="button" class="btn buttons">Note !</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-12 text-center">
-                        <button type="button" class="btn buttons">Movie</button>
-                    </div>
-                    <div class="col-lg-6 col-12 text-center">
-                        <button type="button" class="btn buttons">Note !</button>
                     </div>
                 </div>
             </div>

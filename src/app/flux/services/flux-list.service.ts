@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import {inject, Injectable} from '@angular/core';
 import {Flux, Profile} from '../models/flux.model';
-import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
   providedIn: 'root',
