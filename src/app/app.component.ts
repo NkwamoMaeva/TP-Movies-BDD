@@ -54,6 +54,11 @@ export class AppComponent {
       link: '/download',
       icon: 'download',
     },
+    {
+      name: 'Flux',
+      link: '/flux',
+      icon: '',
+    },
   ];
 
   goToMenu(menu: string) {
