@@ -11,4 +11,7 @@ import {AsyncPipe, NgForOf} from "@angular/common";
 })
 export class FluxListComponent {
   public readonly flux = inject(FluxListService).flux;
+  constructor(private fluxService : FluxListService) { 
+    this.fluxService.changeNotif();
+  }
 }

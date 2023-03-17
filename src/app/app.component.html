@@ -26,7 +26,7 @@
             <a mat-button routerLink="/download">Téléchargements</a>
 
             <button mat-icon-button aria-label="notifications">
-                <mat-icon matBadge="8" matBadgeColor="accent">notifications</mat-icon>
+                <mat-icon [matBadge]="notif" matBadgeColor="accent">notifications</mat-icon>
             </button>
             <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                 <mat-icon>person</mat-icon>
@@ -73,7 +73,7 @@
                     <div fxLayout="column" fxLayoutAlign="space-between end" class="h-100">
                         <div>
                             <button mat-icon-button aria-label="notifications" *ngIf="connected">
-                                <mat-icon class="white" matBadge="8" matBadgeColor="accent" mat-icon-no-color>
+                                <mat-icon class="white" [matBadge]="notif" matBadgeColor="accent" mat-icon-no-color>
                                     notifications</mat-icon>
                             </button>
                             <span class="example-spacer"></span>

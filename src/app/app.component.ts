@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { RatingTestService } from './notif-test/services/notif-test.services';
 
 export interface Menu {
   name: string;
@@ -13,13 +14,16 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private router: Router) {
+  constructor(private router: Router, private rts: RatingTestService) {
+    this.notif = this.rts.getNotif();
+    
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
       }
     });
   }
+  notif = 10;
   title = '';
   link = '/';
 

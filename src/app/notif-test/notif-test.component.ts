@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RatingTest } from './models/rating-test.model';
-import { RatingTestService } from './services/rating-test.service';
+import { RatingTestService } from './services/notif-test.services';
 import { Observable } from 'rxjs/internal/Observable';
 import { AsyncPipe, NgForOf } from '@angular/common';
 import {
@@ -12,17 +11,10 @@ import { FluxListService } from '../flux/services/flux-list.service';
 import { Firestore } from '@angular/fire/firestore';
 
 @Component({
-  selector: 'tp-movies-rating-test',
-  templateUrl: './rating-test.component.html',
-  styleUrls: ['./rating-test.component.scss'],
+  selector: 'tp-movies-notif-test',
+  templateUrl: './notif-test.component.html',
 })
-export class RatingTestComponent {
+export class NotifTestComponent {
   constructor(private rts: RatingTestService) {
-    
-  }
-  addDocument() {
-    this.rts.addDocument().then(() => {
-      console.log('Document added');
-    });
   }
 }
