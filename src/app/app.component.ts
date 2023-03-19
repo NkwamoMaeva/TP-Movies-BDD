@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
 import { RatingTestService } from './notif-test/services/notif-test.services';
@@ -26,7 +25,7 @@ export class AppComponent {
         this.link = this.router.url;
       }
     });
-    if(!(this.link === '/flus')) {
+    if(!(this.link === '/flux')) {
       this.notif = this.rts.getNotif();
     }
     this.auth.user.subscribe((user) => {

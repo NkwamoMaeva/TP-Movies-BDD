@@ -10,7 +10,7 @@
     <div class="movie-list-container" *ngFor="let slide of sliderMovies;let i=index;">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
             <h2>{{slide.title}}</h2>
-            <a mat-button href="https://www.google.com/" target="_blank">
+            <a mat-button [routerLink]="['/movies']" [queryParams]="{ type: 'trending'}">
                 Show more
                 <mat-icon iconPositionEnd>navigate_next</mat-icon>
             </a>
