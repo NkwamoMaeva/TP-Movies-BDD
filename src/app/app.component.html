@@ -17,15 +17,18 @@
                 </div>
             </ng-template>
         </a>
-        <a mat-button routerLink="/">Accueil</a>
-        <a mat-button routerLink="/wachlist">Wachlist</a>
-        <a mat-button routerLink="/download">Téléchargements</a>
-        <a mat-button routerLink="/flux">Flux</a>
+        <div fxShow="true" fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="flex-end center">
+            <a mat-button routerLink="/">Accueil</a>
+            <a mat-button routerLink="/wachlist">Wachlist</a>
+            <a mat-button routerLink="/download">Téléchargements</a>
+            <a mat-button routerLink="/flux">Flux</a>
+        </div>
+
         <span class="spacer"></span>
 
         <div class="nav-list" fxShow="true" fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="flex-end center">
             <ng-container *ngIf="connected; else elseAvatar">
-                <h5>{{user?.email}}</h5>
+                <h5 [matMenuTriggerFor]="connectedMenu">{{user?.email}}</h5>
                 <img class="user-avatar" [matMenuTriggerFor]="connectedMenu"
                     [src]="user?.photoURL ? user?.photoURL: 'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
                     alt=" avatar">

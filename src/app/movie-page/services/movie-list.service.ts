@@ -16,10 +16,10 @@ export class MovieListService {
         page
     );
   }
-  getMoviesDay(page: number): Observable<MovieResult> {
+  getMoviesPopular(page: number): Observable<MovieResult> {
     return this.http
       .get<MovieResult>(
-        'https://api.themoviedb.org/3/trending/all/week?api_key=4789d4caefcebacc74ede26d39fe8048&page=' +
+        'https://api.themoviedb.org/3/movie/popular?api_key=4789d4caefcebacc74ede26d39fe8048&page=' +
           page
       )
       .pipe(
