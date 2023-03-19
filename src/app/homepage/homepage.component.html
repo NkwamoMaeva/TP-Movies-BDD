@@ -1,13 +1,13 @@
 <div class="home-container">
     <div class="featured-content"
-        style="background:url('https://w0.peakpx.com/wallpaper/355/184/HD-wallpaper-avatar-the-way-of-the-water-2022-avatar-2-avatar-the-way-of-water-2022-movies-movies.jpg');">
+        style="order:1; background:url('https://w0.peakpx.com/wallpaper/355/184/HD-wallpaper-avatar-the-way-of-the-water-2022-avatar-2-avatar-the-way-of-water-2022-movies-movies.jpg');">
         <img class="featured-title" [src]='"https://image.tmdb.org/t/p/w500" + bannerMovie1.poster_path' alt="">
         <p class="featured-desc">
             {{bannerMovie1.overview}}
         </p>
 
     </div>
-    <div class="movie-list-container" *ngFor="let slide of sliderMovies;let i=index;">
+    <div class="movie-list-container" [style]="{order:slide.order}" *ngFor="let slide of sliderMovies;let i=index;">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
             <h2>{{slide.title}}</h2>
             <a mat-button [routerLink]="['/movies']" [queryParams]="{ type: 'trending'}">
@@ -34,39 +34,13 @@
     </div>
 
     <div class="featured-content"
-        style="background:linear-gradient(to bottom, rgba(0, 0, 0, 0),
+        style="order:4;background:linear-gradient(to bottom, rgba(0, 0, 0, 0),
         #151515),url('https://marvelstory.fr/wp-content/uploads/2022/07/Banniere_Site_MS_Juillet2K22.png'); margin: 50px 0;">
         <img class="featured-title" [src]='"https://image.tmdb.org/t/p/w500" + bannerMovie2.poster_path' alt="">
         <p class="featured-desc">
             {{bannerMovie2.overview}}
         </p>
 
-    </div>
-
-    <div class="movie-list-container">
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
-            <h2>{{lastSlider.title}}</h2>
-            <a mat-button href="https://www.google.com/" target="_blank">
-                Show more
-                <mat-icon iconPositionEnd>navigate_next</mat-icon>
-            </a>
-        </div>
-        <div class="movie-list-wrapper">
-            <div class="movie-list">
-                <div class="movie-list-item" *ngFor="let item of lastSlider.movies;">
-                    <div class=" movie-list-item-img"
-                        [style]="{'background-image': 'url(https://image.tmdb.org/t/p/w500' + item.poster_path +')'}">
-                        <div class="movie-list-item-img-cover"></div>
-                    </div>
-                    <div class="movie-list-item-details">
-                        <span class="movie-list-item-title">{{item.title}}</span>
-                        <p class="movie-list-item-desc">{{item.overview}}</p>
-                    </div>
-
-                </div>
-            </div>
-            <mat-icon class="arrow" color="primary" id="" (click)="next(3)">navigate_next</mat-icon>
-        </div>
     </div>
 
 </div>
