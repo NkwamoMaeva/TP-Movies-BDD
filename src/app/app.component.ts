@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthentificationService } from './authentification/services/authentification.service';
