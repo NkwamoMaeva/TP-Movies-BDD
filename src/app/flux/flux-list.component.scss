@@ -20,9 +20,7 @@ html,
   padding: 1em 1em 84px 1em;
 }
 
-.fade {
-  display: block;
-}
+.modal{background: rgba(0,0,0, .5)};
 
 .profile {
   border-radius: 20px;
@@ -98,6 +96,10 @@ button {
   background: linear-gradient(to bottom left, $error 40%, $orange 100%);
   border-radius: 20px;
   box-shadow: 5px 5px 20px rgba($gray, 10%);
+}
+
+.my-note {
+  border: rgba(96, 63, 181) 2px solid !important;
 }
 
 .face, .face2 {

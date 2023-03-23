@@ -34,12 +34,13 @@ export class FluxListService {
   }
 
   constructor(private readonly afs: AngularFirestore) {}
-  addNote(id_user: string, id: number) {
+
+  addNote(id_user: string, id_movie: number, rating: string) {
     const document = {
       date_created: new Date().toLocaleString(),
-      id_movie: id,
+      id_movie: id_movie,
       id_user: id_user,
-      rating: 5
+      rating: rating
     };
     return this.afs
         .collection('Ratings')

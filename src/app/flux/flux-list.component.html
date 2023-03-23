@@ -7,9 +7,9 @@
                 <div *ngIf="flu.id_user===profile.id_user">
                     <div *ngFor="let movie of movies">
                         <div *ngIf="flu.id_movie===movie.id">
-                            <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" class="py-3 px-3">
+                            <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" [ngClass]="{'my-note': userId===flu.id_user}" class="py-3 px-3">
                                 <div class="row">
-                                    <div class="col-lg-3 col-12">
+                                    <div *ngIf="profile.photo" class="col-lg-3 col-12">
                                         <img src="{{profile.photo}}" alt="Profile picture of {{ profile.username }}" class="w-100 profile"/>
                                     </div>
                                     <div class="col-lg-9 col-12 my-auto">
@@ -21,7 +21,7 @@
                                         <img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt="Photo of the movie {{ movie.title }}" class="w-100 movie"/>
                                     </div>
                                     <div class="col-lg-8 col-12 my-auto">
-                                        <strong>{{ movie.title }}</strong>
+                                        <a href="" class="text-black"><strong><u>{{ movie.title }}</u></strong></a>
                                     </div>
                                 </div>
                                 <div class="row my-2">
@@ -53,11 +53,14 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6 col-12 text-center">
-                                        <button type="button" class="btn buttons">Movie</button>
-                                    </div>
-                                    <div class="col-lg-6 col-12 text-center">
-                                        <button type="button" class="btn buttons" data-backdrop="static" data-keyboard="false" data-bs-toggle="modal" data-bs-target="#noteMovie">Note !</button>
+                                    <div class="col-12 text-center">
+                                        <div *ngFor="let flu of flux | async">
+                                            <div *ngIf="userId===flu.id_user && flu.id_movie===movie.id">
+                                                <label for="newnote">Your note : &nbsp;</label>
+                                                <input type="text" id="newnote" name="newnote" class="w-25" placeholder="{{ flu.rating }}" [(ngModel)]="newNoteValue">
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn buttons mt-2" (click)="updateRating(userId, movie.id)">Modify my note</button>
                                     </div>
                                 </div>
                             </div>
@@ -68,25 +71,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="noteMovie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Ma modale</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Contenu de ma modale
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-primary">Enregistrer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
