@@ -18,27 +18,31 @@ export class AuthentificationService {
     private router: Router
   ) {}
   // Sign up with email/password
-  signUp(email: string, password: string, username: string) {
-    return this.afAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        result.user?.updateProfile({ displayName: username });
-        const user: User = {
-          username: result.user?.displayName ?? '',
-          photo: '',
-          firstname: '',
-          lastname: '',
-          id_user: result.user?.uid ?? '',
-          email: result.user?.email ?? '',
-        };
-        this.firestore.collection('Profile').doc(result.user?.uid).set(user);
-        window.alert('You have been successfully registered!');
-        console.log(result.user);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+  async signUp(email: string, password: string, username: string) {
+    try {
+      const result = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      await result.user?.updateProfile({ displayName: username });
+      
+      const querySnapshot = await this.firestore.collection('Ratings').get().toPromise();
+      const user: User = {
+        username: result.user?.displayName ?? '',
+        photo: '',
+        firstname: '',
+        lastname: '',
+        id_user: result.user?.uid ?? '',
+        email: result.user?.email ?? '',
+        notification: querySnapshot?.size,
+      };
+      
+      await this.firestore.collection('Profile').doc(result.user?.uid).set(user);
+      
+      window.alert('You have been successfully registered!');
+      console.log(result.user);
+    } catch (error) {
+      window.alert(error);
+    }
   }
+  
   // Sign in with email/password
   signIn(email: string, password: string) {
     return this.afAuth

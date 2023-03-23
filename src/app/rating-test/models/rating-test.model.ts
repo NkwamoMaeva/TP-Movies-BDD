@@ -1,7 +1,7 @@
 export interface RatingTest {
     id_user: string;
     rating: number,
-    movie_name: string,
+    id_movie: string,
     date_created: string,
   }
   
