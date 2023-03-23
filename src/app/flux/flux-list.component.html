@@ -54,15 +54,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 text-center">
-                                        <div *ngFor="let flu of flux | async">
+                                        <ng-container *ngFor="let flu of flux | async">
                                             <div *ngIf="userId===flu.id_user && flu.id_movie===movie.id">
-                                                <label for="newnote">Your note : &nbsp;</label>
+                                                <label for="newnote">Votre note : &nbsp;</label>
                                                 <input type="text" id="newnote" name="newnote" class="w-25" placeholder="{{ flu.rating }}" [(ngModel)]="newNoteValue">
                                             </div>
-                                        </div>
-                                        <button type="button" class="btn buttons mt-2" (click)="updateRating(userId, movie.id)">Modify my note</button>
+                                        </ng-container>
+                                        <button type="button" class="btn buttons mt-2" (click)="updateRating(userId, movie.id)">Add my note</button>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
