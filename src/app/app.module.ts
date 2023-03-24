@@ -36,13 +36,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
+import { HotToastService } from '@ngneat/hot-toast';
+ 
 @NgModule({
   declarations: [ 
     AppComponent,
     HomepageComponent,
     AuthentificationComponent,
     MoviePageComponent,
-    MovieListComponent, ProfileComponent,
+    MovieListComponent, 
+    ProfileComponent,
     FluxListComponent,
   ],
 imports: [ 
@@ -77,6 +81,7 @@ imports: [
     MovieListService,
     AuthentificationService,
     ProfileComponent,
+    HotToastService,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
   bootstrap: [AppComponent],

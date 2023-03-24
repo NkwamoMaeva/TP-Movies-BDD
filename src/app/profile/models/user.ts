@@ -3,11 +3,11 @@
 
 export interface ProfileUser {
     uid: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    displayName?: string;
-    phone?: string;
-    address?: string;
-    photoURL?: string;
+    email?: string | null;
+    firstName?: string | null ;
+    lastName?: string | null;
+    displayName?: string | null;
+    phone?: string | null;
+    address?: string | null;
+    photoURL?: string | null;
   }

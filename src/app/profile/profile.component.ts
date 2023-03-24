@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { switchMap, tap } from 'rxjs';
@@ -30,9 +30,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private imageUploadService: ImageUploadService,
-    private toast: HotToastService,
-    private usersService: UsersService,
-    private fb: NonNullableFormBuilder
+    @Inject(HotToastService) private toast: HotToastService,
+    private usersService : UsersService,
+    private fb : FormBuilder
   ) {}
 
   ngOnInit(): void {
