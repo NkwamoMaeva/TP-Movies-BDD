@@ -2,6 +2,9 @@ import {Component, inject} from '@angular/core';
 import {FluxListService} from "./services/flux-list.service";
 import {Movie} from "../movie-page/models/movie.model";
 import {MovieListService} from "../movie-page/services/movie-list.service";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
+import {Observable} from "rxjs";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Component({
   selector: 'tp-movies-movie-flux',
