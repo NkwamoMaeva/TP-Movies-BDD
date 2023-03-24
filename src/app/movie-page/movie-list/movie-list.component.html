@@ -1,0 +1,8 @@
+<div>
+    <div class="list mt-4 pt-4">
+        <div *ngFor="let movie of movies.results;" class='movie-item'>
+            <h2>{{ movie.title }}</h2>
+            <img loading="lazy" [src]='"https://image.tmdb.org/t/p/w500" + movie.poster_path'>
+        </div>
+    </div>
+</div>

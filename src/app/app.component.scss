@@ -13,7 +13,7 @@ a {
   align-items: center;
 }
 
-.example-spacer {
+.spacer {
   flex: 1 1 auto;
 }
 
@@ -40,5 +40,20 @@ a {
       border-radius: 50%;
       border: 2px solid lightgray;
     }
+  }
+}
+
+@media only screen and (min-width: 764px) {
+  h5 {
+    font-size: 14px;
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  .user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid lightgray;
   }
 }

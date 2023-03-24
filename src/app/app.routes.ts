@@ -1,12 +1,18 @@
 import { Route } from '@angular/router';
+import { HomepageComponent } from './homepage/homepage.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
-import { MovieListComponent } from './movie-list/movie-list.component';
+import { MoviePageComponent } from './movie-page/movie-page.component';
+import { FluxListComponent } from './flux/flux-list.component';
 import { ProfileComponent } from './profile/profile.component';
+import { RatingTestComponent } from './rating-test/rating-test.component';
 export const appRoutes: Route[] = [
-  { path: '', component: MovieListComponent },
+  { path: '', component: HomepageComponent },
+  { path: 'movies', component: MoviePageComponent },
   { path: 'login', component: AuthentificationComponent },
   { path: 'register', component: AuthentificationComponent },
   { path: 'profile', component: ProfileComponent  },
 
   
+  { path: 'flux', component: FluxListComponent },
+  { path: 'rating-test', component: RatingTestComponent },
 ];
