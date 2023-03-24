@@ -9,10 +9,10 @@
                         <div *ngIf="flu.id_movie===movie.id">
                             <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" [ngClass]="{'my-note': userId===flu.id_user}" class="py-3 px-3">
                                 <div class="row">
-                                    <div *ngIf="profile.photo" class="col-lg-3 col-12">
+                                    <div *ngIf="profile.photo" class="col-lg-3 col-4">
                                         <img src="{{profile.photo}}" alt="Profile picture of {{ profile.username }}" class="w-100 profile"/>
                                     </div>
-                                    <div class="col-lg-9 col-12 my-auto">
+                                    <div class="col-lg-9 col-8 my-auto">
                                         <strong>{{ profile.username }}</strong>
                                     </div>
                                 </div>
@@ -20,7 +20,7 @@
                                     <div class="col-lg-4 col-12">
                                         <img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt="Photo of the movie {{ movie.title }}" class="w-100 movie"/>
                                     </div>
-                                    <div class="col-lg-8 col-12 my-auto">
+                                    <div class="col-lg-8 col-12 my-auto lg-mt-0 mt-2">
                                         <a href="" class="text-black"><strong><u>{{ movie.title }}</u></strong></a>
                                     </div>
                                 </div>
@@ -32,7 +32,7 @@
                                             <div [attr.class]="flu.rating >= 3.5 ? 'mouth happy' : 'mouth sad'"></div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8 col-12">
+                                    <div class="col-lg-8 col-12 lg-mt-0 mt-3">
                                         {{ flu.rating }} stars
                                         <svg style="display:none;">
                                             <defs>
