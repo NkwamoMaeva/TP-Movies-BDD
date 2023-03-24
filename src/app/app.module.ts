@@ -20,10 +20,13 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { HomepageComponent } from './homepage/homepage.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
-import { MovieListComponent } from './movie-list/movie-list.component';
+import { MoviePageComponent } from './movie-page/movie-page.component';
+import { MovieListComponent } from './movie-page/movie-list/movie-list.component';
+import { FluxListComponent } from './flux/flux-list.component';
 
-import { MovieListService } from './movie-list/services/movie-list.service';
+import { MovieListService } from './movie-page/services/movie-list.service';
 import { AuthentificationService } from './authentification/services/authentification.service';
 
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
@@ -33,9 +36,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
+import { HotToastService } from '@ngneat/hot-toast';
+ 
 @NgModule({
-  declarations: [ AppComponent, AuthentificationComponent, MovieListComponent, ProfileComponent],
-  imports: [ 
+  declarations: [ 
+    AppComponent,
+    HomepageComponent,
+    AuthentificationComponent,
+    MoviePageComponent,
+    MovieListComponent, 
+    ProfileComponent,
+    FluxListComponent,
+  ],
+imports: [ 
 
     BrowserModule,
     HttpClientModule,
@@ -67,10 +81,17 @@ import { MatInputModule } from '@angular/material/input';
     MovieListService,
     AuthentificationService,
     ProfileComponent,
+    HotToastService,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
   bootstrap: [AppComponent],
-  exports: [AuthentificationComponent, MovieListComponent, ProfileComponent],
+  exports: [
+    AuthentificationComponent,
+    HomepageComponent,
+    MoviePageComponent,
+    MovieListComponent, ProfileComponent,
+    FluxListComponent,
+  ],
 })
 export class AppModule {
   constructor(
