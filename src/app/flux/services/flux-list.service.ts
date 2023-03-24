@@ -32,4 +32,18 @@ export class FluxListService {
       }
     });
   }
+
+  constructor(private readonly afs: AngularFirestore) {}
+
+  addNote(id_user: string, id_movie: number, rating: string) {
+    const document = {
+      date_created: new Date().toLocaleString(),
+      id_movie: id_movie,
+      id_user: id_user,
+      rating: rating
+    };
+    return this.afs
+        .collection('Ratings')
+        .add(document);
+  }
 }
