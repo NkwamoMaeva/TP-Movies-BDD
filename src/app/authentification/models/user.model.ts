@@ -5,4 +5,5 @@ export interface User {
   lastname: string;
   photo: string;
   username: string;
+  notification : number | undefined;
 }
