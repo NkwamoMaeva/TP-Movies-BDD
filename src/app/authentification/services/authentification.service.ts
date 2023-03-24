@@ -6,7 +6,8 @@ import {
 } from '@angular/fire/compat/firestore';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
-import { getAuth, signOut } from '@angular/fire/auth';
+import { authState, getAuth, signOut } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class AuthentificationService {
     private router: Router
   ) {}
   // Sign up with email/password
+  
   signUp(email: string, password: string, username: string) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)

@@ -27,10 +27,16 @@ import { MovieListService } from './movie-list/services/movie-list.service';
 import { AuthentificationService } from './authentification/services/authentification.service';
 
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
-
+import { ProfileComponent } from './profile/profile.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 @NgModule({
-  declarations: [AppComponent, AuthentificationComponent, MovieListComponent],
-  imports: [
+  declarations: [ AppComponent, AuthentificationComponent, MovieListComponent, ProfileComponent],
+  imports: [ 
+
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
@@ -39,6 +45,13 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatFormFieldModule, MatButtonModule,
+    
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
@@ -53,10 +66,11 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
   providers: [
     MovieListService,
     AuthentificationService,
+    ProfileComponent,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
   bootstrap: [AppComponent],
-  exports: [AuthentificationComponent, MovieListComponent],
+  exports: [AuthentificationComponent, MovieListComponent, ProfileComponent],
 })
 export class AppModule {
   constructor(
