@@ -1,16 +1,10 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FluxListService} from "./services/flux-list.service";
 import {Movie} from "../movie-page/models/movie.model";
 import {MovieListService} from "../movie-page/services/movie-list.service";
-import {AngularFireAuth} from "@angular/fire/compat/auth";
-import firebase from "firebase/compat";
-import {getAuth} from "@angular/fire/auth";
-import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
-import {Flux} from "./models/flux.model";
-import {Observable} from "rxjs/internal/Observable";
 
 @Component({
-  selector: 'tp-movies-movie-list',
+  selector: 'tp-movies-movie-flux',
   templateUrl: './flux-list.component.html',
   styleUrls: ['./flux-list.component.scss'],
 })
@@ -29,7 +23,6 @@ export class FluxListComponent {
     this.movieListService.getMoviesTrending(1).subscribe((movies) => {
       this.movies = movies.results;
       // this.applyFilter(this.selectedGenre);
-
     });
     this.auth.authState.subscribe(user => {
       if (user) {

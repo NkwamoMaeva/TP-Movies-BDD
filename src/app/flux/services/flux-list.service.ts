@@ -23,9 +23,9 @@ export class FluxListService {
           .subscribe((querySnapshot) => {
             const sizeRatings = querySnapshot.size;
             const notificationDocRef = this.af
-              .collection('Notification')
+              .collection('Profile')
               .doc(user.uid);
-            notificationDocRef.update({ lastLengthNotif: sizeRatings });
+            notificationDocRef.update({ notification: sizeRatings });
           });
       } else {
         console.log(null);
