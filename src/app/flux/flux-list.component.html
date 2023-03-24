@@ -10,7 +10,7 @@
                             <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" [ngClass]="{'my-note': userId===flu.id_user}" class="py-3 px-3">
                                 <div class="row">
                                     <div *ngIf="profile.photo" class="col-lg-3 col-4">
-                                        <img src="{{profile.photo}}" alt="Profile picture of {{ profile.username }}" class="w-100 profile"/>
+                                        <img src="{{profile.photo}}" alt="" class="w-100 profile"/>
                                     </div>
                                     <div class="col-lg-9 col-8 my-auto">
                                         <strong>{{ profile.username }}</strong>
