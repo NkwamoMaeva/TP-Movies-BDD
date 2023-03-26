@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MovieResult } from '../models/movie.model';
+import { Movie } from '../models/movie.model';
 
 @Component({
   selector: 'tp-movies-movie-list',
@@ -7,5 +7,5 @@ import { MovieResult } from '../models/movie.model';
   styleUrls: ['./movie-list.component.scss'],
 })
 export class MovieListComponent {
-  @Input() movies: MovieResult = {} as MovieResult;
+  @Input() movies: Movie[] | undefined = [];
 }

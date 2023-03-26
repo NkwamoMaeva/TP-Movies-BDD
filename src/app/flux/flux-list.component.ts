@@ -18,7 +18,7 @@ export class FluxListComponent {
     private movieListService: MovieListService
   ) {
     this.fluxService.changeNotif();
-    this.movieListService.getMoviesTrending(1).subscribe((movies) => {
+    this.movieListService.getMovies('all', 1).subscribe((movies) => {
       this.movies = movies.results;
       // this.applyFilter(this.selectedGenre);
     });
