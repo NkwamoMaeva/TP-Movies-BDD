@@ -23,7 +23,7 @@ export class FluxListComponent {
   constructor(private fluxService : FluxListService, private movieListService: MovieListService,
               private readonly rts: FluxListService, private auth: AngularFireAuth, private afs: AngularFirestore) {
     this.fluxService.changeNotif();
-    this.movieListService.getMoviesTrending(1).subscribe((movies) => {
+    this.movieListService.getMovies('all', 1).subscribe((movies) => {
       this.movies = movies.results;
       // this.applyFilter(this.selectedGenre);
     });

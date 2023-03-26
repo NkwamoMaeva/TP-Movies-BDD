@@ -1,7 +1,23 @@
-import { Component } from '@angular/core';
-import { MovieResult } from './models/movie.model';
-import { PageEvent } from '@angular/material/paginator';
+import {
+  Component,
+  inject,
+  ViewChild,
+  HostListener,
+  ElementRef,
+} from '@angular/core';
+import {
+  BehaviorSubject,
+  map,
+  Observable,
+  switchMap,
+  combineLatest,
+} from 'rxjs';
+import { MoviesResponse } from './models/movie.model';
+import { GenresService } from './services/genre.service';
 import { MovieListService } from './services/movie-list.service';
+import { Genre } from './models/genre.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'tp-movies-movie-page',
@@ -9,38 +25,70 @@ import { MovieListService } from './services/movie-list.service';
   styleUrls: ['./movie-page.component.scss'],
 })
 export class MoviePageComponent {
-  movies: MovieResult = {} as MovieResult;
-  genres = [
-    { name: 'Comedy', selected: false },
-    { name: 'Drama', selected: false },
-    { name: 'Action', selected: false },
-    { name: 'Thriller', selected: false },
-    { name: 'Horror', selected: false },
-    { name: 'Romance', selected: false },
-    { name: 'Family', selected: false },
-  ];
-  selectedGenres = [];
-  query = '';
-  pageIndex = 0;
-  loading = true;
+  private readonly genresService = inject(GenresService);
+  private readonly movieListService = inject(MovieListService);
+  private readonly selectedGenres = new BehaviorSubject<number[]>([]);
+  selectedGenresModel: number[] = [];
+  public readonly type = new BehaviorSubject<string>('all');
+  public readonly searchValue = new BehaviorSubject<string>('');
 
-  handlePageEvent(e: PageEvent) {
-    this.pageIndex = e.pageIndex + 1;
-    this.loading = false;
-    this.movieListService
-      .getMoviesTrending(this.pageIndex)
-      .subscribe((movies) => {
-        this.movies = movies;
-        this.loading = false;
-        // this.applyFilter(this.selectedGenre);
-      });
+  typeFilter = 'all';
+  types: string[] = ['all', 'trending', 'popular', 'show'];
+  private readonly pageIndex = new BehaviorSubject<number>(1);
+  movies$: Observable<MoviesResponse> = combineLatest([
+    this.type,
+    this.selectedGenres,
+    this.pageIndex,
+    this.searchValue,
+  ]).pipe(
+    switchMap(([type, genre, page, search]) => {
+      return this.movieListService.getMovies(type, page, genre, search);
+    })
+  );
+  genres: Observable<{ id: string; name: string; selected: boolean }[]> =
+    this.genresService.getGenres().pipe(
+      map((objects: any) => {
+        return objects.map((obj: Genre) => {
+          return {
+            ...obj,
+            id: obj.id,
+            name: obj.name,
+            selected: false,
+          };
+        });
+      })
+    );
+
+  constructor(private route: ActivatedRoute, private router: Router) {
+    route.queryParams.subscribe((params) => {
+      if (params['type']) {
+        this.typeFilter = params['type'];
+        this.type.next(params['type']);
+      } else {
+        this.typeFilter = 'all';
+        this.type.next('all');
+      }
+    });
   }
 
-  constructor(private movieListService: MovieListService) {
-    this.movieListService.getMoviesTrending(1).subscribe((movies) => {
-      this.movies = movies;
-      this.loading = false;
-      // this.applyFilter(this.selectedGenre);
-    });
+  onGenre() {
+    this.selectedGenres.next(this.selectedGenresModel);
+  }
+  onGenreMenu() {
+    this.selectedGenres.next(this.selectedGenresModel);
+  }
+  onTypeChange(event: MatButtonToggleChange) {
+    // this.type.next(event.value);
+    this.router.navigate(['/movies'], { queryParams: { type: event.value } });
+  }
+  onSearch(event: any) {
+    this.searchValue.next(event.target.value);
+  }
+  clearSearch() {
+    this.searchValue.next('');
+  }
+
+  next() {
+    this.pageIndex.next(this.pageIndex.getValue() + 1);
   }
 }

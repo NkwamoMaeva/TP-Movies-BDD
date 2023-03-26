@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Movie } from '../movie-page/models/movie.model';
+import { Movie, TypeMovieList } from '../movie-page/models/movie.model';
 import { MovieListService } from '../movie-page/services/movie-list.service';
 
 @Component({
@@ -22,21 +22,23 @@ export class HomepageComponent {
     movies: Movie[];
   };
   constructor(movieService: MovieListService) {
-    movieService.search('Avatar 2').subscribe((movies) => {
+    movieService.search('Avatar 2', 1).subscribe((movies) => {
       this.bannerMovie1 = movies.results[1];
     });
-    movieService.search('Ant Man').subscribe((movies) => {
+    movieService.search('Ant Man', 1).subscribe((movies) => {
       this.bannerMovie2 = movies.results[1];
     });
-    movieService.getMoviesTrending(1).subscribe((movies) => {
-      this.sliderMovies.push({
-        title: 'Trending',
-        clickCounter: 0,
-        order: 2,
-        movies: movies.results.slice(0, 8),
+    movieService
+      .getMovies(TypeMovieList.trending, 1, [])
+      .subscribe((movies) => {
+        this.sliderMovies.push({
+          title: 'Trending',
+          clickCounter: 0,
+          order: 2,
+          movies: movies.results.slice(0, 8),
+        });
       });
-    });
-    movieService.getShows(1).subscribe((movies) => {
+    movieService.getMovies(TypeMovieList.show, 1, []).subscribe((movies) => {
       this.sliderMovies.push({
         title: 'TV Shows',
         clickCounter: 0,
@@ -44,7 +46,7 @@ export class HomepageComponent {
         movies: movies.results.slice(0, 8),
       });
     });
-    movieService.getMoviesPopular(1).subscribe((movies) => {
+    movieService.getMovies(TypeMovieList.popular, 1, []).subscribe((movies) => {
       this.sliderMovies.push({
         title: 'Popular Movies',
         clickCounter: 0,
