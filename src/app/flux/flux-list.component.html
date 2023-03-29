@@ -1,84 +1,44 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<div class="list container py-3">
+    <div *ngFor="let flu of flux$ | async">
+        <div class="card px-3" *ngIf="flu.user">
+            <div class="d-flex flex-row justify-content-between">
+                <div class="d-flex flex-row mt-2">
+                    <div *ngIf="flu.user.photo" class="me-2 mb-1">
+                        <img [src]="flu.user.photo" alt="Profile picture of {{ flu.user.username }}" class="profile" />
+                    </div>
+                    <div class="d-flex flex-column">
+                        <strong class="fw-semibold">{{ userId === flu.user.id_user ? 'Me' :flu.user.username }}</strong>
+                        <span style="font-size: 10px;">{{flu.date_created}}</span>
+                    </div>
+                </div>
+                <a class="icon-link icon-link-hover" (click)="openDialog(flu)"
+                    style="--bs-icon-link-transform: translate3d(.125rem, -.125rem, 0); cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-box-arrow-in-up-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M6.364 13.5a.5.5 0 0 0 .5.5H13.5a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 13.5 1h-10A1.5 1.5 0 0 0 2 2.5v6.636a.5.5 0 1 0 1 0V2.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5H6.864a.5.5 0 0 0-.5.5z" />
+                        <path fill-rule="evenodd"
+                            d="M11 5.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793l-8.147 8.146a.5.5 0 0 0 .708.708L10 6.707V10.5a.5.5 0 0 0 1 0v-5z" />
+                    </svg> </a>
+            </div>
 
-<div class="row my-5 px-lg-5">
-    <div class="col-lg-3 col-md-5 col-11 mx-auto" *ngFor="let flu of flux | async">
-        <div class="card border-0 my-2" >
-            <div *ngFor="let profile of profiles | async">
-                <div *ngIf="flu.id_user===profile.id_user">
-                    <div *ngFor="let movie of movies">
-                        <div *ngIf="flu.id_movie===movie.id">
-                            <div [attr.id]="flu.rating >= 3.5 ? 'success-box' : 'error-box'" [ngClass]="{'my-note': userId===flu.id_user}" class="py-3 px-3">
-                                <div class="row">
-                                    <div *ngIf="profile.photo" class="col-lg-3 col-4">
-                                        <img src="{{profile.photo}}" alt="Profile picture of {{ profile.username }}" class="w-100 profile"/>
-                                    </div>
-                                    <div class="col-lg-9 col-8 my-auto">
-                                        <strong>{{ profile.username }}</strong>
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-lg-4 col-12">
-                                        <img src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt="Photo of the movie {{ movie.title }}" class="w-100 movie"/>
-                                    </div>
-                                    <div class="col-lg-8 col-12 my-lg-auto lg-mt-0 mt-2">
-                                        <strong>{{ movie.title }}</strong>
-                                    </div>
-                                </div>
-                                <div class="row my-2">
-                                    <div class="col-lg-4 col-4 my-auto">
-                                        <div [attr.class]="flu.rating >= 3.5 ? 'face' : 'face2'">
-                                            <div class="eye"></div>
-                                            <div class="eye right"></div>
-                                            <div [attr.class]="flu.rating >= 3.5 ? 'mouth happy' : 'mouth sad'"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8 col-8 lg-mt-0 mt-3">
-                                        {{ flu.rating }} stars
-                                        <svg style="display:none;">
-                                            <defs>
-                                                <symbol id="fivestars">
-                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"/>
-                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(24)"/>
-                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(48)"/>
-                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(72)"/>
-                                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"  transform="translate(96)"/>
-                                                </symbol>
-                                            </defs>
-                                        </svg>
-                                        <div class="rating">
-                                            <progress class="rating-bg" value="{{ flu.rating }}" max="5"></progress>
-                                            <svg><use xlink:href="#fivestars"/></svg>
-                                        </div>
-                                        <p class="mt-2">{{ flu.date_created }}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <button type="button" class="btn buttons mt-2">See movie page</button>
-                                    </div>
-                                </div>
-
-                                <!--<div class="row">
-                                    <div class="col-12 text-center">
-                                        <ng-container *ngFor="let flu of flux | async">
-                                            <div *ngIf="userId===flu.id_user && flu.id_movie===movie.id">
-                                                <label for="newnote">Votre note : &nbsp;</label>
-                                                <input type="text" id="newnote" name="newnote" class="w-25" placeholder="{{ flu.rating }}" [(ngModel)]="newNoteValue">
-                                            </div>
-                                        </ng-container>
-                                        <button type="button" class="btn buttons mt-2" (click)="updateRating(userId, movie.id)">Add my note</button>
-                                    </div>
-                                </div>-->
-
-                            </div>
+            <div class="row card-body">
+                <div class="col-4 p-0">
+                    <img [src]="'https://image.tmdb.org/t/p/w500/' + flu.movie.poster_path"
+                        alt="Photo of the movie {{ flu.movie.title }}" class="w-100 movie" />
+                </div>
+                <div class="col-8 my-auto" style="padding: 0 0 0 12px">
+                    <div class="d-flex flex-column">
+                        <strong class="text-truncate">{{ flu.movie.title }}</strong>
+                        <span class="comment" style="font-size: 12px;">{{'“'+flu.comment+'”'}}</span>
+                        <div class="d-flex justify-content-end w-100">
+                            <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating" [readonly]="true">
+                            </ngb-rating>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>

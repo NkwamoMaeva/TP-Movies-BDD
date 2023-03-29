@@ -1,17 +1,24 @@
 .rating-star {
-  font-size: 16px;
+  font-size: 24px;
   color: #dc9600;
+}
+textarea {
+  height: 250px !important;
 }
 
 .profile {
   border-radius: 50px;
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
 }
 
 .movie,
 .profile {
   border: var(--bs-border-color-translucent) 2px solid;
+}
+
+.movie {
+  width: 150px;
 }
 strong {
   font-size: 14px;

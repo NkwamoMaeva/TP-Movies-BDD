@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { Injectable } from '@angular/core';
-import { TypeMovieList, MoviesResponse } from '../models/movie.model';
+import { TypeMovieList, MoviesResponse, Movie } from '../models/movie.model';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -85,6 +85,14 @@ export class MovieListService {
         search +
         '&page=' +
         page
+    );
+  }
+
+  public getMovieById(id: number): Observable<Movie> {
+    return this.http.get<Movie>(
+      'https://api.themoviedb.org/3/movie/' +
+        id +
+        '?api_key=4789d4caefcebacc74ede26d39fe8048'
     );
   }
 }
