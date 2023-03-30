@@ -9,9 +9,16 @@ export interface Movie {
   vote_average: number;
 }
 
-export interface MovieResult {
+export interface MoviesResponse {
   page: number;
   results: Movie[];
   total_pages: number;
   total_results: number;
+}
+
+export enum TypeMovieList {
+  trending = 'trending',
+  show = 'show',
+  popular = 'popular',
+  all = 'all',
 }

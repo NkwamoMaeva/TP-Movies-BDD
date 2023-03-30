@@ -24,7 +24,10 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
 import { MoviePageComponent } from './movie-page/movie-page.component';
 import { MovieListComponent } from './movie-page/movie-list/movie-list.component';
-import { FluxListComponent } from './flux/flux-list.component';
+import {
+  DialogFluxDetailComponent,
+  FluxListComponent,
+} from './flux/flux-list.component';
 
 import { MovieListService } from './movie-page/services/movie-list.service';
 import { AuthentificationService } from './authentification/services/authentification.service';
@@ -38,19 +41,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { HotToastService } from '@ngneat/hot-toast';
- 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
-  declarations: [ 
+  declarations: [
     AppComponent,
     HomepageComponent,
     AuthentificationComponent,
     MoviePageComponent,
-    MovieListComponent, 
+    MovieListComponent,
     ProfileComponent,
     FluxListComponent,
+    DialogFluxDetailComponent,
   ],
-imports: [ 
-
+  imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
@@ -64,8 +68,10 @@ imports: [
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatFormFieldModule, MatButtonModule,
-    
+    MatFormFieldModule,
+    MatButtonModule,
+    NgbModule,
+
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
@@ -89,7 +95,8 @@ imports: [
     AuthentificationComponent,
     HomepageComponent,
     MoviePageComponent,
-    MovieListComponent, ProfileComponent,
+    MovieListComponent,
+    ProfileComponent,
     FluxListComponent,
   ],
 })
@@ -100,7 +107,6 @@ export class AppModule {
     this.afAuth.onAuthStateChanged((user: any) => {
       if (user) {
         localStorage.setItem('connected', 'true');
-        console.log('Connected user', user);
       } else {
         localStorage.setItem('connected', 'false');
         console.log('Is not connected at all');

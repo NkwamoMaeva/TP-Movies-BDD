@@ -11,20 +11,14 @@ import {
   providedIn: 'root',
 })
 export class RatingTestService {
-
-  constructor(private readonly afs: AngularFirestore) {
-  }
+  constructor(private readonly afs: AngularFirestore) {}
   addDocument() {
     const document = {
-      date_created: '10 mars 2023',
+      date_created: new Date().toString(),
       id_movie: 27205,
-      id_user: 'jLyZyMIQv9Z53wMpI8XCnmKht513',
-      rating: 5
+      id_user: 'A9AuIFj5qpejKB1Hc2DIJ0qPAd02',
+      rating: 5,
     };
-    return this.afs
-      .collection('Ratings')
-      .add(document);
+    return this.afs.collection('Ratings').add(document);
   }
-
 }
- 

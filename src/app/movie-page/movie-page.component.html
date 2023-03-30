@@ -2,23 +2,50 @@
     <div class="container pt-4">
         <div class="d-flex flex-wrap">
             <div class="search-wrapper">
+                <mat-button-toggle-group [(ngModel)]="typeFilter" (change)="onTypeChange($event)">
+                    <mat-button-toggle [value]="item" *ngFor="let item of types;">{{item}}</mat-button-toggle>
+                </mat-button-toggle-group>
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Search</mat-label>
-                    <input matInput placeholder="search">
-                    <mat-icon matSuffix>search</mat-icon>
+                    <input matInput placeholder="search" (keyup)="onSearch($event)">
+                    <ng-container matSuffix *ngIf="searchValue | async; else elseIcon">
+                        <button mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </ng-container>
+                    <ng-template matSuffix #elseIcon>
+                        <mat-icon fxShow="true" fxHide.lt-md="true">search</mat-icon>
+                        <button mat-icon-button [matMenuTriggerFor]="menu" matMenuTrigger fxShow="false"
+                            fxHide.lt-md="false">
+                            <mat-icon>filter_list</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <mat-selection-list #shoes [multiple]="true" [(ngModel)]="selectedGenresModel"
+                                (selectionChange)="onGenreMenu()">
+                                <mat-list-option (click)="$event.stopPropagation();"
+                                    *ngFor="let genre of genres | async" [value]="genre.id" [selected]="genre.selected">
+                                    {{ genre.name }}
+                                </mat-list-option>
+                            </mat-selection-list>
+                        </mat-menu>
+                    </ng-template>
                 </mat-form-field>
             </div>
         </div>
 
-        <div class="genres">
-            <mat-chip-listbox *ngFor="let genre of genres;" aria-label="Genre selection">
-                <mat-chip-option [selected]="genre.selected" style="margin-right: 5px;">{{genre.name}}</mat-chip-option>
+        <div class=" genres" fxShow="true" fxHide.lt-md="true"
+            [style]="{'display': (type|async) === 'all' ? 'flex': 'none'}">
+            <mat-chip-listbox multiple [(ngModel)]="selectedGenresModel" (change)="onGenre()"
+                aria-label="Genre selection">
+                <mat-chip-option *ngFor="let genre of genres | async" [value]="genre.id" [selected]="genre.selected"
+                    style="margin-right: 5px;">{{genre.name}}
+                </mat-chip-option>
             </mat-chip-listbox>
         </div>
 
-        <tp-movies-movie-list [movies]="movies"></tp-movies-movie-list>
+        <tp-movies-movie-list [movies]="(movies$ | async)?.results"></tp-movies-movie-list>
 
-        <mat-paginator (page)="handlePageEvent($event)" [length]="movies.total_results" [pageSize]="20"
+        <mat-paginator (page)="next()" [length]="(movies$ | async)?.total_results" [pageSize]="20"
             aria-label="Select page">
         </mat-paginator>
 
