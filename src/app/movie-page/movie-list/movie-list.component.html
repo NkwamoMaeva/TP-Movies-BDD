@@ -1,6 +1,6 @@
 <div>
     <div class="list mt-4 pt-4">
-        <div *ngFor="let movie of movies;" class='movie-item'>
+        <div *ngFor="let movie of movies;" class='movie-item' [routerLink]="'/movies/'+ movie.id">
             <h2>{{ movie.title }}</h2>
             <img loading="lazy" [src]='"https://image.tmdb.org/t/p/w500" + movie.poster_path'>
         </div>

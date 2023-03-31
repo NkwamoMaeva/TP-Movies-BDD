@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthentificationService } from './authentification/services/authentification.service';
-import { Observable } from 'rxjs';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 
-import { Profile } from './flux/models/flux.model';
 import { RatingTest } from './rating-test/models/rating-test.model';
+import { FluxListService } from './flux/services/flux-list.service';
 
 export interface Menu {
   name: string;
@@ -23,7 +22,9 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  notif = this.getNotif();
+  private readonly fluxService = inject(FluxListService);
+
+  notif = this.fluxService.getNotif();
 
   title = '';
   link = '/';
@@ -57,13 +58,12 @@ export class AppComponent {
     public authService: AuthentificationService,
     private afs: AngularFirestore
   ) {
-   
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
-        if(this.link !== '/flux') {
-          this.getNotif();
-        }
+        // if(this.link !== '/flux') {
+        //   this.getNotif();
+        // }
         // else {
         //   this.notif. = 0;
         //   // this.changeNotifUser();
@@ -76,74 +76,8 @@ export class AppComponent {
         this.connected = true;
         this.user = user;
       }
-    }); 
-    
-  }
-
-  getNotif(): Observable<number> {
-    let sizeNotif : number;
-    let a : number;
-    a = 10;
-    this.auth.user.subscribe((user) => {
-      console.log("coucou")
-      if (user) {
-        this.afs
-          .doc<Profile>(`Profile/${user.uid}`)
-          .valueChanges()
-          .subscribe((notif) => {
-            const lastLengthNotif = notif?.notification;
-            this.afs
-              .collection('Ratings')
-              .get()
-              .subscribe((querySnapshot) => {
-                const sizeRatings = querySnapshot?.size;
-                sizeNotif = sizeRatings
-                  ? lastLengthNotif
-                    ? sizeRatings - lastLengthNotif
-                    : 0
-                  : 0;
-                
-                this.afs.collection<RatingTest>('Ratings', (ref) =>
-                    ref.limit(sizeNotif)).stateChanges(['added']).subscribe((changes) => {
-                      changes.forEach((change) => {
-                        const rating = change.payload.doc.data() as RatingTest;
-                        if (rating.rating === 4 || rating.rating === 5) {
-                          a = a + 1;
-                          this.triggerNotification(
-                            `Nouvelle note ${rating.id_movie}`,
-                            `Nouvelle note ajoutée pour le film ${rating.id_movie}.`
-                          );
-                        }
-                      });
-                    });
-                // this.watchRatings(
-                //   this.afs.collection<RatingTest>('Ratings', (ref) =>
-                //     ref.limit(sizeNotif)
-                //   )
-                // );
-              });
-          });
-          // return new Observable((subscriber) => {
-          //   subscriber.next(a);
-          // }); 
-      } else {
-        console.log(null);
-        // return new Observable((subscriber) => {
-        //   subscriber.next(0);
-        // }); 
-      } 
-      
-      // return new Observable((subscriber) => {
-      //   subscriber.next(0);
-      // }); 
     });
-    console.log("hello");
-    return new Observable((subscriber) => {
-      subscriber.next(a);
-    }); 
   }
-
-
   goToMenu(menu: string) {
     this.title = menu;
   }
@@ -184,13 +118,10 @@ export class AppComponent {
           const options = {
             body: body,
           };
-          new Notification(id_movie, options).addEventListener(
-            'click',
-            () => {
-              // Rediriger l'utilisateur vers la page "ratings"
-              window.location.href = '/';
-            }
-          );
+          new Notification(id_movie, options).addEventListener('click', () => {
+            // Rediriger l'utilisateur vers la page "ratings"
+            window.location.href = '/';
+          });
         }
       });
     }

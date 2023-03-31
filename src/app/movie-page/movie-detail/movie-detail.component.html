@@ -1,0 +1,32 @@
+<div id="content_hero" class="center-content hero-ontop"
+    [style]="{'background-image': 'url(https://image.tmdb.org/t/p/original' + movie.backdrop_path + ')'}">
+
+    <div class="container">
+        <div class="row blurb scrollme animateme" data-when="exit" data-from="0" data-to="1" data-opacity="0"
+            data-translatey="100">
+            <div class="col-md-9">
+                <h5><span class="badge bg-secondary me-2">{{movie.status}}</span>
+                    <span *ngFor="let genre of movie.genres"
+                        class="badge rounded-pill text-bg-warning me-2">{{genre.name}}</span>
+                </h5>
+                <h1>
+                    {{movie.title}}
+                </h1>
+                <p>{{movie.overview}}</p>
+                <div class="buttons">
+                    <span class="certificate">PG</span>
+
+                    <div class="position-relative" style="width: min-content;">
+                        <mat-progress-spinner class="example-margin" mode="determinate" [value]="movie.vote_average*10">
+                        </mat-progress-spinner>
+                        <span class="rate">
+                            {{movie.vote_average}}
+                            <i class="material-icons">star_rate</i>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

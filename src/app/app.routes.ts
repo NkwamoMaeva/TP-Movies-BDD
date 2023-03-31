@@ -5,14 +5,14 @@ import { MoviePageComponent } from './movie-page/movie-page.component';
 import { FluxListComponent } from './flux/flux-list.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RatingTestComponent } from './rating-test/rating-test.component';
+import { MovieDetailComponent } from './movie-page/movie-detail/movie-detail.component';
 export const appRoutes: Route[] = [
   { path: '', component: HomepageComponent },
   { path: 'movies', component: MoviePageComponent },
+  { path: 'movies/:id', component: MovieDetailComponent },
   { path: 'login', component: AuthentificationComponent },
   { path: 'register', component: AuthentificationComponent },
   { path: 'profile', component: ProfileComponent  },
-
-  
   { path: 'flux', component: FluxListComponent },
   { path: 'rating-test', component: RatingTestComponent },
 ];

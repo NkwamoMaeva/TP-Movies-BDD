@@ -1,17 +1,22 @@
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable, combineLatest } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
 import { Flux, Profile } from '../models/flux.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
 import { Movie } from 'src/app/movie-page/models/movie.model';
-import { doc, getDoc, getFirestore } from '@angular/fire/firestore';
+import {
+  doc,
+  DocumentData,
+  getDoc,
+  getFirestore,
+  QuerySnapshot,
+} from '@angular/fire/firestore';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
-
-type NewType = number;
+import { RatingTest } from 'src/app/rating-test/models/rating-test.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,11 +24,16 @@ type NewType = number;
 export class FluxListService {
   constructor(private readonly afs: AngularFirestore) {}
 
+  ratingLength$ = this.afs
+    .collection('Ratings')
+    .get()
+    .pipe(map((snapshot) => snapshot.size));
+
   private readonly af = inject(AngularFirestore);
   private readonly auth = inject(AngularFireAuth);
   private readonly movieListService = inject(MovieListService);
-  private ratingsCollection: AngularFirestoreCollection<any> =
-    this.af.collection<any>('Ratings');
+  private ratingsCollection: AngularFirestoreCollection<RatingTest> =
+    this.af.collection<RatingTest>('Ratings');
 
   public profiles: Observable<Profile[]> = this.af
     .collection<Profile>('Profile')
@@ -87,9 +97,6 @@ export class FluxListService {
       }
     });
   }
-
- 
-
   public addNote(id_user: string, id_movie: number, rating: number) {
     const document = {
       date_created: new Date().toLocaleString(),
@@ -100,7 +107,12 @@ export class FluxListService {
     return this.afs.collection('Ratings').add(document);
   }
 
-  public updateRating(id_user: string, id_movie: number, rating: number) {
+  public updateRating(
+    id_user: string,
+    id_movie: number,
+    rating: number,
+    comment: string
+  ) {
     // Vérifier si l'utilisateur a déjà noté ce film
     const query = this.ratingsCollection.ref
       .where('id_user', '==', id_user)
@@ -112,6 +124,7 @@ export class FluxListService {
           id_user: id_user,
           id_movie: id_movie,
           rating: rating,
+          comment: comment,
           date_created: new Date().toLocaleString(),
         });
       } else {
@@ -122,5 +135,23 @@ export class FluxListService {
         });
       }
     });
+  }
+
+  public getNotif(): Observable<number> {
+    return combineLatest([this.auth.user, this.ratingLength$]).pipe(
+      switchMap(([user, query]) =>
+        this.afs
+          .doc<Profile>(`Profile/${user?.uid}`)
+          .snapshotChanges()
+          .pipe(
+            map((doc) => {
+              console.log(user);
+              const notif = doc.payload.data()?.notification;
+
+              return query - (notif ? notif : 0);
+            })
+          )
+      )
+    );
   }
 }
