@@ -11,6 +11,8 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 
+type NewType = number;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -85,6 +87,8 @@ export class FluxListService {
       }
     });
   }
+
+ 
 
   public addNote(id_user: string, id_movie: number, rating: number) {
     const document = {

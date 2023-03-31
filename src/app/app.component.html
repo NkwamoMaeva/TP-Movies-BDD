@@ -57,7 +57,7 @@
                 </button>
             </mat-menu>
             <button mat-icon-button aria-label="notifications">
-                <mat-icon [matBadge]="notif" matBadgeColor="accent">notifications</mat-icon>
+                <mat-icon [matBadge]="notif | async" matBadgeColor="accent">notifications</mat-icon>
             </button>
         </div>
         <div fxShow="false" fxHide.lt-md="false">
@@ -95,7 +95,7 @@
                     <div fxLayout="column" fxLayoutAlign="space-between end" class="h-100">
                         <div>
                             <button mat-icon-button aria-label="notifications" *ngIf="connected">
-                                <mat-icon class="white" [matBadge]="notif" matBadgeColor="accent" mat-icon-no-color>
+                                <mat-icon class="white" [matBadge]="notif | async" matBadgeColor="accent" mat-icon-no-color>
                                     notifications</mat-icon>
                             </button>
                             <span class="spacer"></span>

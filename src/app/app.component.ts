@@ -23,7 +23,7 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  notif = 0;
+  notif = this.getNotif();
 
   title = '';
   link = '/';
@@ -57,13 +57,17 @@ export class AppComponent {
     public authService: AuthentificationService,
     private afs: AngularFirestore
   ) {
+   
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
         if(this.link !== '/flux') {
-          this.getClients();
+          this.getNotif();
         }
-
+        // else {
+        //   this.notif. = 0;
+        //   // this.changeNotifUser();
+        // }
       }
     });
 
@@ -76,8 +80,12 @@ export class AppComponent {
     
   }
 
-  getClients(): Observable<Profile[]> {
+  getNotif(): Observable<number> {
+    let sizeNotif : number;
+    let a : number;
+    a = 10;
     this.auth.user.subscribe((user) => {
+      console.log("coucou")
       if (user) {
         this.afs
           .doc<Profile>(`Profile/${user.uid}`)
@@ -89,7 +97,7 @@ export class AppComponent {
               .get()
               .subscribe((querySnapshot) => {
                 const sizeRatings = querySnapshot?.size;
-                const sizeNotif = sizeRatings
+                sizeNotif = sizeRatings
                   ? lastLengthNotif
                     ? sizeRatings - lastLengthNotif
                     : 0
@@ -100,7 +108,7 @@ export class AppComponent {
                       changes.forEach((change) => {
                         const rating = change.payload.doc.data() as RatingTest;
                         if (rating.rating === 4 || rating.rating === 5) {
-                          this.notif = this.notif + 1;
+                          a = a + 1;
                           this.triggerNotification(
                             `Nouvelle note ${rating.id_movie}`,
                             `Nouvelle note ajoutée pour le film ${rating.id_movie}.`
@@ -115,14 +123,26 @@ export class AppComponent {
                 // );
               });
           });
+          // return new Observable((subscriber) => {
+          //   subscriber.next(a);
+          // }); 
       } else {
         console.log(null);
-      }
+        // return new Observable((subscriber) => {
+        //   subscriber.next(0);
+        // }); 
+      } 
+      
+      // return new Observable((subscriber) => {
+      //   subscriber.next(0);
+      // }); 
     });
-    return this.afs
-      .collection<Profile>(`Profile`)
-      .valueChanges({ idField: 'id' });
+    console.log("hello");
+    return new Observable((subscriber) => {
+      subscriber.next(a);
+    }); 
   }
+
 
   goToMenu(menu: string) {
     this.title = menu;
@@ -149,14 +169,14 @@ export class AppComponent {
     });
   }
 
-  private triggerNotification(movie_name: string, body: string) {
+  private triggerNotification(id_movie: string, body: string) {
     if (Notification.permission === 'granted') {
       const options = {
         body: body,
       };
-      new Notification(movie_name, options).addEventListener('click', () => {
+      new Notification(id_movie, options).addEventListener('click', () => {
         // Rediriger l'utilisateur vers la page "ratings"
-        window.location.href = '/details-fils/' + movie_name;
+        window.location.href = '/movies/' + id_movie;
       });
     } else if (Notification.permission !== 'denied') {
       Notification.requestPermission().then((permission) => {
@@ -164,7 +184,7 @@ export class AppComponent {
           const options = {
             body: body,
           };
-          new Notification(movie_name, options).addEventListener(
+          new Notification(id_movie, options).addEventListener(
             'click',
             () => {
               // Rediriger l'utilisateur vers la page "ratings"
