@@ -1,22 +1,21 @@
-import { Observable, combineLatest } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
-import { Flux, Profile } from '../models/flux.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { map, switchMap } from 'rxjs/operators';
-import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
-import { Movie } from 'src/app/movie-page/models/movie.model';
-import {
-  doc,
-  DocumentData,
-  getDoc,
-  getFirestore,
-  QuerySnapshot,
-} from '@angular/fire/firestore';
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
+  AngularFirestoreCollection
 } from '@angular/fire/compat/firestore';
+import {
+  doc, getDoc,
+  getFirestore
+} from '@angular/fire/firestore';
+import { NavigationEnd, Router } from '@angular/router';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
+import { Movie } from 'src/app/movie-page/models/movie.model';
+import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
 import { RatingTest } from 'src/app/rating-test/models/rating-test.model';
+import { Flux, Profile } from '../models/flux.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +31,7 @@ export class FluxListService {
   private readonly af = inject(AngularFirestore);
   private readonly auth = inject(AngularFireAuth);
   private readonly movieListService = inject(MovieListService);
+  private readonly router = inject(Router);
   private ratingsCollection: AngularFirestoreCollection<RatingTest> =
     this.af.collection<RatingTest>('Ratings');
 
@@ -137,21 +137,77 @@ export class FluxListService {
     });
   }
 
-  public getNotif(): Observable<number> {
-    return combineLatest([this.auth.user, this.ratingLength$]).pipe(
-      switchMap(([user, query]) =>
-        this.afs
-          .doc<Profile>(`Profile/${user?.uid}`)
-          .snapshotChanges()
-          .pipe(
-            map((doc) => {
-              console.log(user);
-              const notif = doc.payload.data()?.notification;
 
-              return query - (notif ? notif : 0);
-            })
+
+  public getNotif(router: Router): Observable<number> {
+    return router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      switchMap(() =>
+        combineLatest([this.auth.user, this.ratingLength$]).pipe(
+          switchMap(([user, query]) =>
+            this.afs
+              .doc<Profile>(`Profile/${user?.uid}`)
+              .snapshotChanges()
+              .pipe(
+                map((doc) => {
+                  const notif = doc.payload.data()?.notification;
+                  if (router.url === '/flux') {
+                    // this.afs.doc(`Profile/${user?.uid}`).update({ notification: query });
+                    return 0;
+                  } else {
+                    // this.watchRatings(this.afs.collection<RatingTest>('Ratings', (ref) =>
+                    // ref.limit(query - (notif ? notif : 0))));
+                    return query - (notif ? notif : 0);
+                  }
+                })
+              )
           )
+        )
       )
     );
   }
+
+  watchRatings(ratingCollection: AngularFirestoreCollection<RatingTest>) {
+    ratingCollection.stateChanges(['added']).subscribe((changes) => {
+      changes.forEach((change) => {
+        const rating = change.payload.doc.data() as RatingTest;
+        if (rating.rating === 4 || rating.rating === 5) {
+          this.triggerNotification(
+            `Nouvelle note ${rating.id_movie}`,
+            `Nouvelle note ajoutée pour le film ${rating.id_movie}.`
+          );
+        }
+      });
+    });
+  }
+
+  private triggerNotification(id_movie: string, body: string) {
+    if (Notification.permission === 'granted') {
+      const options = {
+        body: body,
+      };
+      new Notification(id_movie, options).addEventListener('click', () => {
+        // Rediriger l'utilisateur vers la page "ratings"
+        window.location.href = '/movies/' + id_movie;
+      });
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          const options = {
+            body: body,
+          };
+          new Notification(id_movie, options).addEventListener('click', () => {
+            // Rediriger l'utilisateur vers la page "ratings"
+            window.location.href = '/';
+          });
+        }
+      });
+    }
+  }
+  
+
+ 
+  
+  
+
 }

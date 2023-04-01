@@ -24,7 +24,7 @@ export interface Menu {
 export class AppComponent {
   private readonly fluxService = inject(FluxListService);
 
-  notif = this.fluxService.getNotif();
+  notif = this.fluxService.getNotif(this.router);
 
   title = '';
   link = '/';
@@ -61,13 +61,6 @@ export class AppComponent {
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
-        // if(this.link !== '/flux') {
-        //   this.getNotif();
-        // }
-        // else {
-        //   this.notif. = 0;
-        //   // this.changeNotifUser();
-        // }
       }
     });
 
@@ -88,42 +81,5 @@ export class AppComponent {
     });
   }
 
-  watchRatings(ratingCollection: AngularFirestoreCollection<RatingTest>) {
-    ratingCollection.stateChanges(['added']).subscribe((changes) => {
-      changes.forEach((change) => {
-        const rating = change.payload.doc.data() as RatingTest;
-        console.log(rating);
-        if (rating.rating === 4 || rating.rating === 5) {
-          this.triggerNotification(
-            `Nouvelle note ${rating.id_movie}`,
-            `Nouvelle note ajoutée pour le film ${rating.id_movie}.`
-          );
-        }
-      });
-    });
-  }
 
-  private triggerNotification(id_movie: string, body: string) {
-    if (Notification.permission === 'granted') {
-      const options = {
-        body: body,
-      };
-      new Notification(id_movie, options).addEventListener('click', () => {
-        // Rediriger l'utilisateur vers la page "ratings"
-        window.location.href = '/movies/' + id_movie;
-      });
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          const options = {
-            body: body,
-          };
-          new Notification(id_movie, options).addEventListener('click', () => {
-            // Rediriger l'utilisateur vers la page "ratings"
-            window.location.href = '/';
-          });
-        }
-      });
-    }
-  }
 }
