@@ -67,6 +67,9 @@
             <button mat-icon-button aria-label="logout" routerLink="/login" *ngIf="connected">
                 <mat-icon>logout</mat-icon>
             </button>
+            <button mat-icon-button aria-label="notifications">
+                <mat-icon [matBadge]="notif | async" matBadgeColor="accent">notifications</mat-icon>
+            </button>
         </div>
 
     </mat-toolbar>
@@ -94,11 +97,6 @@
                     <span class="spacer"></span>
                     <div fxLayout="column" fxLayoutAlign="space-between end" class="h-100">
                         <div>
-                            <button mat-icon-button aria-label="notifications" *ngIf="connected">
-                                <mat-icon class="white" [matBadge]="notif | async" matBadgeColor="accent"
-                                    mat-icon-no-color>
-                                    notifications</mat-icon>
-                            </button>
                             <span class="spacer"></span>
                             <button mat-icon-button aria-label="settings">
                                 <mat-icon class="white" mat-icon-no-color>settings</mat-icon>
