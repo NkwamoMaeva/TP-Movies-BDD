@@ -79,18 +79,18 @@ export class FluxListService {
   }
 
   public async changeNotif() {
-    this.auth.user.subscribe((user) => {
+    this.auth.user.subscribe(async (user) => {
       // eslint-disable-next-line no-empty
       if (user) {
-        this.af
+        await  this.af
           .collection('Ratings')
           .get()
-          .subscribe((querySnapshot) => {
+          .subscribe(async (querySnapshot) => {
             const sizeRatings = querySnapshot.size;
             const notificationDocRef = this.af
               .collection('Profile')
               .doc(user.uid);
-            notificationDocRef.update({ notification: sizeRatings });
+              await notificationDocRef.update({ notification: sizeRatings });
           });
       } else {
         console.log(null);
@@ -152,7 +152,7 @@ export class FluxListService {
                 map((doc) => {
                   const notif = doc.payload.data()?.notification;
                   if (router.url === '/flux') {
-                    // this.afs.doc(`Profile/${user?.uid}`).update({ notification: query });
+                   this.afs.doc(`Profile/${user?.uid}`).update({ notification: query });
                     return 0;
                   } else {
                     // this.watchRatings(this.afs.collection<RatingTest>('Ratings', (ref) =>
