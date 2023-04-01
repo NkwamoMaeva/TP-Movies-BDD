@@ -2,12 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
-import {
-  doc, getDoc,
-  getFirestore
-} from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore } from '@angular/fire/firestore';
 import { NavigationEnd, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -15,7 +12,6 @@ import { Movie } from 'src/app/movie-page/models/movie.model';
 import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
 import { RatingTest } from 'src/app/rating-test/models/rating-test.model';
 import { Flux, Profile } from '../models/flux.model';
-
 
 @Injectable({
   providedIn: 'root',
@@ -82,7 +78,7 @@ export class FluxListService {
     this.auth.user.subscribe(async (user) => {
       // eslint-disable-next-line no-empty
       if (user) {
-        await  this.af
+        await this.af
           .collection('Ratings')
           .get()
           .subscribe(async (querySnapshot) => {
@@ -90,7 +86,7 @@ export class FluxListService {
             const notificationDocRef = this.af
               .collection('Profile')
               .doc(user.uid);
-              await notificationDocRef.update({ notification: sizeRatings });
+            await notificationDocRef.update({ notification: sizeRatings });
           });
       } else {
         console.log(null);
@@ -137,8 +133,6 @@ export class FluxListService {
     });
   }
 
-
-
   public getNotif(router: Router): Observable<number> {
     return router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -152,11 +146,14 @@ export class FluxListService {
                 map((doc) => {
                   const notif = doc.payload.data()?.notification;
                   if (router.url === '/flux') {
-                   this.afs.doc(`Profile/${user?.uid}`).update({ notification: query });
+                    this.afs
+                      .doc(`Profile/${user?.uid}`)
+                      .update({ notification: query });
                     return 0;
                   } else {
-                    // this.watchRatings(this.afs.collection<RatingTest>('Ratings', (ref) =>
-                    // ref.limit(query - (notif ? notif : 0))));
+                    if( query - (notif ? notif : 0) !== 0 ) {
+                    this.watchRatings(this.afs.collection<RatingTest>('Ratings', (ref) => ref.limit(query - (notif ? notif : 0))));
+                    }
                     return query - (notif ? notif : 0);
                   }
                 })
@@ -204,10 +201,4 @@ export class FluxListService {
       });
     }
   }
-  
-
- 
-  
-  
-
 }
