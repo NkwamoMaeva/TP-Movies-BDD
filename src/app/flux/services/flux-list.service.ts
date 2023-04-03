@@ -93,15 +93,6 @@ export class FluxListService {
       }
     });
   }
-  public addNote(id_user: string, id_movie: number, rating: number) {
-    const document = {
-      date_created: new Date().toLocaleString(),
-      id_movie: id_movie,
-      id_user: id_user,
-      rating: rating,
-    };
-    return this.afs.collection('Ratings').add(document);
-  }
 
   public updateRating(
     id_user: string,

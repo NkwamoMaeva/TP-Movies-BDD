@@ -1,41 +1,45 @@
-<h2 mat-dialog-title>Rating details</h2>
-<mat-dialog-content class="mat-typography">
-    <div class="px-3" *ngIf="data.user">
-        <div class="d-flex flex-row justify-content-between">
-            <div class="d-flex flex-row my-2">
-                <div *ngIf="data.user.photo" class="me-2 mb-1">
-                    <img [src]="data.user.photo" alt="Profile picture of {{ data.user.username }}" class="profile" />
-                </div>
-                <div class="d-flex flex-column">
-                    <strong class="fw-semibold">{{ data.user.username }}</strong>
-                    <span style="font-size: 10px;">{{data.date_created}}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="d-flex flex-row">
-            <div class="p-0">
-                <img [src]="'https://image.tmdb.org/t/p/w500/' + data.movie.poster_path"
-                    alt="Photo of the movie {{ data.movie.title }}" class="movie" />
-            </div>
-            <div class="my-auto" style="padding: 0 0 0 12px">
-                <div class="d-flex flex-column ms-3">
-                    <h4 class="mb-2">{{ data.movie.title }}</h4>
-                    <mat-form-field class="example-full-width" style="width: 300px;">
-                        <mat-label>Leave a comment</mat-label>
-                        <textarea matInput placeholder="Comment" [ariaValueMin]="10">{{data.comment}}</textarea>
-                    </mat-form-field>
-                    <div class="d-flex justify-content-end w-100">
-                        <ngb-rating class="rating-star" [max]="5" [(rate)]="data.rating" [readonly]="true">
-                        </ngb-rating>
+<div class="card-size">
+    <h2 mat-dialog-title>Rating details</h2>
+    <mat-dialog-content class="mat-typography">
+        <div class="px-lg-3 px-1" *ngIf="data.user">
+            <div class="d-flex flex-row justify-content-between">
+                <div class="d-flex flex-row my-2">
+                    <div *ngIf="data.user.photo" class="me-2 mb-1">
+                        <img [src]="data.user.photo" alt="Profile picture of {{ data.user.username }}" class="profile" />
                     </div>
-
+                    <div class="d-flex flex-column">
+                        <strong class="fw-semibold">{{ data.user.username }}</strong>
+                        <span style="font-size: 10px;">{{data.date_created}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row row">
+                <div class="p-0 col-lg-2 col-12 text-center mb-lg-0 mb-2">
+                    <img [src]="'https://image.tmdb.org/t/p/w500/' + data.movie.poster_path"
+                        alt="Photo of the movie {{ data.movie.title }}" class="movie" />
+                </div>
+                <div class="my-auto col-lg-10 col-12" style="padding: 0 0 0 12px">
+                    <div class="d-flex flex-column mx-lg-4">
+                        <strong class="text-truncate">{{ data.movie.title }}</strong>
+                        <div class="d-flex justify-content-start my-3">
+                            <ngb-rating class="rating-star" [max]="5" [(rate)]="data.rating" [readonly]="true"></ngb-rating>
+                        </div>
+                        <ng-container *ngIf="isUserConnected(data); else notConnected">
+                            <mat-form-field>
+                                <mat-label><strong>Leave a comment</strong></mat-label>
+                                <textarea matInput id="comment">{{ data.comment }}</textarea>
+                            </mat-form-field>
+                        </ng-container>
+                        <ng-template #notConnected>
+                            <label *ngIf="data.comment">{{'“'+data.comment+'“'}}</label>
+                        </ng-template>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Edit</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
-</mat-dialog-actions>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button *ngIf="isUserConnected(data)" mat-raised-button color="primary" (click)="updateComment(data)" [mat-dialog-close]="true">Edit</button>
+        <button [mat-dialog-close]="true" mat-raised-button color="warn">Close</button>
+    </mat-dialog-actions>
+</div>

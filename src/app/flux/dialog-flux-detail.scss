@@ -37,3 +37,12 @@ strong {
   margin-bottom: 56px;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
 }
+
+.card-size {
+  width: 900px !important;
+}
+@media (max-width: 576px) {
+  .card-size {
+    width: 100% !important;
+  }
+}
