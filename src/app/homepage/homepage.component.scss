@@ -19,6 +19,7 @@
     border-radius: 20px;
     transition: all 0.5s ease;
     object-fit: cover;
+    cursor: pointer;
     &:hover {
       transform: scale(1.2);
       margin: 0px 20px;
@@ -71,6 +72,7 @@
       .movie-list-item {
         margin: 0 10px;
         position: relative;
+        cursor: pointer;
 
         &:hover {
           .movie-list-item-img {
