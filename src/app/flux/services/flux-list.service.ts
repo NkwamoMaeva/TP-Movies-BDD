@@ -73,6 +73,44 @@ export class FluxListService {
         })
       );
   }
+  public getFluxByMovieId(movieId: string): Observable<Flux[]> {
+    return this.af
+      .collection<Flux>('Ratings', (ref) => ref.where('id_movie', '==', movieId))
+      .valueChanges()
+      .pipe(
+        map((response) => {
+          response.forEach(async (result: any) => {
+            let movie: Movie = {} as Movie;
+            let user: Profile = {} as Profile;
+            this.movieListService
+              .getMovieById(result.id_movie)
+              .subscribe((movieFlux: Movie) => {
+                movie = movieFlux;
+              });
+            const db = getFirestore();
+            const docRef = doc(db, 'Profile', result.id_user);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              user = docSnap.data() as Profile;
+              const options = {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              } as const;
+              const date = new Date(result.date_created);
+              result.user = user;
+              result.movie = movie;
+              result.date_created = date.toLocaleDateString('en-US', options);
+              return result as Flux;
+            } else {
+              console.log('Document does not exist');
+              return {};
+            }
+          });
+          return response;
+        })
+      );
+  }
 
   public async changeNotif() {
     this.auth.user.subscribe(async (user) => {

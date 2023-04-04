@@ -92,7 +92,7 @@ export class MovieListService {
     return this.http.get<Movie>(
       'https://api.themoviedb.org/3/movie/' +
         id +
-        '?api_key=4789d4caefcebacc74ede26d39fe8048'
+        '?api_key=4789d4caefcebacc74ede26d39fe8048&append_to_response=credits'
     );
   }
 }

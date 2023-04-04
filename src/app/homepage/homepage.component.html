@@ -1,7 +1,8 @@
 <div class="home-container">
     <div class="featured-content"
         style="order:1; background:url('https://w0.peakpx.com/wallpaper/355/184/HD-wallpaper-avatar-the-way-of-the-water-2022-avatar-2-avatar-the-way-of-water-2022-movies-movies.jpg');">
-        <img class="featured-title" [src]='"https://image.tmdb.org/t/p/w500" + bannerMovie1.poster_path' alt="">
+        <img class="featured-title" [src]='"https://image.tmdb.org/t/p/w500" + bannerMovie1.poster_path' alt=""
+            [routerLink]="'/movies/'+ bannerMovie1.id">
         <p class="featured-desc">
             {{bannerMovie1.overview}}
         </p>
@@ -17,7 +18,7 @@
         </div>
         <div class="movie-list-wrapper">
             <div class="movie-list">
-                <div class="movie-list-item" *ngFor="let item of slide.movies;">
+                <div class="movie-list-item" *ngFor="let item of slide.movies;" [routerLink]="'/movies/'+ item.id">
                     <div class=" movie-list-item-img"
                         [style]="{'background-image': 'url(https://image.tmdb.org/t/p/w500' + item.poster_path +')'}">
                         <div class="movie-list-item-img-cover"></div>
@@ -36,7 +37,8 @@
     <div class="featured-content"
         style="order:4;background:linear-gradient(to bottom, rgba(0, 0, 0, 0),
         #151515),url('https://marvelstory.fr/wp-content/uploads/2022/07/Banniere_Site_MS_Juillet2K22.png'); margin: 50px 0;">
-        <img class="featured-title" [src]='"https://image.tmdb.org/t/p/w500" + bannerMovie2.poster_path' alt="">
+        <img class="featured-title" [src]='"https://image.tmdb.org/t/p/w500" + bannerMovie2.poster_path' alt=""
+            [routerLink]="'/movies/'+ bannerMovie2.id">
         <p class="featured-desc">
             {{bannerMovie2.overview}}
         </p>
