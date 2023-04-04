@@ -21,8 +21,16 @@
                 <div class="my-auto col-lg-10 col-12" style="padding: 0 0 0 12px">
                     <div class="d-flex flex-column mx-lg-4">
                         <strong class="text-truncate">{{ data.movie.title }}</strong>
-                        <div class="d-flex justify-content-start my-3">
-                            <ngb-rating class="rating-star" [max]="5" [(rate)]="data.rating" [readonly]="true"></ngb-rating>
+                        <div class="my-3 row">
+                            <div class="col-lg-3 col-12 mb-lg-0 mb-3">
+                                <label><strong style="font-size: 12px;">Leave a rate :&nbsp;</strong>
+                                    <input type="number" name="input" value="{{ data.rating }}" [(ngModel)]="data.rating"
+                                           step="1" min="0" max="5" required pattern="^[0-9]+(\.[0-9]{1,2})?$" id="rate">
+                                </label>&nbsp;
+                            </div>
+                            <div class="col-lg-9 col-12">
+                                <ngb-rating class="rating-star" [max]="5" [(rate)]="data.rating" [readonly]="false"></ngb-rating>
+                            </div>
                         </div>
                         <ng-container *ngIf="isUserConnected(data); else notConnected">
                             <mat-form-field>
