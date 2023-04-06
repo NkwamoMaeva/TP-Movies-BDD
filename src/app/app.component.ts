@@ -29,9 +29,14 @@ export class AppComponent {
       let value = false;
       if (user) {
         this.user = user;
+        this.menus[1].visible = true;
+        this.menus[2].visible = true;
+        value = true;
+      } else {
+        this.user = null;
+
         this.menus[1].visible = false;
         this.menus[2].visible = false;
-        value = true;
       }
       return value;
     })

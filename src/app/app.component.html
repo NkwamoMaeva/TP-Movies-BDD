@@ -19,7 +19,7 @@
         </a>
         <div fxShow="true" fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="flex-start center">
             <a mat-button routerLink="/movies">Movies</a>
-            <a mat-button routerLink="/search" *ngIf="isConnected | async">Search</a>
+            <a mat-button routerLink="/users" *ngIf="isConnected | async">Search</a>
             <a mat-button routerLink="/flux" *ngIf="isConnected | async">Flux</a>
         </div>
 
