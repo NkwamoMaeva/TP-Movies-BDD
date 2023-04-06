@@ -52,9 +52,15 @@ export class MovieDetailComponent {
     });
   }
 
-  openDialog(flux: Flux) {
+  openDialog(element: any, edit: boolean) {
+    console.log(element);
+    if (element.user && this.userId == element.user.id_user) {
+      edit = true;
+    }
+    const result = { movie: {} };
+    result.movie = element as Movie;
     this.dialog.open(DialogFluxDetailComponent, {
-      data: flux,
+      data: { element: result, edit: edit },
     });
   }
 

@@ -2,12 +2,6 @@ import { Component, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthentificationService } from './authentification/services/authentification.service';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/compat/firestore';
-
-import { RatingTest } from './rating-test/models/rating-test.model';
 import { FluxListService } from './flux/services/flux-list.service';
 
 export interface Menu {
@@ -55,8 +49,7 @@ export class AppComponent {
   constructor(
     private router: Router,
     public auth: AngularFireAuth,
-    public authService: AuthentificationService,
-    private afs: AngularFirestore
+    public authService: AuthentificationService
   ) {
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -80,6 +73,4 @@ export class AppComponent {
       console.log(result);
     });
   }
-
-
 }

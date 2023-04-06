@@ -75,7 +75,9 @@ export class FluxListService {
   }
   public getFluxByMovieId(movieId: string): Observable<Flux[]> {
     return this.af
-      .collection<Flux>('Ratings', (ref) => ref.where('id_movie', '==', movieId))
+      .collection<Flux>('Ratings', (ref) =>
+        ref.where('id_movie', '==', movieId)
+      )
       .valueChanges()
       .pipe(
         map((response) => {
@@ -155,8 +157,7 @@ export class FluxListService {
       } else {
         // Si l'utilisateur a déjà noté le film, mettre à jour la note existante
         querySnapshot.forEach((doc) => {
-          const docRef = this.ratingsCollection.doc(doc.id);
-          docRef.update({ rating: rating });
+          doc.ref.update({ rating: rating, comment: comment });
         });
       }
     });
@@ -175,13 +176,22 @@ export class FluxListService {
                 map((doc) => {
                   const notif = doc.payload.data()?.notification;
                   if (router.url === '/flux') {
-                    this.afs
-                      .doc(`Profile/${user?.uid}`)
-                      .update({ notification: query });
+                    if (query !== notif) {
+                      this.afs
+                        .doc(`Profile/${user?.uid}`)
+                        .update({ notification: query });
+                    }
+
                     return 0;
                   } else {
-                    if( query - (notif ? notif : 0) !== 0 ) {
-                    this.watchRatings(this.afs.collection<RatingTest>('Ratings', (ref) => ref.limit(query - (notif ? notif : 0))));
+                    console.log(query - (notif ? notif : 0) !== 0);
+                    console.log(query);
+                    if (query - (notif ? notif : 0) !== 0) {
+                      this.watchRatings(
+                        this.afs.collection<RatingTest>('Ratings', (ref) =>
+                          ref.limit(query - (notif ? notif : 0))
+                        )
+                      );
                     }
                     return query - (notif ? notif : 0);
                   }

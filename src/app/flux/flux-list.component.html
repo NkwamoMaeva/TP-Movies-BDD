@@ -11,7 +11,7 @@
                         <span style="font-size: 10px;">{{flu.date_created}}</span>
                     </div>
                 </div>
-                <a class="icon-link icon-link-hover" (click)="openDialog(flu)"
+                <a class="icon-link icon-link-hover" (click)="openDialog(flu, false)"
                     style="--bs-icon-link-transform: translate3d(.125rem, -.125rem, 0); cursor: pointer;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-box-arrow-in-up-right" viewBox="0 0 16 16">
@@ -31,9 +31,11 @@
                 <div class="col-8 my-auto" style="padding: 0 0 0 12px">
                     <div class="d-flex flex-column">
                         <strong class="text-truncate">{{ flu.movie.title }}</strong>
-                        <label *ngIf="flu.comment" class="comment" style="font-size: 12px;">{{'“'+flu.comment+'”'}}</label>
+                        <label *ngIf="flu.comment" class="comment"
+                            style="font-size: 12px;">{{'“'+flu.comment+'”'}}</label>
                         <div class="d-flex justify-content-end w-100">
-                            <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating" [readonly]="true"></ngb-rating>
+                            <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating" [readonly]="true">
+                            </ngb-rating>
                         </div>
                     </div>
                 </div>
