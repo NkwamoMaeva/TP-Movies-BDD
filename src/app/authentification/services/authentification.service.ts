@@ -21,10 +21,16 @@ export class AuthentificationService {
   // Sign up with email/password
   async signUp(email: string, password: string, username: string) {
     try {
-      const result = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      const result = await this.afAuth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
       await result.user?.updateProfile({ displayName: username });
-      
-      const querySnapshot = await this.firestore.collection('Ratings').get().toPromise();
+
+      const querySnapshot = await this.firestore
+        .collection('Ratings')
+        .get()
+        .toPromise();
       const user: User = {
         username: result.user?.displayName ?? '',
         photo: '',
@@ -34,16 +40,16 @@ export class AuthentificationService {
         email: result.user?.email ?? '',
         notification: querySnapshot?.size,
       };
-      
-      await this.firestore.collection('Profile').doc(result.user?.uid).set(user);
-      
-      window.alert('You have been successfully registered!');
-      console.log(result.user);
+
+      await this.firestore
+        .collection('Profile')
+        .doc(result.user?.uid)
+        .set(user);
     } catch (error) {
-      window.alert(error);
+      console.log(error);
     }
   }
-  
+
   // Sign in with email/password
   signIn(email: string, password: string) {
     return this.afAuth

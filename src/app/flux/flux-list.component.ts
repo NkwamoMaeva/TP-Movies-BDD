@@ -3,13 +3,16 @@ import { FluxListService } from './services/flux-list.service';
 import { BehaviorSubject, Observable, combineLatest, switchMap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Flux } from './models/flux.model';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
 import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
-import { RatingTest } from '../rating-test/models/rating-test.model';
-import { Movie } from '../movie-page/models/movie.model';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -25,18 +28,21 @@ export class FluxListComponent {
 
   public readonly fluxService = inject(FluxListService);
 
-  flux$: Observable<Flux[]> = this.type
-  .pipe(
+  flux$: Observable<Flux[]> = this.type.pipe(
     switchMap((type) => {
       return this.fluxService.getAllFlux(type);
     })
   );
 
- 
   myFlux$: Observable<Flux[]> = this.fluxService.getMyFlux();
   userId = '';
 
-  constructor(private auth: AngularFireAuth, public dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private auth: AngularFireAuth,
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.auth.user.subscribe((user) => {
       if (user) {
         this.userId = user.uid;
@@ -62,8 +68,19 @@ export class FluxListComponent {
     if (this.userId == element.user.id_user) {
       edit = true;
     }
-    this.dialog.open(DialogFluxDetailComponent, {
+    const dialogRef = this.dialog.open(DialogFluxDetailComponent, {
       data: { element: element, edit: edit },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+      if (result) {
+        this.fluxService.updateRating(
+          result.user.id_user,
+          result.movie.id,
+          result.rating,
+          result.comment
+        );
+      }
     });
   }
 }
@@ -79,6 +96,7 @@ export class DialogFluxDetailComponent {
     this.db.collection<Flux>('Ratings');
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { element: any; edit: boolean },
+    public dialogRef: MatDialogRef<DialogFluxDetailComponent>,
 
     private auth: AngularFireAuth,
     private db: AngularFirestore
@@ -91,40 +109,10 @@ export class DialogFluxDetailComponent {
       }
     });
   }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
   isUserConnected(data: Flux) {
     return this.userId === data.user.id_user;
-  }
-
-  updateComment(data: Flux) {
-    const newComment = (<HTMLInputElement>document.getElementById('comment'))
-      .value;
-    const newRate = parseFloat(
-      (<HTMLInputElement>document.getElementById('rate')).value
-    );
-    // Vérifier si l'utilisateur a déjà noté ce film
-    const query = this.ratingsCollection.ref
-      .where('id_user', '==', data.user.id_user)
-      .where('id_movie', '==', data.movie.id);
-
-    query.get().then((querySnapshot) => {
-      // Si l'utilisateur a déjà noté le film, mettre à jour la note existante
-      querySnapshot.forEach((doc) => {
-        this.ratingsCollection
-          .doc(doc.id)
-          .update({
-            comment: newComment,
-            rating: newRate,
-          })
-          .then(() => {
-            console.log('Document mis à jour avec succès');
-          })
-          .catch((error) => {
-            console.error(
-              'Erreur lors de la mise à jour du document : ',
-              error
-            );
-          });
-      });
-    });
   }
 }
