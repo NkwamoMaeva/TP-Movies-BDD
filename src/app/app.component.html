@@ -60,7 +60,7 @@
             </button>
         </div>
         <div fxShow="false" fxHide.lt-md="false">
-            <button mat-icon-button aria-label="search">
+            <button mat-icon-button aria-label="search" routerLink="/users">
                 <mat-icon>search</mat-icon>
             </button>
             <button mat-icon-button aria-label="logout" routerLink="/login" *ngIf="isConnected | async">
@@ -101,7 +101,8 @@
                                 <mat-icon class="white" mat-icon-no-color>settings</mat-icon>
                             </button>
                         </div>
-                        <button *ngIf="isConnected | async" class="white" mat-button routerLink="/profile"  (click)="sidenav.close()">Edit</button>
+                        <button *ngIf="isConnected | async" class="white" mat-button routerLink="/profile"
+                            (click)="sidenav.close()">Edit</button>
 
                     </div>
                 </div>
