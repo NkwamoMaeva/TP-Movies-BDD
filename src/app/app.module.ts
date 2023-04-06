@@ -1,5 +1,8 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatMenuModule } from '@angular/material/menu';
+import { HotToastModule } from '@ngneat/hot-toast';
+
 
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
@@ -84,6 +87,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    HotToastModule.forRoot(),
+    MatMenuModule,
   ],
   providers: [
     MovieListService,

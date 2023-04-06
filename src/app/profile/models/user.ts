@@ -2,12 +2,11 @@
   
 
 export interface ProfileUser {
-    uid: string;
+    uid: string ;
     email?: string | null;
-    firstName?: string | null ;
-    lastName?: string | null;
-    displayName?: string | null;
-    phone?: string | null;
-    address?: string | null;
+    firstname?: string | null ;
+    lastname?: string | null;
+    displayname?: string | null;
+    username?: string | null;
     photoURL?: string | null;
   }
