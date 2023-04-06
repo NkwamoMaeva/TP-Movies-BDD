@@ -102,7 +102,7 @@
                                 <mat-icon class="white" mat-icon-no-color>settings</mat-icon>
                             </button>
                         </div>
-                        <button *ngIf="connected" class="white" mat-button>Modifier</button>
+                        <button *ngIf="connected" class="white" mat-button routerLink="/profile"  (click)="sidenav.close()">Edit</button>
 
                     </div>
                 </div>

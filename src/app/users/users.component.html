@@ -4,24 +4,30 @@
       <div class="search-wrapper"></div>
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Search</mat-label>
-        <input matInput placeholder="search" (keyup)="onSearch($event)">
-        <ng-container matSuffix *ngIf="searchValue | async;">
-            <button mat-icon-button aria-label="Clear" (click)="clearSearch()">
-                <mat-icon>close</mat-icon>
-            </button>
+        <input matInput placeholder="search" (keyup)="onSearch($event)" />
+        <ng-container matSuffix *ngIf="searchValue | async">
+          <button mat-icon-button aria-label="Clear" (click)="clearSearch()">
+            <mat-icon>close</mat-icon>
+          </button>
         </ng-container>
-    </mat-form-field>
+      </mat-form-field>
     </div>
   </div>
 </div>
 
 <div>
-    <div class="list mt-4 pt-4">
-        <div *ngFor="let profile of profiles$ | async" class='movie-item' >
-            <h2>{{ profile.username }}</h2>
-            <h2>{{ profile.firstname }}</h2>
-            <!-- <img loading="lazy" [src]='"https://image.tmdb.org/t/p/w500" + profile.photoURL'> -->
-        </div>
-    </div>
-</div>
+  <div class="list mt-4 pt-4">
+    <mat-card *ngFor="let profile of profiles$ | async" class="movie-item">
 
+        <mat-card-content>
+        <h3>@{{ profile.username}}</h3>
+        <p> {{profile.firstname}} <strong>{{profile.lastname?.toUpperCase()}}</strong> </p>
+        <p></p>
+        </mat-card-content>
+      </mat-card>
+    <div >
+      
+      <!-- <img loading="lazy" [src]='"https://image.tmdb.org/t/p/w500" + profile.photoURL'> -->
+    </div>
+  </div>
+</div>

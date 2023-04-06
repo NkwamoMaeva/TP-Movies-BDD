@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
+import { NonNullableFormBuilder } from '@angular/forms';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { switchMap, tap } from 'rxjs';
-import { AuthentificationService } from '../authentification/services/authentification.service';
-import { ProfileUser } from './models/user';
-import { ImageUploadService } from './sevices/image-upload.service';
+import { of, switchMap, tap, throwError } from 'rxjs';
 import { UsersService } from './sevices/users.service';
-import { of, throwError } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -24,6 +20,7 @@ export class ProfileComponent implements OnInit {
     lastname: [''],
     email: [''],
     username: [''],
+    photoURL : [''],
   });
 
   ngOnInit(): void {
@@ -56,41 +53,29 @@ export class ProfileComponent implements OnInit {
   }
 
   constructor(
-    private authService: AuthentificationService,
-    private imageUploadService: ImageUploadService,
     private toast: HotToastService,
     private usersService: UsersService,
     private fb: NonNullableFormBuilder
   ) {}
 
-  // uploadFile(event: any, { uid }: ProfileUser) {
-  //   this.imageUploadService
-  //     .uploadImage(event.target.files[0], `images/profile/${uid}`)
-  //     .pipe(
-  //       this.toast.observe({
-  //         loading: 'Uploading profile image...',
-  //         success: 'Image uploaded successfully',
-  //         error: 'There was an error in uploading the image',
-  //       }),
-  //       switchMap((photoURL) =>
-  //         this.usersService.updateUser({
-  //           uid,
-  //           photoURL,
-  //         })
-  //       )
-  //     )
-  //     .subscribe();
-  // }
+ 
 
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.user$.subscribe((user) => {
+      this.usersService.uploadImage(file, user?.id_user ).subscribe((response) => {
+        this.profileForm.patchValue({ photoURL: response});
+      });
+    });
+  }
   saveProfile() {
-    console.log('helle je suis là', this.profileForm.value);
-    const { id_user, ...data } = this.profileForm.value;
-    console.log('helle je suis là2222', { id_user, ...data });
+    const { id_user, ...data} = this.profileForm.value;
     if (!id_user) {
       return;
     }
-
     this.usersService.updateUser({id_user, ...data }).pipe(
+      
       this.toast.observe({
         loading: 'Saving profile data...',
         success: 'Profile updated successfully',
