@@ -8,6 +8,15 @@ export interface Flux {
   date_created: string;
 }
 
+export interface Rating {
+  id_user: string;
+  rating: number;
+  id_movie: number;
+  date_created: string;
+  comment: string;
+}
+
+
 export interface Profile {
   id_user: string;
   username: string;

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
+import { map, Observable } from 'rxjs';
 import { AuthentificationService } from './authentification/services/authentification.service';
 import { FluxListService } from './flux/services/flux-list.service';
 
@@ -8,6 +9,7 @@ export interface Menu {
   name: string;
   link: string;
   icon: string;
+  visible: boolean;
 }
 
 @Component({
@@ -16,34 +18,42 @@ export interface Menu {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  private readonly fluxService = inject(FluxListService);
-
-  notif = this.fluxService.getNotif(this.router);
-
   title = '';
   link = '/';
   user: firebase.default.User | null = null;
-  connected = false;
+  private readonly fluxService = inject(FluxListService);
+
+  notif = this.fluxService.getNotif(this.router);
+  isConnected: Observable<boolean> = this.auth.user.pipe(
+    map((user) => {
+      let value = false;
+      if (user) {
+        this.user = user;
+        this.menus[1].visible = false;
+        this.menus[2].visible = false;
+        value = true;
+      }
+      return value;
+    })
+  );
   menus: Menu[] = [
     {
-      name: 'Accueil',
-      link: '/',
-      icon: 'home',
+      name: 'Movies',
+      link: '/movies',
+      icon: 'theaters',
+      visible: true,
     },
     {
-      name: 'Wachlist',
-      link: '/wachlist',
-      icon: 'bookmark',
-    },
-    {
-      name: 'Téléchargements',
-      link: '/download',
-      icon: 'download',
+      name: 'Search',
+      link: '/users',
+      icon: 'search',
+      visible: true,
     },
     {
       name: 'Flux',
       link: '/flux',
-      icon: '',
+      icon: 'equalizer',
+      visible: true,
     },
   ];
   constructor(
@@ -56,21 +66,14 @@ export class AppComponent {
         this.link = this.router.url;
       }
     });
-
-    this.auth.user.subscribe((user) => {
-      if (user) {
-        this.connected = true;
-        this.user = user;
-      }
-    });
   }
   goToMenu(menu: string) {
     this.title = menu;
   }
   signOut() {
     console.log('Logout');
-    this.auth.signOut().then((result) => {
-      console.log(result);
+    this.auth.signOut().then(() => {
+      this.router.navigate(['login']);
     });
   }
 }

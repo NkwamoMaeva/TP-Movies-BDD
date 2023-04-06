@@ -3,13 +3,16 @@ import { FluxListService } from './services/flux-list.service';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Flux } from './models/flux.model';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
 import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
-import { RatingTest } from '../rating-test/models/rating-test.model';
-import { Movie } from '../movie-page/models/movie.model';
 
 @Component({
   selector: 'tp-movies-movie-flux',
@@ -36,8 +39,19 @@ export class FluxListComponent {
     if (this.userId == element.user.id_user) {
       edit = true;
     }
-    this.dialog.open(DialogFluxDetailComponent, {
+    const dialogRef = this.dialog.open(DialogFluxDetailComponent, {
       data: { element: element, edit: edit },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+      if (result) {
+        this.fluxService.updateRating(
+          result.user.id_user,
+          result.movie.id,
+          result.rating,
+          result.comment
+        );
+      }
     });
   }
 }
@@ -53,6 +67,7 @@ export class DialogFluxDetailComponent {
     this.db.collection<Flux>('Ratings');
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { element: any; edit: boolean },
+    public dialogRef: MatDialogRef<DialogFluxDetailComponent>,
 
     private auth: AngularFireAuth,
     private db: AngularFirestore
@@ -64,6 +79,9 @@ export class DialogFluxDetailComponent {
         console.log('No user is currently signed in.');
       }
     });
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
   }
   isUserConnected(data: Flux) {
     return this.userId === data.user.id_user;

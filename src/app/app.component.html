@@ -18,16 +18,15 @@
             </ng-template>
         </a>
         <div fxShow="true" fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="flex-start center">
-            <a mat-button routerLink="/">Accueil</a>
-            <a mat-button routerLink="/wachlist">Wachlist</a>
-            <a mat-button routerLink="/download">Téléchargements</a>
-            <a mat-button routerLink="/flux">Flux</a>
+            <a mat-button routerLink="/movies">Movies</a>
+            <a mat-button routerLink="/search" *ngIf="isConnected | async">Search</a>
+            <a mat-button routerLink="/flux" *ngIf="isConnected | async">Flux</a>
         </div>
 
         <span class="spacer"></span>
 
         <div class="nav-list" fxShow="true" fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="flex-end center">
-            <ng-container *ngIf="connected; else elseAvatar">
+            <ng-container *ngIf="isConnected | async; else elseAvatar">
                 <h5 [matMenuTriggerFor]="connectedMenu">{{user?.displayName}}</h5>
                 <img class="user-avatar" [matMenuTriggerFor]="connectedMenu"
                     [src]="user?.photoURL ? user?.photoURL: 'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
@@ -43,7 +42,7 @@
                 <button mat-menu-item routerLink="/profile">
                     <span>Profile</span>
                 </button>
-                <button mat-menu-item (click)="signOut()" routerLink="/login">
+                <button mat-menu-item (click)="signOut()">
                     <span>Logout</span>
                 </button>
             </mat-menu>
@@ -56,19 +55,19 @@
                     <span>Login</span>
                 </button>
             </mat-menu>
-            <button mat-icon-button aria-label="notifications" routerLink="/flux">
-                <mat-icon [matBadge]="notif | async" matBadgeColor="accent">notifications</mat-icon>
+            <button mat-icon-button aria-label="notifications" *ngIf="isConnected | async" routerLink="/flux">
+                <mat-icon [matBadge]="(notif | async) ?? 0" matBadgeColor="accent">notifications</mat-icon>
             </button>
         </div>
         <div fxShow="false" fxHide.lt-md="false">
             <button mat-icon-button aria-label="search">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button aria-label="logout" routerLink="/login" *ngIf="connected">
+            <button mat-icon-button aria-label="logout" routerLink="/login" *ngIf="isConnected | async">
                 <mat-icon>logout</mat-icon>
             </button>
-            <button mat-icon-button aria-label="notifications" routerLink="/flux">
-                <mat-icon [matBadge]="notif | async" matBadgeColor="accent">notifications</mat-icon>
+            <button mat-icon-button aria-label="notifications" *ngIf="isConnected | async" routerLink="/flux">
+                <mat-icon [matBadge]="(notif | async) ?? 0" matBadgeColor="accent">notifications</mat-icon>
             </button>
         </div>
 
@@ -79,12 +78,12 @@
             <div fxLayout="column" class="sidebar-content">
                 <div class="user-info" fxLayout="row">
                     <div fxLayout="column" fxLayoutAlign="space-between start" class="h-100">
-                        <img class="user-avatar" [src]="connected ? (user?.photoURL?
+                        <img class="user-avatar" [src]="(isConnected | async) ? (user?.photoURL?
                             'https://material.angular.io/assets/img/examples/shiba2.jpg' :
                             'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png') :
                             'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
                             alt="avatar">
-                        <ng-container *ngIf="connected; else elseConnect">
+                        <ng-container *ngIf="isConnected | async; else elseConnect">
                             <span class="white" style="margin-bottom: 9px;">{{user?.displayName}}</span>
                         </ng-container>
                         <ng-template #elseConnect>
@@ -102,13 +101,13 @@
                                 <mat-icon class="white" mat-icon-no-color>settings</mat-icon>
                             </button>
                         </div>
-                        <button *ngIf="connected" class="white" mat-button>Modifier</button>
+                        <button *ngIf="isConnected | async" class="white" mat-button>Modifier</button>
 
                     </div>
                 </div>
                 <mat-divider></mat-divider>
                 <a mat-button [routerLink]="menu.link" (click)="sidenav.close(); goToMenu(menu.name)"
-                    *ngFor="let menu of menus">
+                    *ngFor="let menu of menus" [style]="{display:menu.visible ? '' : 'none'}">
                     <mat-icon style="font-size: 26px;height: 26px; width: 26px;">{{menu.icon}}</mat-icon>
                     <span>{{menu.name}}</span>
                 </a>

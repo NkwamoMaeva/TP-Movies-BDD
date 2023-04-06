@@ -25,7 +25,8 @@
 
             <div class="row card-body">
                 <div class="col-4 p-0">
-                    <img [src]="'https://image.tmdb.org/t/p/w500/' + flu.movie.poster_path"
+                    <img *ngIf="flu.movie.poster_path" loading="lazy" [routerLink]="'/movies/'+ flu.movie.id"
+                        [src]="'https://image.tmdb.org/t/p/w500/' + flu.movie.poster_path"
                         alt="Photo of the movie {{ flu.movie.title }}" class="w-100 movie" />
                 </div>
                 <div class="col-8 my-auto" style="padding: 0 0 0 12px">
@@ -33,9 +34,8 @@
                         <strong class="text-truncate">{{ flu.movie.title }}</strong>
                         <label *ngIf="flu.comment" class="comment"
                             style="font-size: 12px;">{{'“'+flu.comment+'”'}}</label>
-                        <div class="d-flex justify-content-end w-100">
-                            <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating" [readonly]="true">
-                            </ngb-rating>
+                        <div class="d-flex justify-content-end w-100" style="font-size: small;">
+                            {{flu.rating}}/10
                         </div>
                     </div>
                 </div>
