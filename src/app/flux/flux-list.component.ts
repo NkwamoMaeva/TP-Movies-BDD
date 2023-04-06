@@ -115,37 +115,4 @@ export class DialogFluxDetailComponent {
   isUserConnected(data: Flux) {
     return this.userId === data.user.id_user;
   }
-
-  updateComment(data: Flux) {
-    const newComment = (<HTMLInputElement>document.getElementById('comment'))
-      .value;
-    const newRate = parseFloat(
-      (<HTMLInputElement>document.getElementById('rate')).value
-    );
-    // Vérifier si l'utilisateur a déjà noté ce film
-    const query = this.ratingsCollection.ref
-      .where('id_user', '==', data.user.id_user)
-      .where('id_movie', '==', data.movie.id);
-
-    query.get().then((querySnapshot) => {
-      // Si l'utilisateur a déjà noté le film, mettre à jour la note existante
-      querySnapshot.forEach((doc) => {
-        this.ratingsCollection
-          .doc(doc.id)
-          .update({
-            comment: newComment,
-            rating: newRate,
-          })
-          .then(() => {
-            console.log('Document mis à jour avec succès');
-          })
-          .catch((error) => {
-            console.error(
-              'Erreur lors de la mise à jour du document : ',
-              error
-            );
-          });
-      });
-    });
-  }
 }
