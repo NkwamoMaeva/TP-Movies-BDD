@@ -3,46 +3,75 @@
 <h1>Update Profile</h1>
 
 <div class="profile-image">
-  <img width="120" height="120" class="margin-top mat-elevation-z1"
-    [src]="(user$ | async)?.photoURL ?? '/assets/images/image-placeholder.png'" />
+  <img
+    width="120"
+    height="120"
+    class="margin-top mat-elevation-z1"
+    [src]="(user$ | async)?.photoURL ?? '/assets/images/image-placeholder.png.jpeg'"
+  />
 
   <button mat-mini-fab (click)="inputField.click()">
     <mat-icon>edit</mat-icon>
   </button>
 </div>
 
-<input #inputField hidden type="file" change="user$ | async as user; uploadFile($event, user)">
+<input
+  #inputField
+  hidden
+  type="file"
+  change="user$ | async as user; uploadFile($event, user)"
+/>
 
 <form class="margin-top" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
   <div class="row">
     <mat-form-field>
-      <input type="text" matInput formControlName="firstname" placeholder="First Name" />
+      <input
+        type="text"
+        matInput
+        formControlName="firstname"
+        placeholder="First Name"
+      />
     </mat-form-field>
 
     <mat-form-field>
-      <input type="text" matInput formControlName="lastname" placeholder="Last Name" />
+      <input
+        type="text"
+        matInput
+        formControlName="lastname"
+        placeholder="Last Name"
+      />
     </mat-form-field>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <mat-form-field>
       <input type="text" matInput formControlName="displayname" placeholder="Display Name" />
     </mat-form-field>
 
    
-  </div>
+  </div> -->
   <div class="row">
-  <mat-form-field>
-    <input type="text" matInput formControlName="email" placeholder="Email" />
-  </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput formControlName="email" placeholder="Email" />
+    </mat-form-field>
 
-  <mat-form-field>
-    <input type="text" matInput formControlName="username" placeholder="Username" />
-  </mat-form-field>
-</div>
-<div class="row">
-  
- 
-</div>
-  <button type="submit" class="margin-top" mat-raised-button color="primary" (click)="saveProfile()">Save</button>
+    <mat-form-field>
+      <input
+        type="text"
+        matInput
+        formControlName="username"
+        placeholder="Username"
+      />
+    </mat-form-field>
+  </div>
+  <div class="row"></div>
+  <button
+    type="submit"
+    class="margin-top"
+    mat-raised-button
+    color="primary"
+    (click)="saveProfile()"
+  >
+    Save
+  </button>
 </form>

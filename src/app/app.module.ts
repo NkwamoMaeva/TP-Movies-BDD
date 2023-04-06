@@ -34,6 +34,7 @@ import {
 import { MovieListService } from './movie-page/services/movie-list.service';
 import { MovieDetailComponent } from './movie-page/movie-detail/movie-detail.component';
 import { AuthentificationService } from './authentification/services/authentification.service';
+import { UsersComponent } from './users/users.component';
 
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { ProfileComponent } from './profile/profile.component';
@@ -58,6 +59,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FluxListComponent,
     MovieDetailComponent,
     DialogFluxDetailComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,
@@ -111,6 +113,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ProfileComponent,
     MovieDetailComponent,
     FluxListComponent,
+    UsersComponent
   ],
 })
 export class AppModule {

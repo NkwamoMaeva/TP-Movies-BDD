@@ -10,7 +10,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Movie } from 'src/app/movie-page/models/movie.model';
 import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
-import { Flux, Profile, Rating } from '../models/flux.model';
+import { Flux, Profile, Rating, TypeFluxList } from '../models/flux.model';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +41,56 @@ export class FluxListService {
     });
   }
 
+  // My flux
+  public getMyFlux(): Observable<Flux[]> {
+    return combineLatest([this.auth.user]).pipe(
+      switchMap(([user]) => {
+        return this.af
+          .collection<Flux>('Ratings')
+          .valueChanges()
+          .pipe(
+            map((response) => {
+              response
+                .filter((result) => result.id_user === user?.uid) // filter by user id
+                .map(async (result: any) => {
+                  let movie: Movie = {} as Movie;
+                  let user: Profile = {} as Profile;
+                  this.movieListService
+                    .getMovieById(result.id_movie)
+                    .subscribe((movieFlux: Movie) => {
+                      movie = movieFlux;
+                    });
+                  const db = getFirestore();
+                  const docRef = doc(db, 'Profile', result.id_user);
+                  const docSnap = await getDoc(docRef);
+                  if (docSnap.exists()) {
+                    user = docSnap.data() as Profile;
+                    const options = {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    } as const;
+                    const date = new Date(result.date_created);
+                    result.user = user;
+                    result.movie = movie;
+                    result.date_created = date.toLocaleDateString(
+                      'en-US',
+                      options
+                    );
+                    return result as Flux;
+                  } else {
+                    console.log('Document does not exist');
+                    return {};
+                  }
+                });
+
+              return response;
+            })
+          );
+      })
+    );
+  }
+  // All flux
   public getFlux(): Observable<Flux[]> {
     return this.af
       .collection<Flux>('Ratings')
@@ -79,6 +129,49 @@ export class FluxListService {
         })
       );
   }
+
+  public getAllFlux(type: string): Observable<Flux[]> {
+    if (type === TypeFluxList.MINES) {
+      return this.getMyFlux()
+    }
+    return this.af
+      .collection<Flux>('Ratings')
+      .valueChanges()
+      .pipe(
+        map((response) => {
+          response.forEach(async (result: any) => {
+            let movie: Movie = {} as Movie;
+            let user: Profile = {} as Profile;
+            this.movieListService
+              .getMovieById(result.id_movie)
+              .subscribe((movieFlux: Movie) => {
+                movie = movieFlux;
+              });
+            const db = getFirestore();
+            const docRef = doc(db, 'Profile', result.id_user);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              user = docSnap.data() as Profile;
+              const options = {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              } as const;
+              const date = new Date(result.date_created);
+              result.user = user;
+              result.movie = movie;
+              result.date_created = date.toLocaleDateString('en-US', options);
+              return result as Flux;
+            } else {
+              console.log('Document does not exist');
+              return {};
+            }
+          });
+          return response;
+        })
+      );
+  }
+
   public getFluxByMovieId(movieId: string): Observable<Flux[]> {
     return this.af
       .collection<Flux>('Ratings', (ref) =>
@@ -118,26 +211,6 @@ export class FluxListService {
           return response;
         })
       );
-  }
-
-  public async changeNotif() {
-    this.auth.user.subscribe(async (user) => {
-      // eslint-disable-next-line no-empty
-      if (user) {
-        await this.af
-          .collection('Ratings')
-          .get()
-          .subscribe(async (querySnapshot) => {
-            const sizeRatings = querySnapshot.size;
-            const notificationDocRef = this.af
-              .collection('Profile')
-              .doc(user.uid);
-            await notificationDocRef.update({ notification: sizeRatings });
-          });
-      } else {
-        console.log(null);
-      }
-    });
   }
 
   public updateRating(
@@ -214,7 +287,6 @@ export class FluxListService {
       });
     });
   }
-
   private triggerNotification(id_movie: string, body: string) {
     if (Notification.permission === 'granted') {
       const options = {

@@ -6,6 +6,7 @@ export interface Flux {
   movie: Movie;
   comment: string;
   date_created: string;
+  id_user :  string;
 }
 
 export interface Rating {
@@ -22,4 +23,9 @@ export interface Profile {
   username: string;
   photo: string;
   notification: number;
+}
+
+export enum TypeFluxList {
+  ALL = 'all',
+  MINES = 'mines',
 }

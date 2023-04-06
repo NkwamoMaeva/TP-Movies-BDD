@@ -9,7 +9,6 @@ import { ImageUploadService } from './sevices/image-upload.service';
 import { UsersService } from './sevices/users.service';
 import { of, throwError } from 'rxjs';
 
-
 @UntilDestroy()
 @Component({
   selector: 'tp-movies-profile',
@@ -20,12 +19,11 @@ export class ProfileComponent implements OnInit {
   user$ = this.usersService.currentUserProfile$;
 
   profileForm = this.fb.group({
-    uid: [''],
-    displayname: [''],
+    id_user: [''],
     firstname: [''],
     lastname: [''],
     email: [''],
-    username: ['']
+    username: [''],
   });
 
   ngOnInit(): void {
@@ -34,24 +32,19 @@ export class ProfileComponent implements OnInit {
         untilDestroyed(this),
         tap(console.log),
         switchMap((user) =>
-          user
-            ? of(user)
-            : throwError('Could not fetch user profile data')
+          user ? of(user) : throwError('Could not fetch user profile data')
         )
       )
       .subscribe({
         next: (user) => {
           if (user) {
-            const { uid, displayname, firstname, lastname, email, username } =
-              user;
-  
+            const { id_user, firstname, lastname, email, username } = user;
             this.profileForm.patchValue({
-              uid,
-              displayname,
+              id_user,
               firstname,
               lastname,
               email,
-              username
+              username,
             });
           }
         },
@@ -61,8 +54,7 @@ export class ProfileComponent implements OnInit {
         },
       });
   }
-  
-  
+
   constructor(
     private authService: AuthentificationService,
     private imageUploadService: ImageUploadService,
@@ -71,40 +63,39 @@ export class ProfileComponent implements OnInit {
     private fb: NonNullableFormBuilder
   ) {}
 
-  uploadFile(event: any, { uid }: ProfileUser) {
-    this.imageUploadService
-      .uploadImage(event.target.files[0], `images/profile/${uid}`)
-      .pipe(
-        this.toast.observe({
-          loading: 'Uploading profile image...',
-          success: 'Image uploaded successfully',
-          error: 'There was an error in uploading the image',
-        }),
-        switchMap((photoURL) =>
-          this.usersService.updateUser({
-            uid,
-            photoURL,
-          })
-        )
-      )
-      .subscribe();
-  }
+  // uploadFile(event: any, { uid }: ProfileUser) {
+  //   this.imageUploadService
+  //     .uploadImage(event.target.files[0], `images/profile/${uid}`)
+  //     .pipe(
+  //       this.toast.observe({
+  //         loading: 'Uploading profile image...',
+  //         success: 'Image uploaded successfully',
+  //         error: 'There was an error in uploading the image',
+  //       }),
+  //       switchMap((photoURL) =>
+  //         this.usersService.updateUser({
+  //           uid,
+  //           photoURL,
+  //         })
+  //       )
+  //     )
+  //     .subscribe();
+  // }
 
   saveProfile() {
-    const { uid, ...data } = this.profileForm.value;
-
-    if (!uid) {
+    console.log('helle je suis là', this.profileForm.value);
+    const { id_user, ...data } = this.profileForm.value;
+    console.log('helle je suis là2222', { id_user, ...data });
+    if (!id_user) {
       return;
     }
 
-    this.usersService
-      .updateUser({ uid, ...data })
-      .pipe(
-        this.toast.observe({
-          loading: 'Saving profile data...',
-          success: 'Profile updated successfully',
-          error: 'There was an error in updating the profile',
-        })
-      )
-      .subscribe
-      }}
+    this.usersService.updateUser({id_user, ...data }).pipe(
+      this.toast.observe({
+        loading: 'Saving profile data...',
+        success: 'Profile updated successfully',
+        error: 'There was an error in updating the profile',
+      })
+    ).subscribe;
+  }
+}
