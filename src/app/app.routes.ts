@@ -15,8 +15,8 @@ export const appRoutes: Route[] = [
   { path: 'movies/:id', component: MovieDetailComponent },
   { path: 'login', component: AuthentificationComponent },
   { path: 'register', component: AuthentificationComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'flux', component: FluxListComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'flux', component: FluxListComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-  { path: 'profiles/:id', component: MovieDetailComponent },
+  { path: 'profiles/:id', component: MovieDetailComponent, canActivate: [AuthGuard]},
 ];
