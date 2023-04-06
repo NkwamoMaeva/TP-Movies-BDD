@@ -1,30 +1,110 @@
-<div id="content_hero" class="center-content hero-ontop"
-    [style]="{'background-image': 'url(https://image.tmdb.org/t/p/original' + movie.backdrop_path + ')'}">
+<div *ngIf="movie" style="margin-bottom: 164px;">
+    <div id="content_hero" class="center-content hero-ontop"
+        [style]="{'background-image': 'url(https://image.tmdb.org/t/p/original' + movie.backdrop_path + ')'}">
 
-    <div class="container">
-        <div class="row blurb scrollme animateme" data-when="exit" data-from="0" data-to="1" data-opacity="0"
-            data-translatey="100">
-            <div class="col-md-9">
-                <h5><span class="badge bg-secondary me-2">{{movie.status}}</span>
-                    <span *ngFor="let genre of movie.genres"
-                        class="badge rounded-pill text-bg-warning me-2">{{genre.name}}</span>
-                </h5>
-                <h1>
-                    {{movie.title}}
-                </h1>
-                <p>{{movie.overview}}</p>
-                <div class="buttons">
-                    <span class="certificate">PG</span>
+        <div class="container">
+            <div class="row blurb scrollme animateme">
+                <div class="col-md-9">
+                    <h5><span class="badge bg-secondary me-2">{{movie.status}}</span></h5>
+                    <h1>
+                        {{movie.title}}
+                    </h1>
+                    <h5>
+                        <span *ngFor="let genre of movie.genres"
+                            class="badge rounded-pill text-bg-warning me-2">{{genre.name}}</span>
+                    </h5>
+                    <div class="buttons d-flex flex-row align-items-center mt-5">
+                        <div class="white d-flex flex-row">
+                            <div class="d-flex flex-column me-4">
+                                <span class="d-flex flex-column fs-6">Release date</span>
+                                <span class="fs-4">{{movie.release_date | date}}
+                                </span>
+                            </div>
 
-                    <div class="position-relative" style="width: min-content;">
-                        <mat-progress-spinner class="example-margin" mode="determinate" [value]="movie.vote_average*10">
-                        </mat-progress-spinner>
-                        <span class="rate">
-                            {{movie.vote_average}}
-                            <i class="material-icons">star_rate</i>
-                        </span>
+                            <div class="d-flex flex-column me-5">
+                                <span class="fs-6">Duration</span>
+                                <span class="fs-4">
+                                    <span>{{convertDuration(movie.runtime)[0]}} hr </span>
+                                    <span>{{convertDuration(movie.runtime)[1]}} min</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="position-relative" style="width: min-content;">
+                            <mat-progress-spinner class="rating" mode="determinate" [value]="movie.vote_average*10">
+                            </mat-progress-spinner>
+                            <span class="rate fw-semibold" *ngIf="movie.vote_average">
+                                <span>{{(movie.vote_average).toFixed(1)}}</span>
+                                <i class="material-icons">star_rate</i>
+                            </span>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="my-5">
+            <span class="fs-3 fw-bold">Synopsis</span>
+            <p>{{movie.overview}}</p>
+        </div>
+        <div class="my-5">
+            <div *ngIf="movie.credits">
+                <span class="fs-3 mb-4 fw-bold">The cast</span>
+                <div class="list">
+                    <div class="d-flex flex-column" *ngFor="let cast of casts">
+                        <img class="cast_img" loading="lazy"
+                            [src]="'https://image.tmdb.org/t/p/w500' + cast.profile_path">
+                        <span class="fs-6 mt-2">{{cast.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-5">
+            <div *ngIf="movie.credits">
+                <span class="fs-3 mb-4 fw-bold">Ratings</span>
+                <div class="list_rating">
+                    <div *ngFor="let flu of flux$">
+                        <div class="card p-3" *ngIf="flu.user">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="d-flex flex-row mb-2">
+                                    <div *ngIf="flu.user.photo" class="me-2 mb-1">
+                                        <img [src]="flu.user.photo" alt="Profile picture of {{ flu.user.username }}"
+                                            class="profile" />
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <strong
+                                            class="fw-semibold">{{ userId === flu.user.id_user ? 'Me' :flu.user.username }}</strong>
+                                        <span style="font-size: 10px;">{{flu.date_created}}</span>
+                                    </div>
+                                </div>
+                                <a class="icon-link icon-link-hover" (click)="openDialog(flu)"
+                                    style="--bs-icon-link-transform: translate3d(.125rem, -.125rem, 0); cursor: pointer;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-box-arrow-in-up-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M6.364 13.5a.5.5 0 0 0 .5.5H13.5a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 13.5 1h-10A1.5 1.5 0 0 0 2 2.5v6.636a.5.5 0 1 0 1 0V2.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5H6.864a.5.5 0 0 0-.5.5z" />
+                                        <path fill-rule="evenodd"
+                                            d="M11 5.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793l-8.147 8.146a.5.5 0 0 0 .708.708L10 6.707V10.5a.5.5 0 0 0 1 0v-5z" />
+                                    </svg> </a>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex flex-column">
+                                        <strong class="text-truncate">{{ flu.movie.title }}</strong>
+                                        <span *ngIf="flu.comment" class="comment"
+                                            style="font-size: 12px;">{{'“'+flu.comment+'”'}}</span>
+                                        <div class="d-flex justify-content-end w-100">
+                                            <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating"
+                                                [readonly]="true">
+                                            </ngb-rating>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

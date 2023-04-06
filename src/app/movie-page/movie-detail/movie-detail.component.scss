@@ -12,13 +12,6 @@ $light-background: rgb(245, 245, 245);
   }
 }
 
-.rate {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .hero {
   //background-position: center;
   text-align: center;
@@ -61,136 +54,24 @@ $light-background: rgb(245, 245, 245);
 .hero-ontop {
   z-index: 1;
 }
-
-a,
-a:active,
-a:visited {
-  cursor: pointer;
-  transition: all 300ms ease-in-out;
-  text-decoration: none;
-  color: #ec7532;
-  outline: none;
-  box-shadow: none;
+.rating {
+  width: 70px !important;
+  height: 70px !important;
 }
-
-.btn {
-  font-size: 13px;
-  font-weight: normal;
-  position: relative;
-  overflow: hidden;
-  width: auto;
-  padding: 12px 24px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #fff;
-  border-width: 2px;
-  border-radius: 30px;
-}
-
-.btn i,
-.btn:hover i {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  vertical-align: middle;
-  color: #fff;
-}
-
-.btn-default {
-  border: none;
-  background-image: linear-gradient(to right, #fbbd61, #ec7532);
-}
-
-.btn-default span,
-.btn-default span:hover,
-.btn-ghost span:hover {
-  position: relative;
-  z-index: 1;
-  color: #fff;
-}
-
-.btn-default:hover:before {
-  width: 140%;
-}
-
-.btn-default:before,
-.btn-ghost:before {
+.rate {
   position: absolute;
-  z-index: 0;
-  bottom: 0;
-  left: -15px;
-  width: 0;
-  height: 100%;
-  content: '';
-  transition: 0.4s;
-
-  transform: skewX(30deg);
-  background: #ec7532;
-}
-
-.btn-primary {
-  border: none;
-  background: #ec7532;
-}
-
-.btn-ghost {
-  transition: all 300ms ease-in-out;
-  color: #ec7532;
-  border-color: #ec7532;
-  background: transparent;
-}
-
-.btn-ghost:hover span {
-  color: #fff;
-}
-
-.btn-ghost:hover:before {
-  z-index: -1;
-  width: 140%;
-}
-
-.btn-ghost:hover {
-  color: #fff;
-}
-
-button.btn-default,
-button.btn-primary {
-  -webkit-transition: all 300ms ease-in-out;
-  -moz-transition: all 300ms ease-in-out;
-  transition: all 300ms ease-in-out;
-}
-
-button.btn-default:before,
-button.btn-primary:before {
-  display: none;
-}
-
-button.btn-default:hover,
-button.btn-primary:hover {
-  color: #fff;
-  background: #fbbd61;
-}
-
-a.arrow-button {
+  top: 50%;
+  left: 50%;
   font-size: 12px;
-  position: relative;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #ec7532;
-}
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transform: translate(-50%, -50%);
 
-a.arrow-button:after {
-  font-family: 'Material Icons';
-  font-weight: bold;
-  position: absolute;
-  top: -1px;
-  content: 'chevron_right';
-  text-transform: none;
-  -webkit-font-feature-settings: 'chevron_right';
-}
-
-a.arrow-button:hover {
-  color: #101010;
+  i.material-icons {
+    font-size: 14px;
+    color: #fbbd61;
+  }
 }
 
 .star-rating {
@@ -198,7 +79,7 @@ a.arrow-button:hover {
 }
 
 .star-rating i {
-  font-size: 18px;
+  font-size: 12px;
   display: inline-block;
   width: 18px;
   color: #fbbd61;
@@ -207,6 +88,18 @@ a.arrow-button:hover {
 i.material-icons {
   display: inline-flex;
   vertical-align: middle;
+}
+.cast_img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.list {
+  display: grid;
+  grid-gap: 20px;
+  padding-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
 #content_hero .scroll {
@@ -287,8 +180,8 @@ i.material-icons {
 }
 
 #content_hero .container .blurb {
-  margin-top: 200px;
-  margin-bottom: 100px;
+  margin-top: 120px;
+  margin-bottom: 60px;
 }
 
 #content_hero .container .blurb h1 {
@@ -306,3 +199,37 @@ span.title {
   text-transform: uppercase;
   color: #fbbd61;
 }
+
+.rating-star {
+  font-size: 16px;
+  color: #dc9600;
+}
+
+.profile {
+  border-radius: 50px;
+  width: 35px;
+  height: 35px;
+}
+
+.movie,
+.profile {
+  border: var(--bs-border-color-translucent) 2px solid;
+}
+strong {
+  font-size: 14px;
+}
+
+.comment {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.list_rating {
+  display: grid;
+  grid-gap: 20px;
+  margin-bottom: 56px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
