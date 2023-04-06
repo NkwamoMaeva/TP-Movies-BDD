@@ -26,7 +26,6 @@ export class UsersService {
         if (!user?.uid) {
           return of(null);
         }
-
         const ref = doc(this.firestore, 'Profile', user?.uid);
         return docData(ref) as Observable<ProfileUser>;
         
@@ -35,13 +34,13 @@ export class UsersService {
   }
 
   addUser(user: ProfileUser): Observable<void> {
-    const ref = doc(this.firestore, 'Profile', user.uid);
+    const ref = doc(this.firestore, 'Profile', user.id_user);
     return from(setDoc(ref, user));
     
   }
 
   updateUser(user: ProfileUser): Observable<void> {
-    const ref = doc(this.firestore, 'Profile', user.uid);
+    const ref = doc(this.firestore, 'Profile', user.id_user);
     return from(updateDoc(ref, { ...user }));
   }
 }

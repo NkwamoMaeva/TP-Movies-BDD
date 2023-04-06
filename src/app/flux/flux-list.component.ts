@@ -1,6 +1,6 @@
 import { Component, Inject, inject } from '@angular/core';
 import { FluxListService } from './services/flux-list.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, switchMap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Flux } from './models/flux.model';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,6 +10,8 @@ import {
 } from '@angular/fire/compat/firestore';
 import { RatingTest } from '../rating-test/models/rating-test.model';
 import { Movie } from '../movie-page/models/movie.model';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'tp-movies-movie-flux',
@@ -17,12 +19,24 @@ import { Movie } from '../movie-page/models/movie.model';
   styleUrls: ['./flux-list.component.scss'],
 })
 export class FluxListComponent {
+  typeFilter = 'all';
+  types: string[] = ['all', 'mines'];
+  public readonly type = new BehaviorSubject<string>('all');
+
   public readonly fluxService = inject(FluxListService);
-  flux$: Observable<Flux[]> = this.fluxService.getFlux();
+
+  flux$: Observable<Flux[]> = this.type
+  .pipe(
+    switchMap((type) => {
+      return this.fluxService.getAllFlux(type);
+    })
+  );
+
+ 
+  myFlux$: Observable<Flux[]> = this.fluxService.getMyFlux();
   userId = '';
 
-  constructor(private auth: AngularFireAuth, public dialog: MatDialog) {
-    this.fluxService.changeNotif();
+  constructor(private auth: AngularFireAuth, public dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
     this.auth.user.subscribe((user) => {
       if (user) {
         this.userId = user.uid;
@@ -30,6 +44,18 @@ export class FluxListComponent {
         console.log('No user is currently signed in.');
       }
     });
+    route.queryParams.subscribe((params) => {
+      if (params['type']) {
+        this.typeFilter = params['type'];
+        this.type.next(params['type']);
+      } else {
+        this.typeFilter = 'all';
+        this.type.next('all');
+      }
+    });
+  }
+  onTypeChange(event: MatButtonToggleChange) {
+    this.router.navigate(['/flux'], { queryParams: { type: event.value } });
   }
 
   openDialog(element: any, edit: boolean) {
