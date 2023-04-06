@@ -12,10 +12,12 @@ import {
   switchMap,
   combineLatest,
 } from 'rxjs';
+
 import { MoviesResponse } from './models/movie.model';
 import { GenresService } from './services/genre.service';
 import { MovieListService } from './services/movie-list.service';
 import { Genre } from './models/genre.model';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 

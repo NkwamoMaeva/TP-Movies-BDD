@@ -6,6 +6,7 @@ import { FluxListComponent } from './flux/flux-list.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RatingTestComponent } from './rating-test/rating-test.component';
 import { MovieDetailComponent } from './movie-page/movie-detail/movie-detail.component';
+import { UsersComponent } from './users/users.component'
 export const appRoutes: Route[] = [
   { path: '', component: HomepageComponent },
   { path: 'movies', component: MoviePageComponent },
@@ -15,4 +16,6 @@ export const appRoutes: Route[] = [
   { path: 'profile', component: ProfileComponent  },
   { path: 'flux', component: FluxListComponent },
   { path: 'rating-test', component: RatingTestComponent },
+  { path: 'users', component: UsersComponent },
+  { path: 'profiles/:id', component: MovieDetailComponent },
 ];
