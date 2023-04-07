@@ -90,45 +90,7 @@ export class FluxListService {
       })
     );
   }
-  // All flux
-  public getFlux(): Observable<Flux[]> {
-    return this.af
-      .collection<Flux>('Ratings')
-      .valueChanges()
-      .pipe(
-        map((response) => {
-          response.forEach(async (result: any) => {
-            let movie: Movie = {} as Movie;
-            let user: Profile = {} as Profile;
-            this.movieListService
-              .getMovieById(result.id_movie)
-              .subscribe((movieFlux: Movie) => {
-                movie = movieFlux;
-              });
-            const db = getFirestore();
-            const docRef = doc(db, 'Profile', result.id_user);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-              user = docSnap.data() as Profile;
-              const options = {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              } as const;
-              const date = new Date(result.date_created);
-              result.user = user;
-              result.movie = movie;
-              result.date_created = date.toLocaleDateString('en-US', options);
-              return result as Flux;
-            } else {
-              console.log('Document does not exist');
-              return {};
-            }
-          });
-          return response;
-        })
-      );
-  }
+
 
   public getAllFlux(type: string): Observable<Flux[]> {
     if (type === TypeFluxList.MINES) {
@@ -255,8 +217,6 @@ export class FluxListService {
 
                     return 0;
                   } else {
-                    console.log(query - (notif ? notif : 0) !== 0);
-                    console.log(query);
                     if (query - (notif ? notif : 0) !== 0) {
                       this.watchRatings(
                         this.afs.collection<Rating>('Ratings', (ref) =>
@@ -278,7 +238,7 @@ export class FluxListService {
     ratingCollection.stateChanges(['added']).subscribe((changes) => {
       changes.forEach((change) => {
         const rating = change.payload.doc.data() as Rating;
-        if (rating.rating === 4 || rating.rating === 5) {
+        if (rating.rating >= 4) {
           this.triggerNotification(
             `Nouvelle note ${rating.id_movie}`,
             `Nouvelle note ajoutée pour le film ${rating.id_movie}.`
