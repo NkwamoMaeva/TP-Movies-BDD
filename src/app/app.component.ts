@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NavigationEnd, Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { AuthentificationService } from './authentification/services/authentification.service';
 import { FluxListService } from './flux/services/flux-list.service';
+import { UsersService } from './profile/sevices/users.service';
 
 export interface Menu {
   name: string;
@@ -21,7 +22,10 @@ export class AppComponent {
   title = '';
   link = '/';
   user: firebase.default.User | null = null;
+  photoURL : string | undefined;
   private readonly fluxService = inject(FluxListService);
+
+  user$ = this.usersService.currentUserProfile$;
 
   notif = this.fluxService.getNotif(this.router);
   isConnected: Observable<boolean> = this.auth.user.pipe(
@@ -32,7 +36,6 @@ export class AppComponent {
         this.menus[2].visible = true;
         return true;
       } else {
-        console.log(false);
         this.user = null;
         this.menus[1].visible = false;
         this.menus[2].visible = false;
@@ -40,6 +43,8 @@ export class AppComponent {
       }
     })
   );
+
+ 
   menus: Menu[] = [
     {
       name: 'Movies',
@@ -63,13 +68,17 @@ export class AppComponent {
   constructor(
     private router: Router,
     public auth: AngularFireAuth,
-    public authService: AuthentificationService
+    public authService: AuthentificationService,
+    private usersService : UsersService,
   ) {
     router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.link = this.router.url;
       }
     });
+    this.usersService.currentUserProfile$.subscribe((user) => {
+      this.photoURL = user?.photoURL ?? '';
+    })
   }
   goToMenu(menu: string) {
     this.title = menu;

@@ -29,7 +29,7 @@
             <ng-container *ngIf="isConnected | async; else elseAvatar">
                 <h5 [matMenuTriggerFor]="connectedMenu">{{user?.displayName}}</h5>
                 <img class="user-avatar" [matMenuTriggerFor]="connectedMenu"
-                    [src]="user?.photoURL ? user?.photoURL: 'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
+                    [src]="photoURL ? photoURL: 'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
                     alt=" avatar">
             </ng-container>
             <ng-template #elseAvatar>
@@ -78,8 +78,8 @@
             <div fxLayout="column" class="sidebar-content">
                 <div class="user-info" fxLayout="row">
                     <div fxLayout="column" fxLayoutAlign="space-between start" class="h-100">
-                        <img class="user-avatar" [src]="(isConnected | async) ? (user?.photoURL?
-                            'https://material.angular.io/assets/img/examples/shiba2.jpg' :
+                        <img class="user-avatar" [src]="(isConnected | async) ? (photoURL?
+                            photoURL :
                             'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png') :
                             'https://www.pngmart.com/files/22/User-Avatar-Profile-Download-PNG-Isolated-Image.png'"
                             alt="avatar">
