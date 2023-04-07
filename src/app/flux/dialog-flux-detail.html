@@ -26,7 +26,7 @@
                         <strong class="text-truncate">{{ data.element.movie.title }}</strong>
                         <div class="my-3 row">
                             <div class="col-lg-9 col-12">
-                                <ngb-rating class="rating-star" [(ngModel)]="data.element.rating" [max]="10"
+                                <ngb-rating class="rating-star" [(ngModel)]="data.element.rating" [max]="5"
                                     [(rate)]="data.element.rating"
                                     [readonly]="!(data.edit || data.element.user===undefined)">
                                 </ngb-rating>

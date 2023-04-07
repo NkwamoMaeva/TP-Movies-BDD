@@ -41,9 +41,8 @@
                         <strong class="text-truncate">{{ flu.movie.title }}</strong>
                         <label *ngIf="flu.comment" class="comment"
                             style="font-size: 12px;">{{'“'+flu.comment+'”'}}</label>
-                        <div class="d-flex justify-content-end w-100" style="font-size: small;">
-                            {{flu.rating}}/10
-                        </div>
+                        <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating" [readonly]="true">
+                        </ngb-rating>
                     </div>
                 </div>
             </div>

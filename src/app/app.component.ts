@@ -26,19 +26,18 @@ export class AppComponent {
   notif = this.fluxService.getNotif(this.router);
   isConnected: Observable<boolean> = this.auth.user.pipe(
     map((user) => {
-      let value = false;
       if (user) {
         this.user = user;
         this.menus[1].visible = true;
         this.menus[2].visible = true;
-        value = true;
+        return true;
       } else {
+        console.log(false);
         this.user = null;
-
         this.menus[1].visible = false;
         this.menus[2].visible = false;
+        return false;
       }
-      return value;
     })
   );
   menus: Menu[] = [
