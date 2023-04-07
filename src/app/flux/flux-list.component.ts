@@ -28,13 +28,13 @@ export class FluxListComponent {
 
   public readonly fluxService = inject(FluxListService);
 
-  flux$: Observable<Flux[]> = this.type.pipe(
+  flux$: Observable<(Flux | null)[]> = this.type.pipe(
     switchMap((type) => {
-      return this.fluxService.getAllFlux(type);
+      
+      return this.fluxService.getFlux(type);
     })
   );
 
-  myFlux$: Observable<Flux[]> = this.fluxService.getMyFlux();
   userId = '';
 
   constructor(

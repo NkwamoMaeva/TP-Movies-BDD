@@ -6,8 +6,8 @@ import {
 } from '@angular/fire/compat/firestore';
 import { doc, getDoc, getFirestore } from '@angular/fire/firestore';
 import { NavigationEnd, Router } from '@angular/router';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { combineLatest, from, Observable } from 'rxjs';
+import { filter, map, mergeMap, switchMap, toArray } from 'rxjs/operators';
 import { Movie } from 'src/app/movie-page/models/movie.model';
 import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
 import { Flux, Profile, Rating, TypeFluxList } from '../models/flux.model';
@@ -42,59 +42,57 @@ export class FluxListService {
   }
 
   // My flux
-  public getMyFlux(): Observable<Flux[]> {
-    return combineLatest([this.auth.user]).pipe(
-      switchMap(([user]) => {
-        return this.af
-          .collection<Flux>('Ratings')
-          .valueChanges()
-          .pipe(
-            map((response) => {
-              response
-                .filter((result) => result.id_user === user?.uid) // filter by user id
-                .map(async (result: any) => {
-                  let movie: Movie = {} as Movie;
-                  let user: Profile = {} as Profile;
-                  this.movieListService
-                    .getMovieById(result.id_movie)
-                    .subscribe((movieFlux: Movie) => {
-                      movie = movieFlux;
-                    });
-                  const db = getFirestore();
-                  const docRef = doc(db, 'Profile', result.id_user);
-                  const docSnap = await getDoc(docRef);
-                  if (docSnap.exists()) {
-                    user = docSnap.data() as Profile;
-                    const options = {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    } as const;
-                    const date = new Date(result.date_created);
-                    result.user = user;
-                    result.movie = movie;
-                    result.date_created = date.toLocaleDateString(
-                      'en-US',
-                      options
-                    );
-                    return result as Flux;
-                  } else {
-                    console.log('Document does not exist');
-                    return {};
-                  }
-                });
+ 
 
-              return response;
-            })
-          );
-      })
-    );
-  }
-
-
-  public getAllFlux(type: string): Observable<Flux[]> {
+  public getFlux(type: string): Observable<(Flux | null)[]> {
     if (type === TypeFluxList.MINES) {
-      return this.getMyFlux()
+      return combineLatest([this.auth.user]).pipe(
+        switchMap(([user]) => {
+          return this.af
+            .collection<Flux>('Ratings')
+            .valueChanges()
+            .pipe(
+              switchMap((response) => {
+                const filtered = response.filter((result) => result.id_user === user?.uid);
+                return from(filtered).pipe(
+                  mergeMap(async (result: any) => {
+                    let movie: Movie = {} as Movie;
+                    let user: Profile = {} as Profile;
+                    this.movieListService
+                      .getMovieById(result.id_movie)
+                      .subscribe((movieFlux: Movie) => {
+                        movie = movieFlux;
+                      });
+                    const db = getFirestore();
+                    const docRef = doc(db, 'Profile', result.id_user);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                      user = docSnap.data() as Profile;
+                      const options = {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      } as const;
+                      const date = new Date(result.date_created);
+                      result.user = user;
+                      result.movie = movie;
+                      result.date_created = date.toLocaleDateString(
+                        'en-US',
+                        options
+                      );
+                      return result as Flux;
+                    } else {
+                      console.log('Document does not exist');
+                      return null;
+                    }
+                  }),
+                  filter((item) => item !== null),
+                  toArray()
+                );
+              })
+            );
+        })
+      );
     }
     return this.af
       .collection<Flux>('Ratings')
@@ -129,6 +127,7 @@ export class FluxListService {
               return {};
             }
           });
+          console.log(response);
           return response;
         })
       );
