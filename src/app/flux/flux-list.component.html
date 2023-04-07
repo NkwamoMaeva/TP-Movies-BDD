@@ -32,9 +32,9 @@
       <div class="card px-3" *ngIf="flu && flu.user">
         <div class="d-flex flex-row justify-content-between">
           <div class="d-flex flex-row mt-2">
-            <div *ngIf="flu.user.photo" class="me-2 mb-1">
+            <div *ngIf="flu.user.photoURL ? flu.user.photoURL : flu.user.photo" class="me-2 mb-1">
               <img
-                [src]="flu.user.photo"
+                [src]="flu.user.photoURL ? flu.user.photoURL : flu.user.photo"
                 alt="Profile picture of {{ flu.user.username }}"
                 class="profile"
               />

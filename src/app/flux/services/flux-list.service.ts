@@ -43,96 +43,7 @@ export class FluxListService {
   }
 
   // My flux
- 
-
-  public getFlux(type: string): Observable<(Flux | null)[]> {
-    if (type === TypeFluxList.MINES) {
-      return combineLatest([this.auth.user]).pipe(
-        switchMap(([user]) => {
-          return this.af
-            .collection<Flux>('Ratings')
-            .valueChanges()
-            .pipe(
-              switchMap((response) => {
-                const filtered = response.filter((result) => result.id_user === user?.uid);
-                return from(filtered).pipe(
-                  mergeMap(async (result: any) => {
-                    let movie: Movie = {} as Movie;
-                    let user: Profile = {} as Profile;
-                    this.movieListService
-                      .getMovieById(result.id_movie)
-                      .subscribe((movieFlux: Movie) => {
-                        movie = movieFlux;
-                      });
-                    const db = getFirestore();
-                    const docRef = doc(db, 'Profile', result.id_user);
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) {
-                      user = docSnap.data() as Profile;
-                      const options = {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      } as const;
-                      const date = new Date(result.date_created);
-                      result.user = user;
-                      result.movie = movie;
-                      result.date_created = date.toLocaleDateString(
-                        'en-US',
-                        options
-                      );
-                      return result as Flux;
-                    } else {
-                      console.log('Document does not exist');
-                      return null;
-                    }
-                  }),
-                  filter((item) => item !== null),
-                  toArray()
-                );
-              })
-            );
-        })
-      );
-    }
-    return this.af
-      .collection<Flux>('Ratings')
-      .valueChanges()
-      .pipe(
-        map((response) => {
-          response.forEach(async (result: any) => {
-            let movie: Movie = {} as Movie;
-            let user: Profile = {} as Profile;
-            this.movieListService
-              .getMovieById(result.id_movie)
-              .subscribe((movieFlux: Movie) => {
-                movie = movieFlux;
-              });
-            const db = getFirestore();
-            const docRef = doc(db, 'Profile', result.id_user);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-              user = docSnap.data() as Profile;
-              const options = {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              } as const;
-              const date = new Date(result.date_created);
-              result.user = user;
-              result.movie = movie;
-              result.date_created = date.toLocaleDateString('en-US', options);
-              return result as Flux;
-            } else {
-              console.log('Document does not exist');
-              return {};
-            }
-          });
-          return response;
-        })
-      );
-  }
-  public getFluxT(type: string, search?: string): Observable<(Flux | null)[]> {
+  public getFlux(type: string, search?: string): Observable<(Flux | null)[]> {
     if (search && search !== '') {
       return this.searchByUsername(search);
       
@@ -148,7 +59,7 @@ export class FluxListService {
                 return from(filtered).pipe(
                   mergeMap(async (result: any) => {
                     let movie: Movie = {} as Movie;
-                    let user: Profile = {} as Profile;
+                    let user: ProfileUser = {} as ProfileUser;
                     this.movieListService
                       .getMovieById(result.id_movie)
                       .subscribe((movieFlux: Movie) => {
@@ -158,7 +69,7 @@ export class FluxListService {
                     const docRef = doc(db, 'Profile', result.id_user);
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
-                      user = docSnap.data() as Profile;
+                      user = docSnap.data() as ProfileUser;
                       const options = {
                         day: 'numeric',
                         month: 'long',
@@ -192,7 +103,7 @@ export class FluxListService {
         map((response) => {
           response.forEach(async (result: any) => {
             let movie: Movie = {} as Movie;
-            let user: Profile = {} as Profile;
+            let user: ProfileUser = {} as ProfileUser;
             this.movieListService
               .getMovieById(result.id_movie)
               .subscribe((movieFlux: Movie) => {
@@ -202,7 +113,7 @@ export class FluxListService {
             const docRef = doc(db, 'Profile', result.id_user);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-              user = docSnap.data() as Profile;
+              user = docSnap.data() as ProfileUser;
               const options = {
                 day: 'numeric',
                 month: 'long',

@@ -41,7 +41,7 @@ export class FluxListComponent {
     this.searchValue,
   ]).pipe(
     switchMap(([type, search]) => {
-      return this.fluxService.getFluxT(type, search);
+      return this.fluxService.getFlux(type, search);
     })
   );
   userId = '';

@@ -22,6 +22,7 @@ export interface Profile {
   id_user: string;
   username: string;
   photo: string;
+  photoURL: string;
   notification: number;
 }
 
