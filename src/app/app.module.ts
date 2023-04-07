@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatMenuModule } from '@angular/material/menu';
 import { HotToastModule } from '@ngneat/hot-toast';
 
-
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
@@ -35,15 +34,17 @@ import {
 import { MovieListService } from './movie-page/services/movie-list.service';
 import { MovieDetailComponent } from './movie-page/movie-detail/movie-detail.component';
 import { AuthentificationService } from './authentification/services/authentification.service';
+import { UsersComponent } from './users/users.component';
 
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { ProfileComponent } from './profile/profile.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
 import { HotToastService } from '@ngneat/hot-toast';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -58,6 +59,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FluxListComponent,
     MovieDetailComponent,
     DialogFluxDetailComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +67,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     BrowserAnimationsModule,
     MaterialModule,
+    MatDialogModule,
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
@@ -95,6 +98,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AuthentificationService,
     ProfileComponent,
     HotToastService,
+    {
+      provide: MatDialogRef,
+      useValue: {},
+    },
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
   ],
   bootstrap: [AppComponent],
@@ -106,6 +113,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ProfileComponent,
     MovieDetailComponent,
     FluxListComponent,
+    UsersComponent
   ],
 })
 export class AppModule {

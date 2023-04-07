@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { DialogFluxDetailComponent } from 'src/app/flux/flux-list.component';
@@ -22,17 +22,17 @@ export class MovieDetailComponent {
 
   movie: any = {};
   casts: any[] = [];
+  edit = false;
 
   constructor(
     route: ActivatedRoute,
     private auth: AngularFireAuth,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<DialogFluxDetailComponent>
   ) {
-    console.log(route.snapshot.params['id']);
     this.movieListService
       .getMovieById(route.snapshot.params['id'])
       .subscribe((result) => {
-        console.log(result);
         this.movie = result;
         this.casts = this.movie.credits.cast.slice(0, 10);
 
@@ -52,9 +52,41 @@ export class MovieDetailComponent {
     });
   }
 
-  openDialog(flux: Flux) {
-    this.dialog.open(DialogFluxDetailComponent, {
-      data: flux,
+  openDialog(element: any, edit: boolean) {
+    let result = { movie: {}, comment: '', rating: 0 };
+
+    if (element.user && this.userId == element.user.id_user) {
+      edit = true;
+    }
+    if (element.movie) {
+      result = element;
+    } else {
+      result.movie = element as Movie;
+    }
+    const dialogRef = this.dialog.open(DialogFluxDetailComponent, {
+      data: { element: result, edit: edit },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (result.edit) {
+          this.fluxService.updateRating(
+            result.element.id_user,
+            result.element.movie.id,
+            result.element.rating,
+            result.element.comment
+          );
+          result.rating = 0;
+          result.comment = '';
+        } else {
+          this.fluxService.addRating(
+            result.movie.id,
+            result.rating,
+            result.comment
+          );
+          result.rating = 0;
+          result.comment = '';
+        }
+      }
     });
   }
 

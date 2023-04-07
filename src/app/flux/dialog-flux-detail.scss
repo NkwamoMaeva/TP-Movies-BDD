@@ -19,6 +19,7 @@ textarea {
 
 .movie {
   width: 150px;
+  cursor: pointer;
 }
 strong {
   font-size: 14px;
@@ -39,10 +40,6 @@ strong {
 }
 
 .card-size {
-  width: 900px !important;
-}
-@media (max-width: 576px) {
-  .card-size {
-    width: 100% !important;
-  }
+  width: 100% !important;
+  padding: 10px;
 }

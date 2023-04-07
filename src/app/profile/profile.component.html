@@ -1,19 +1,19 @@
 <div class="container">
 
-  <ng-container *ngIf="user$ | async as user"></ng-container>
+  <ng-container *ngIf="user$ | async as user">
 <br>
   <h1>Update Profile</h1>
 
   <div class="profile-image">
     <img width="120" height="120" class="margin-top mat-elevation-z1"
-      [src]="(user$ | async)?.photoURL ?? '/assets/images/image-placeholder.png'" />
+      [src]="'/assets/images/image-placeholder.png'" />
 
     <button mat-mini-fab (click)="inputField.click()">
       <mat-icon>edit</mat-icon>
     </button>
   </div>
 
-  <input #inputField hidden type="file" change="user$ | async as user; uploadFile($event, user)">
+<input #inputField hidden type="file" (change)="onFileSelected($event)">
 
   <form class="margin-top" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
     <div class="row">
@@ -26,12 +26,13 @@
       </mat-form-field>
     </div>
 
-  
-    <div class="row">
     <mat-form-field>
-      <input type="text" matInput formControlName="email" placeholder="Email" />
+      <input type="text" matInput formControlName="lastname" placeholder="Last Name" />
     </mat-form-field>
+  </div>
 
+
+  <div class="row">
     <mat-form-field>
       <input type="text" matInput formControlName="username" placeholder="Username" />
     </mat-form-field>
@@ -42,4 +43,6 @@
   </div>
     <button type="submit" class="margin-top" mat-raised-button color="primary" (click)="saveProfile()">Save</button>
   </form>
+
+</ng-container>
 </div>

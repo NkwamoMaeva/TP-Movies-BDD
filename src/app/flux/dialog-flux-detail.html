@@ -1,45 +1,46 @@
 <div class="card-size">
     <h2 mat-dialog-title>Rating details</h2>
     <mat-dialog-content class="mat-typography">
-        <div class="px-lg-3 px-1" *ngIf="data.user">
-            <div class="d-flex flex-row justify-content-between">
+        <div class="px-lg-3 px-1">
+            <div class="d-flex flex-row justify-content-between" *ngIf="data.element.user">
                 <div class="d-flex flex-row my-2">
-                    <div *ngIf="data.user.photo" class="me-2 mb-1">
-                        <img [src]="data.user.photo" alt="Profile picture of {{ data.user.username }}" class="profile" />
+                    <div *ngIf="data.element.user.photo" class="me-2 mb-1">
+                        <img [src]="data.element.user.photo" alt="Profile picture of {{ data.element.user.username }}"
+                            class="profile" />
                     </div>
                     <div class="d-flex flex-column">
-                        <strong class="fw-semibold">{{ data.user.username }}</strong>
-                        <span style="font-size: 10px;">{{data.date_created}}</span>
+                        <strong
+                            class="fw-semibold">{{ userId === data.element.user.id_user ? 'Me' :data.element.user.username }}</strong>
+                        <span style="font-size: 10px;">{{data.element.date_created}}</span>
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-row row">
-                <div class="p-0 col-lg-2 col-12 text-center mb-lg-0 mb-2">
-                    <img [src]="'https://image.tmdb.org/t/p/w500/' + data.movie.poster_path"
-                        alt="Photo of the movie {{ data.movie.title }}" class="movie" />
+            <div class="d-flex flex-column flex-lg-row">
+                <div class="p-0 text-center mb-lg-0 mb-2">
+                    <img [src]="'https://image.tmdb.org/t/p/w500/' + data.element.movie.poster_path"
+                        [routerLink]="'/movies/'+ data.element.movie.id"
+                        alt="Photo of the movie {{ data.element.movie.title }}" class="movie" />
                 </div>
-                <div class="my-auto col-lg-10 col-12" style="padding: 0 0 0 12px">
+                <div style="padding: 0 0 0 12px">
                     <div class="d-flex flex-column mx-lg-4">
-                        <strong class="text-truncate">{{ data.movie.title }}</strong>
+                        <strong class="text-truncate">{{ data.element.movie.title }}</strong>
                         <div class="my-3 row">
-                            <div class="col-lg-3 col-12 mb-lg-0 mb-3">
-                                <label><strong style="font-size: 12px;">Leave a rate :&nbsp;</strong>
-                                    <input type="number" name="input" value="{{ data.rating }}" [(ngModel)]="data.rating"
-                                           step="1" min="0" max="5" required pattern="^[0-9]+(\.[0-9]{1,2})?$" id="rate">
-                                </label>&nbsp;
-                            </div>
                             <div class="col-lg-9 col-12">
-                                <ngb-rating class="rating-star" [max]="5" [(rate)]="data.rating" [readonly]="false"></ngb-rating>
+                                <ngb-rating class="rating-star" [(ngModel)]="data.element.rating" [max]="10"
+                                    [(rate)]="data.element.rating"
+                                    [readonly]="!(data.edit || data.element.user===undefined)">
+                                </ngb-rating>
                             </div>
                         </div>
-                        <ng-container *ngIf="isUserConnected(data); else notConnected">
+                        <ng-container *ngIf="data.edit || !data.element.user; else notEdit">
                             <mat-form-field>
                                 <mat-label><strong>Leave a comment</strong></mat-label>
-                                <textarea matInput id="comment">{{ data.comment }}</textarea>
+                                <textarea matInput [(ngModel)]="data.element.comment"
+                                    id="comment">{{ data.element.comment ? data.element.comment : '' }}</textarea>
                             </mat-form-field>
                         </ng-container>
-                        <ng-template #notConnected>
-                            <label *ngIf="data.comment">{{'“'+data.comment+'“'}}</label>
+                        <ng-template #notEdit>
+                            <label *ngIf="data.element.comment">{{'“'+data.element.comment+'“'}}</label>
                         </ng-template>
                     </div>
                 </div>
@@ -47,7 +48,9 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-        <button *ngIf="isUserConnected(data)" mat-raised-button color="primary" (click)="updateComment(data)" [mat-dialog-close]="true">Edit</button>
-        <button [mat-dialog-close]="true" mat-raised-button color="warn">Close</button>
+        <button *ngIf="data.edit" mat-raised-button color="primary" [mat-dialog-close]="data">Edit</button>
+        <button *ngIf="!data.element.user" mat-raised-button color="primary"
+            [mat-dialog-close]="data.element">Rate</button>
+        <button (click)="onNoClick()" mat-raised-button color="warn">Close</button>
     </mat-dialog-actions>
 </div>

@@ -1,5 +1,5 @@
 <div *ngIf="movie" style="margin-bottom: 164px;">
-    <div id="content_hero" class="center-content hero-ontop"
+    <div id="content_hero" class="center-content hero-ontop" *ngIf="movie.backdrop_path"
         [style]="{'background-image': 'url(https://image.tmdb.org/t/p/original' + movie.backdrop_path + ')'}">
 
         <div class="container">
@@ -13,31 +13,51 @@
                         <span *ngFor="let genre of movie.genres"
                             class="badge rounded-pill text-bg-warning me-2">{{genre.name}}</span>
                     </h5>
-                    <div class="buttons d-flex flex-row align-items-center mt-5">
-                        <div class="white d-flex flex-row">
-                            <div class="d-flex flex-column me-4">
-                                <span class="d-flex flex-column fs-6">Release date</span>
-                                <span class="fs-4">{{movie.release_date | date}}
-                                </span>
-                            </div>
-
-                            <div class="d-flex flex-column me-5">
-                                <span class="fs-6">Duration</span>
-                                <span class="fs-4">
-                                    <span>{{convertDuration(movie.runtime)[0]}} hr </span>
-                                    <span>{{convertDuration(movie.runtime)[1]}} min</span>
-                                </span>
-                            </div>
+                    <div class="buttons d-flex flex-row align-items-center white mt-5">
+                        <div class="d-flex flex-column me-4">
+                            <span class="d-flex flex-column fs-6">Release date</span>
+                            <span class="fs-4">{{movie.release_date | date}}
+                            </span>
                         </div>
-                        <div class="position-relative" style="width: min-content;">
+
+                        <div class="d-flex flex-column me-4">
+                            <span class="fs-6">Duration</span>
+                            <span class="fs-4">
+                                <span
+                                    *ngIf="convertDuration(movie.runtime)[0] > 0">{{convertDuration(movie.runtime)[0]}}
+                                    hr
+                                </span>
+                                <span>{{convertDuration(movie.runtime)[1]}} min</span>
+                            </span>
+                        </div>
+                        <div class="d-flex flex-column me-5">
+                            <span class="d-flex flex-column fs-6">Rating</span>
+                            <span class="fs-4" *ngIf="movie.vote_average">{{(movie.vote_average).toFixed(1) + '/10'}}
+                            </span>
+                        </div>
+                        <a class="bg-warning rounded-circle rounded_button shadow-sm mx-2" *ngIf="movie.homepage"
+                            [href]="movie.homepage" target="_blank">
+                            <mat-icon fontIcon="confirmation_number"></mat-icon>
+                        </a>
+                        <div class="bg-warning rounded-circle rounded_button shadow-sm me-2" *ngIf="userId !== ''"
+                            (click)="openDialog(movie,false)">
+                            <mat-icon fontIcon="star"></mat-icon>
+                        </div>
+                        <div class="bg-warning rounded-circle rounded_button shadow-sm">
+                            <mat-icon fontIcon="share"></mat-icon>
+                        </div>
+
+                    </div>
+
+                    <!-- <div class="position-relative" style="width: min-content;">
                             <mat-progress-spinner class="rating" mode="determinate" [value]="movie.vote_average*10">
                             </mat-progress-spinner>
                             <span class="rate fw-semibold" *ngIf="movie.vote_average">
                                 <span>{{(movie.vote_average).toFixed(1)}}</span>
                                 <i class="material-icons">star_rate</i>
                             </span>
-                        </div>
-                    </div>
+                        </div> -->
+
                 </div>
             </div>
         </div>
@@ -55,11 +75,12 @@
                         <img class="cast_img" loading="lazy"
                             [src]="'https://image.tmdb.org/t/p/w500' + cast.profile_path">
                         <span class="fs-6 mt-2">{{cast.name}}</span>
+                        <span style="font-size: small;">{{cast.character}}</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="my-5">
+        <div class="my-5" *ngIf="flux$.length > 0">
             <div *ngIf="movie.credits">
                 <span class="fs-3 mb-4 fw-bold">Ratings</span>
                 <div class="list_rating">
@@ -77,7 +98,7 @@
                                         <span style="font-size: 10px;">{{flu.date_created}}</span>
                                     </div>
                                 </div>
-                                <a class="icon-link icon-link-hover" (click)="openDialog(flu)"
+                                <a class="icon-link icon-link-hover" (click)="openDialog(flu, true)"
                                     style="--bs-icon-link-transform: translate3d(.125rem, -.125rem, 0); cursor: pointer;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-box-arrow-in-up-right" viewBox="0 0 16 16">
@@ -91,7 +112,6 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="d-flex flex-column">
-                                        <strong class="text-truncate">{{ flu.movie.title }}</strong>
                                         <span *ngIf="flu.comment" class="comment"
                                             style="font-size: 12px;">{{'“'+flu.comment+'”'}}</span>
                                         <div class="d-flex justify-content-end w-100">

@@ -34,7 +34,6 @@ export class MovieListService {
                 result.release_date = result.first_air_date;
               }
             });
-            console.log(response);
             return response;
           })
         );
@@ -61,7 +60,6 @@ export class MovieListService {
               result.title = result.name;
               result.release_date = result.first_air_date;
             });
-            console.log(response);
             return response;
           })
         );

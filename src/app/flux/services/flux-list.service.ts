@@ -10,15 +10,13 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Movie } from 'src/app/movie-page/models/movie.model';
 import { MovieListService } from 'src/app/movie-page/services/movie-list.service';
-import { RatingTest } from 'src/app/rating-test/models/rating-test.model';
-import { Flux, Profile } from '../models/flux.model';
+import { Flux, Profile, Rating, TypeFluxList } from '../models/flux.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FluxListService {
-  constructor(private readonly afs: AngularFirestore) {}
-
+  userId = '';
   ratingLength$ = this.afs
     .collection('Ratings')
     .get()
@@ -28,13 +26,71 @@ export class FluxListService {
   private readonly auth = inject(AngularFireAuth);
   private readonly movieListService = inject(MovieListService);
   private readonly router = inject(Router);
-  private ratingsCollection: AngularFirestoreCollection<RatingTest> =
-    this.af.collection<RatingTest>('Ratings');
+  private ratingsCollection: AngularFirestoreCollection<Rating> =
+    this.af.collection<Rating>('Ratings');
 
   public profiles: Observable<Profile[]> = this.af
     .collection<Profile>('Profile')
     .valueChanges();
 
+  constructor(private readonly afs: AngularFirestore) {
+    this.auth.user.subscribe((user) => {
+      if (user) {
+        this.userId = user.uid;
+      }
+    });
+  }
+
+  // My flux
+  public getMyFlux(): Observable<Flux[]> {
+    return combineLatest([this.auth.user]).pipe(
+      switchMap(([user]) => {
+        return this.af
+          .collection<Flux>('Ratings')
+          .valueChanges()
+          .pipe(
+            map((response) => {
+              response
+                .filter((result) => result.id_user === user?.uid) // filter by user id
+                .map(async (result: any) => {
+                  let movie: Movie = {} as Movie;
+                  let user: Profile = {} as Profile;
+                  this.movieListService
+                    .getMovieById(result.id_movie)
+                    .subscribe((movieFlux: Movie) => {
+                      movie = movieFlux;
+                    });
+                  const db = getFirestore();
+                  const docRef = doc(db, 'Profile', result.id_user);
+                  const docSnap = await getDoc(docRef);
+                  if (docSnap.exists()) {
+                    user = docSnap.data() as Profile;
+                    const options = {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    } as const;
+                    const date = new Date(result.date_created);
+                    result.user = user;
+                    result.movie = movie;
+                    result.date_created = date.toLocaleDateString(
+                      'en-US',
+                      options
+                    );
+                    return result as Flux;
+                  } else {
+                    console.log('Document does not exist');
+                    return {};
+                  }
+                });
+
+              return response;
+            })
+          );
+      })
+    );
+  }
+  // All flux
   public getFlux(): Observable<Flux[]> {
     return this.af
       .collection<Flux>('Ratings')
@@ -73,9 +129,13 @@ export class FluxListService {
         })
       );
   }
-  public getFluxByMovieId(movieId: string): Observable<Flux[]> {
+
+  public getAllFlux(type: string): Observable<Flux[]> {
+    if (type === TypeFluxList.MINES) {
+      return this.getMyFlux()
+    }
     return this.af
-      .collection<Flux>('Ratings', (ref) => ref.where('id_movie', '==', movieId))
+      .collection<Flux>('Ratings')
       .valueChanges()
       .pipe(
         map((response) => {
@@ -112,24 +172,45 @@ export class FluxListService {
       );
   }
 
-  public async changeNotif() {
-    this.auth.user.subscribe(async (user) => {
-      // eslint-disable-next-line no-empty
-      if (user) {
-        await this.af
-          .collection('Ratings')
-          .get()
-          .subscribe(async (querySnapshot) => {
-            const sizeRatings = querySnapshot.size;
-            const notificationDocRef = this.af
-              .collection('Profile')
-              .doc(user.uid);
-            await notificationDocRef.update({ notification: sizeRatings });
+  public getFluxByMovieId(movieId: string): Observable<Flux[]> {
+    return this.af
+      .collection<Flux>('Ratings', (ref) =>
+        ref.where('id_movie', '==', movieId)
+      )
+      .valueChanges()
+      .pipe(
+        map((response) => {
+          response.forEach(async (result: any) => {
+            let movie: Movie = {} as Movie;
+            let user: Profile = {} as Profile;
+            this.movieListService
+              .getMovieById(result.id_movie)
+              .subscribe((movieFlux: Movie) => {
+                movie = movieFlux;
+              });
+            const db = getFirestore();
+            const docRef = doc(db, 'Profile', result.id_user);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              user = docSnap.data() as Profile;
+              const options = {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              } as const;
+              const date = new Date(result.date_created);
+              result.user = user;
+              result.movie = movie;
+              result.date_created = date.toLocaleDateString('en-US', options);
+              return result as Flux;
+            } else {
+              console.log('Document does not exist');
+              return {};
+            }
           });
-      } else {
-        console.log(null);
-      }
-    });
+          return response;
+        })
+      );
   }
 
   public updateRating(
@@ -142,21 +223,12 @@ export class FluxListService {
     const query = this.ratingsCollection.ref
       .where('id_user', '==', id_user)
       .where('id_movie', '==', id_movie);
+
     query.get().then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        // Si l'utilisateur n'a pas encore noté le film, ajouter une nouvelle note à Firestore
-        this.ratingsCollection.add({
-          id_user: id_user,
-          id_movie: id_movie,
-          rating: rating,
-          comment: comment,
-          date_created: new Date().toLocaleString(),
-        });
-      } else {
+      if (!querySnapshot.empty) {
         // Si l'utilisateur a déjà noté le film, mettre à jour la note existante
         querySnapshot.forEach((doc) => {
-          const docRef = this.ratingsCollection.doc(doc.id);
-          docRef.update({ rating: rating });
+          doc.ref.update({ rating: rating, comment: comment });
         });
       }
     });
@@ -175,13 +247,22 @@ export class FluxListService {
                 map((doc) => {
                   const notif = doc.payload.data()?.notification;
                   if (router.url === '/flux') {
-                    this.afs
-                      .doc(`Profile/${user?.uid}`)
-                      .update({ notification: query });
+                    if (query !== notif) {
+                      this.afs
+                        .doc(`Profile/${user?.uid}`)
+                        .update({ notification: query });
+                    }
+
                     return 0;
                   } else {
-                    if( query - (notif ? notif : 0) !== 0 ) {
-                    this.watchRatings(this.afs.collection<RatingTest>('Ratings', (ref) => ref.limit(query - (notif ? notif : 0))));
+                    console.log(query - (notif ? notif : 0) !== 0);
+                    console.log(query);
+                    if (query - (notif ? notif : 0) !== 0) {
+                      this.watchRatings(
+                        this.afs.collection<Rating>('Ratings', (ref) =>
+                          ref.limit(query - (notif ? notif : 0))
+                        )
+                      );
                     }
                     return query - (notif ? notif : 0);
                   }
@@ -193,10 +274,10 @@ export class FluxListService {
     );
   }
 
-  watchRatings(ratingCollection: AngularFirestoreCollection<RatingTest>) {
+  watchRatings(ratingCollection: AngularFirestoreCollection<Rating>) {
     ratingCollection.stateChanges(['added']).subscribe((changes) => {
       changes.forEach((change) => {
-        const rating = change.payload.doc.data() as RatingTest;
+        const rating = change.payload.doc.data() as Rating;
         if (rating.rating === 4 || rating.rating === 5) {
           this.triggerNotification(
             `Nouvelle note ${rating.id_movie}`,
@@ -206,7 +287,6 @@ export class FluxListService {
       });
     });
   }
-
   private triggerNotification(id_movie: string, body: string) {
     if (Notification.permission === 'granted') {
       const options = {
@@ -229,5 +309,16 @@ export class FluxListService {
         }
       });
     }
+  }
+
+  addRating(movieId: number, rating: number, comment: string) {
+    const document: Rating = {
+      date_created: new Date().toString(),
+      id_movie: movieId,
+      id_user: this.userId,
+      rating: rating,
+      comment: comment,
+    };
+    return this.afs.collection('Ratings').add(document);
   }
 }

@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NonNullableFormBuilder } from '@angular/forms';
+import { NonNullableFormBuilder } from '@angular/forms';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { switchMap, tap } from 'rxjs';
-import { AuthentificationService } from '../authentification/services/authentification.service';
-import { ProfileUser } from './models/user';
-import { ImageUploadService } from './sevices/image-upload.service';
+import { of, switchMap, tap, throwError } from 'rxjs';
 import { UsersService } from './sevices/users.service';
-import { of, throwError } from 'rxjs';
-
 
 @UntilDestroy()
 @Component({
@@ -20,12 +15,12 @@ export class ProfileComponent implements OnInit {
   user$ = this.usersService.currentUserProfile$;
 
   profileForm = this.fb.group({
-    uid: [''],
-    displayname: [''],
+    id_user: [''],
     firstname: [''],
     lastname: [''],
     email: [''],
-    username: ['']
+    username: [''],
+    photoURL : [''],
   });
 
   ngOnInit(): void {
@@ -34,24 +29,19 @@ export class ProfileComponent implements OnInit {
         untilDestroyed(this),
         tap(console.log),
         switchMap((user) =>
-          user
-            ? of(user)
-            : throwError('Could not fetch user profile data')
+          user ? of(user) : throwError('Could not fetch user profile data')
         )
       )
       .subscribe({
         next: (user) => {
           if (user) {
-            const { uid, displayname, firstname, lastname, email, username } =
-              user;
-  
+            const { id_user, firstname, lastname, email, username } = user;
             this.profileForm.patchValue({
-              uid,
-              displayname,
+              id_user,
               firstname,
               lastname,
               email,
-              username
+              username,
             });
           }
         },
@@ -61,51 +51,38 @@ export class ProfileComponent implements OnInit {
         },
       });
   }
-  
-  
+
   constructor(
-    private authService: AuthentificationService,
-    private imageUploadService: ImageUploadService,
     private toast: HotToastService,
     private usersService: UsersService,
     private fb: NonNullableFormBuilder
   ) {}
 
-  uploadFile(event: any, { uid }: ProfileUser) {
-    this.imageUploadService
-      .uploadImage(event.target.files[0], `images/profile/${uid}`)
-      .pipe(
-        this.toast.observe({
-          loading: 'Uploading profile image...',
-          success: 'Image uploaded successfully',
-          error: 'There was an error in uploading the image',
-        }),
-        switchMap((photoURL) =>
-          this.usersService.updateUser({
-            uid,
-            photoURL,
-          })
-        )
-      )
-      .subscribe();
+ 
+
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.user$.subscribe((user) => {
+      this.usersService.uploadImage(file, user?.id_user ).subscribe((response) => {
+        this.profileForm.patchValue({ photoURL: response});
+      });
+    });
   }
   
 
   saveProfile() {
-    const { uid, ...data } = this.profileForm.value;
-
-    if (!uid) {
+    const { id_user, ...data} = this.profileForm.value;
+    if (!id_user) {
       return;
     }
-
-    this.usersService
-      .updateUser({ uid, ...data })
-      .pipe(
-        this.toast.observe({
-          loading: 'Saving profile data...',
-          success: 'Profile updated successfully',
-          error: 'There was an error in updating the profile',
-        })
-      )
-      .subscribe
-      }}
+    this.usersService.updateUser({id_user, ...data }).pipe(
+      
+      this.toast.observe({
+        loading: 'Saving profile data...',
+        success: 'Profile updated successfully',
+        error: 'There was an error in updating the profile',
+      })
+    ).subscribe;
+  }
+}
