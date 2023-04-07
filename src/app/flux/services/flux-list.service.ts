@@ -127,7 +127,6 @@ export class FluxListService {
               return {};
             }
           });
-          console.log(response);
           return response;
         })
       );
@@ -237,7 +236,7 @@ export class FluxListService {
     ratingCollection.stateChanges(['added']).subscribe((changes) => {
       changes.forEach((change) => {
         const rating = change.payload.doc.data() as Rating;
-        if (rating.rating >= 4) {
+        if (rating.rating === 4 || rating.rating === 5) {
           this.triggerNotification(
             `Nouvelle note ${rating.id_movie}`,
             `Nouvelle note ajoutée pour le film ${rating.id_movie}.`

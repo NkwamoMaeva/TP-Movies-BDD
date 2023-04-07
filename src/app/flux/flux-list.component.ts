@@ -72,7 +72,6 @@ export class FluxListComponent {
       data: { element: element, edit: edit },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
       if (result) {
         this.fluxService.updateRating(
           result.user.id_user,
