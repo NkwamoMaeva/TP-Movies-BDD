@@ -13,47 +13,41 @@
                         <span *ngFor="let genre of movie.genres"
                             class="badge rounded-pill text-bg-warning me-2 mb-1">{{genre.name}}</span>
                     </h5>
-                    <div class="d-flex flex-row align-items-center white mt-5">
-                        <div>
-                            <div class="d-flex flex-column me-4">
+
+                    <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center white mt-5">
+                        <div class="d-flex flex-column flex-md-row align-items-center mb-3 mb-md-0">
+                            <div class="d-flex flex-column me-md-4 mb-2 mb-md-0">
                                 <span class="d-flex flex-column fs-6">Release date</span>
-                                <span class="fs-4">{{movie.release_date | date}}
-                                </span>
+                                <span class="fs-4">{{movie.release_date | date}}</span>
                             </div>
-                            <div class="d-flex flex-column me-4">
+                            <div class="d-flex flex-column me-md-4 mb-2 mb-md-0">
                                 <span class="fs-6">Duration</span>
                                 <span class="fs-4">
-                                    <span
-                                        *ngIf="convertDuration(movie.runtime)[0] > 0">{{convertDuration(movie.runtime)[0]}}
-                                        hr
-                                    </span>
+                                    <span *ngIf="convertDuration(movie.runtime)[0] > 0">{{convertDuration(movie.runtime)[0]}} hr</span>
                                     <span>{{convertDuration(movie.runtime)[1]}} min</span>
                                 </span>
                             </div>
-                            <div class="d-flex flex-column me-5">
+                            <div class="d-flex flex-column me-md-5">
                                 <span class="d-flex flex-column fs-6">Rating</span>
-                                <span class="fs-4"
-                                    *ngIf="movie.vote_average">{{(movie.vote_average/2).toFixed(1) + '/5'}}
-                                </span>
+                                <span class="fs-4" *ngIf="movie.vote_average">{{(movie.vote_average/2).toFixed(1) + '/5'}}</span>
                             </div>
                         </div>
-                        <div></div>
-
-                        <a class="bg-warning rounded-circle rounded_button shadow-sm mx-2" *ngIf="movie.homepage"
-                            [href]="movie.homepage" target="_blank">
-                            <mat-icon fontIcon="confirmation_number"></mat-icon>
-                        </a>
-                        <div class="bg-warning rounded-circle rounded_button shadow-sm me-2" *ngIf="userId !== ''"
-                            (click)="openDialog(movie,false)">
-                            <mat-icon fontIcon="star"></mat-icon>
+                    
+                        <div class="d-flex flex-row mt-2 mt-md-0">
+                            <a class="bg-warning rounded-circle rounded_button shadow-sm mx-2 my-1" *ngIf="movie.homepage"
+                                [href]="movie.homepage" target="_blank">
+                                <mat-icon fontIcon="confirmation_number"></mat-icon>
+                            </a>
+                            <div class="bg-warning rounded-circle rounded_button shadow-sm me-2 mx-2 my-1" *ngIf="userId !== ''"
+                                (click)="openDialog(movie,false)">
+                                <mat-icon fontIcon="star"></mat-icon>
+                            </div>
+                            <div class="bg-warning rounded-circle rounded_button shadow-sm mx-2 my-1">
+                                <mat-icon fontIcon="share" mat-icon-button (click)="sharePage(movie.title, movie.overview)"></mat-icon>
+                            </div>
                         </div>
-                        <div class="bg-warning rounded-circle rounded_button shadow-sm">
-                            <mat-icon fontIcon="share" mat-icon-button (click)="sharePage(movie.title, movie.overview)"></mat-icon>
-                        </div>
-                          
-
                     </div>
-
+                    
                     <!-- <div class="position-relative" style="width: min-content;">
                             <mat-progress-spinner class="rating" mode="determinate" [value]="movie.vote_average*10">
                             </mat-progress-spinner>
