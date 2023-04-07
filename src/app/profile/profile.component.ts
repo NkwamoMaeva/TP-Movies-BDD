@@ -9,7 +9,7 @@ import { UsersService } from './sevices/users.service';
 @Component({
   selector: 'tp-movies-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
   user$ = this.usersService.currentUserProfile$;
@@ -69,6 +69,8 @@ export class ProfileComponent implements OnInit {
       });
     });
   }
+  
+
   saveProfile() {
     const { id_user, ...data} = this.profileForm.value;
     if (!id_user) {
