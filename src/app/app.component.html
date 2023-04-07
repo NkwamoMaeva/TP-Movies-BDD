@@ -56,7 +56,7 @@
                 </button>
             </mat-menu>
             <button mat-icon-button aria-label="notifications" *ngIf="isConnected | async" routerLink="/flux">
-                <mat-icon [matBadge]="(notif | async) ?? 0" matBadgeColor="accent">notifications</mat-icon>
+                <mat-icon [matBadge]="notif | async" matBadgeColor="accent">notifications</mat-icon>
             </button>
         </div>
         <div fxShow="false" fxHide.lt-md="false">
@@ -67,7 +67,7 @@
                 <mat-icon>logout</mat-icon>
             </button>
             <button mat-icon-button aria-label="notifications" *ngIf="isConnected | async" routerLink="/flux">
-                <mat-icon [matBadge]="(notif | async) ?? 0" matBadgeColor="accent">notifications</mat-icon>
+                <mat-icon [matBadge]="notif | async" matBadgeColor="accent">notifications</mat-icon>
             </button>
         </div>
 

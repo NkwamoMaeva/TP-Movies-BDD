@@ -238,7 +238,7 @@ export class FluxListService {
         const rating = change.payload.doc.data() as Rating;
         if (rating.rating === 4 || rating.rating === 5) {
           this.triggerNotification(
-            `Nouvelle note ${rating.id_movie}`,
+            `${rating.id_movie}`,
             `Nouvelle note ajoutée pour le film ${rating.id_movie}.`
           );
         }
@@ -262,7 +262,7 @@ export class FluxListService {
           };
           new Notification(id_movie, options).addEventListener('click', () => {
             // Rediriger l'utilisateur vers la page "ratings"
-            window.location.href = '/';
+            window.location.href = '/movies/' + id_movie;
           });
         }
       });
