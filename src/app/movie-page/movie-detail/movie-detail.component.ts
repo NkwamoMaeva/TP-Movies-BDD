@@ -106,4 +106,26 @@ export class MovieDetailComponent {
     const result = new Date(date);
     return result.toLocaleDateString('en-US', options);
   }
+
+  sharePage(title : string, desc : string): void {
+    const url = window.location.href;
+  
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        text: desc,
+        url: url,
+      })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      // Fallback: Copier l'URL dans le presse-papiers et afficher un message
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Lien copié dans le presse-papiers');
+      }, () => {
+        alert('Erreur lors de la copie du lien, veuillez copier manuellement.');
+      });
+    }
+  }
+  
 }

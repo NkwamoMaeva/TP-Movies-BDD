@@ -48,8 +48,9 @@
                             <mat-icon fontIcon="star"></mat-icon>
                         </div>
                         <div class="bg-warning rounded-circle rounded_button shadow-sm">
-                            <mat-icon fontIcon="share"></mat-icon>
+                            <mat-icon fontIcon="share" mat-icon-button (click)="sharePage(movie.title, movie.overview)"></mat-icon>
                         </div>
+                          
 
                     </div>
 
