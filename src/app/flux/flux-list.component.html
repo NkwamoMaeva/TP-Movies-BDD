@@ -1,53 +1,110 @@
-
 <div>
-    <div class="search-wrapper">
-        <mat-button-toggle-group [(ngModel)]="typeFilter" (change)="onTypeChange($event)" class="w-100">
-            <mat-button-toggle [value]="item" *ngFor="let item of types;">{{item}}</mat-button-toggle>
-        </mat-button-toggle-group>
-               </div>
-<div class="list container py-3">
-    <div *ngFor="let flu of flux$ | async">
-        <div class="card px-3" *ngIf="flu && flu.user">
-            <div class="d-flex flex-row justify-content-between">
-                <div class="d-flex flex-row mt-2">
-                    <div *ngIf="flu.user.photo" class="me-2 mb-1">
-                        <img [src]="flu.user.photo" alt="Profile picture of {{ flu.user.username }}" class="profile" />
-                    </div>
-                    <div class="d-flex flex-column">
-                        <strong class="fw-semibold">{{ userId === flu.user.id_user ? 'Me' :flu.user.username }}</strong>
-                        <span style="font-size: 10px;">{{flu.date_created}}</span>
-                    </div>
-                </div>
-                <a class="icon-link icon-link-hover" (click)="openDialog(flu, false)"
-                    style="--bs-icon-link-transform: translate3d(.125rem, -.125rem, 0); cursor: pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-box-arrow-in-up-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M6.364 13.5a.5.5 0 0 0 .5.5H13.5a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 13.5 1h-10A1.5 1.5 0 0 0 2 2.5v6.636a.5.5 0 1 0 1 0V2.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5H6.864a.5.5 0 0 0-.5.5z" />
-                        <path fill-rule="evenodd"
-                            d="M11 5.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793l-8.147 8.146a.5.5 0 0 0 .708.708L10 6.707V10.5a.5.5 0 0 0 1 0v-5z" />
-                    </svg>
-                </a>
-            </div>
-
-            <div class="row card-body">
-                <div class="col-4 p-0">
-                    <img *ngIf="flu.movie.poster_path" loading="lazy" [routerLink]="'/movies/'+ flu.movie.id"
-                        [src]="'https://image.tmdb.org/t/p/w500/' + flu.movie.poster_path"
-                        alt="Photo of the movie {{ flu.movie.title }}" class="w-100 movie" />
-                </div>
-                <div class="col-8 my-auto" style="padding: 0 0 0 12px">
-                    <div class="d-flex flex-column">
-                        <strong class="text-truncate">{{ flu.movie.title }}</strong>
-                        <label *ngIf="flu.comment" class="comment"
-                            style="font-size: 12px;">{{'“'+flu.comment+'”'}}</label>
-                        <ngb-rating class="rating-star" [max]="5" [(rate)]="flu.rating" [readonly]="true">
-                        </ngb-rating>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="search-wrapper">
+    <mat-button-toggle-group
+      [(ngModel)]="typeFilter"
+      (change)="onTypeChange($event)"
+      class="w-100"
+    >
+      <mat-button-toggle [value]="item" *ngFor="let item of types">{{
+        item
+      }}</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div id="app">
+    <div class="container pt-4">
+      <div class="d-flex flex-wrap">
+        <div class="search-wrapper"></div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Search</mat-label>
+          <input matInput placeholder="search" (keyup)="onSearch($event)" />
+          <ng-container matSuffix *ngIf="searchValue | async">
+            <button mat-icon-button aria-label="Clear" (click)="clearSearch()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-container>
+        </mat-form-field>
+      </div>
     </div>
-   
-</div>               
+  </div>
+  
+  <div class="list container py-3">
+    <div *ngFor="let flu of flux$ | async">
+      <div class="card px-3" *ngIf="flu && flu.user">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="d-flex flex-row mt-2">
+            <div *ngIf="flu.user.photo" class="me-2 mb-1">
+              <img
+                [src]="flu.user.photo"
+                alt="Profile picture of {{ flu.user.username }}"
+                class="profile"
+              />
+            </div>
+            <div class="d-flex flex-column">
+              <strong class="fw-semibold">{{
+                userId === flu.user.id_user ? 'Me' : flu.user.username
+              }}</strong>
+              <span style="font-size: 10px">{{ flu.date_created }}</span>
+            </div>
+          </div>
+          <a
+            class="icon-link icon-link-hover"
+            (click)="openDialog(flu, false)"
+            style="
+              --bs-icon-link-transform: translate3d(0.125rem, -0.125rem, 0);
+              cursor: pointer;
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-box-arrow-in-up-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M6.364 13.5a.5.5 0 0 0 .5.5H13.5a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 13.5 1h-10A1.5 1.5 0 0 0 2 2.5v6.636a.5.5 0 1 0 1 0V2.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5H6.864a.5.5 0 0 0-.5.5z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M11 5.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793l-8.147 8.146a.5.5 0 0 0 .708.708L10 6.707V10.5a.5.5 0 0 0 1 0v-5z"
+              />
+            </svg>
+          </a>
+        </div>
+
+        <div class="row card-body">
+          <div class="col-4 p-0">
+            <img
+              *ngIf="flu.movie.poster_path"
+              loading="lazy"
+              [routerLink]="'/movies/' + flu.movie.id"
+              [src]="'https://image.tmdb.org/t/p/w500/' + flu.movie.poster_path"
+              alt="Photo of the movie {{ flu.movie.title }}"
+              class="w-100 movie"
+            />
+          </div>
+          <div class="col-8 my-auto" style="padding: 0 0 0 12px">
+            <div class="d-flex flex-column">
+              <strong class="text-truncate">{{ flu.movie.title }}</strong>
+              <label
+                *ngIf="flu.comment"
+                class="comment"
+                style="font-size: 12px"
+                >{{ '“' + flu.comment + '”' }}</label
+              >
+              <ngb-rating
+                class="rating-star"
+                [max]="5"
+                [(rate)]="flu.rating"
+                [readonly]="true"
+              >
+              </ngb-rating>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -25,17 +25,27 @@ export class FluxListComponent {
   typeFilter = 'all';
   types: string[] = ['all', 'mines'];
   public readonly type = new BehaviorSubject<string>('all');
+  public readonly searchValue = new BehaviorSubject<string>('');
 
   public readonly fluxService = inject(FluxListService);
 
-  flux$: Observable<(Flux | null)[]> = this.type.pipe(
-    switchMap((type) => {
+  // flux$: Observable<(Flux | null)[]> = this.type.pipe(
+  //   switchMap((type) => {
       
-      return this.fluxService.getFlux(type);
+  //     return this.fluxService.getFlux(type);
+  //   })
+  // );
+
+  flux$: Observable<(Flux | null)[]> = combineLatest([
+    this.type,
+    this.searchValue,
+  ]).pipe(
+    switchMap(([type, search]) => {
+      return this.fluxService.getFluxT(type, search);
     })
   );
-
   userId = '';
+ 
 
   constructor(
     private auth: AngularFireAuth,
@@ -63,6 +73,14 @@ export class FluxListComponent {
   onTypeChange(event: MatButtonToggleChange) {
     this.router.navigate(['/flux'], { queryParams: { type: event.value } });
   }
+  onSearch(event: any) {
+    this.searchValue.next(event.target.value);
+  }
+
+  clearSearch() {
+    this.searchValue.next('');
+  }
+
 
   openDialog(element: any, edit: boolean) {
     if (this.userId == element.user.id_user) {
@@ -114,4 +132,5 @@ export class DialogFluxDetailComponent {
   isUserConnected(data: Flux) {
     return this.userId === data.user.id_user;
   }
+  
 }
