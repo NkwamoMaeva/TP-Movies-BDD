@@ -50,10 +50,6 @@ $light-background: rgb(245, 245, 245);
   align-items: center;
   margin: auto;
 }
-
-.hero-ontop {
-  z-index: 1;
-}
 .rating {
   width: 70px !important;
   height: 70px !important;
@@ -202,11 +198,10 @@ i.material-icons {
   margin-right: 15px;
 }
 
-span.title {
-  font-size: 14px;
+.title {
+  font-size: 30px;
   letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #fbbd61;
+  color: white;
 }
 
 .rating-star {
@@ -240,4 +235,8 @@ strong {
   grid-gap: 20px;
   margin-bottom: 56px;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.rating-star {
+  font-size: 16px;
+  color: #dc9600;
 }

@@ -63,7 +63,7 @@
             <button mat-icon-button aria-label="search" routerLink="/users">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button aria-label="logout" routerLink="/login" *ngIf="isConnected | async">
+            <button mat-icon-button aria-label="logout" (click)="signOut()" *ngIf="isConnected | async">
                 <mat-icon>logout</mat-icon>
             </button>
             <button mat-icon-button aria-label="notifications" *ngIf="isConnected | async" routerLink="/flux">
@@ -114,7 +114,7 @@
                 </a>
             </div>
         </mat-sidenav>
-        <mat-sidenav-content fxFlexFill>
+        <mat-sidenav-content fxFlexFill style="margin-bottom: 64px;">
             <router-outlet></router-outlet>
         </mat-sidenav-content>
 
