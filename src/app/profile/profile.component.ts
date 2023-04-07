@@ -14,7 +14,7 @@ import { of, throwError } from 'rxjs';
 @Component({
   selector: 'tp-movies-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
   user$ = this.usersService.currentUserProfile$;
@@ -89,6 +89,7 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe();
   }
+  
 
   saveProfile() {
     const { uid, ...data } = this.profileForm.value;
