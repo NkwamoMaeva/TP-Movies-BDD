@@ -1,13 +1,13 @@
+
+<div>
+    <div class="search-wrapper">
+        <mat-button-toggle-group [(ngModel)]="typeFilter" (change)="onTypeChange($event)" class="w-100">
+            <mat-button-toggle [value]="item" *ngFor="let item of types;">{{item}}</mat-button-toggle>
+        </mat-button-toggle-group>
+               </div>
 <div class="list container py-3">
-    <div class="d-flex flex-wrap">
-        <div class="search-wrapper">
-            <mat-button-toggle-group [(ngModel)]="typeFilter" (change)="onTypeChange($event)">
-                <mat-button-toggle [value]="item" *ngFor="let item of types;">{{item}}</mat-button-toggle>
-            </mat-button-toggle-group>
-        </div>
-    </div>
     <div *ngFor="let flu of flux$ | async">
-        <div class="card px-3" *ngIf="flu.user">
+        <div class="card px-3" *ngIf="flu && flu.user">
             <div class="d-flex flex-row justify-content-between">
                 <div class="d-flex flex-row mt-2">
                     <div *ngIf="flu.user.photo" class="me-2 mb-1">
@@ -48,5 +48,6 @@
             </div>
         </div>
     </div>
-
+   
+</div>               
 </div>
